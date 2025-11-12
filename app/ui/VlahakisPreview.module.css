@@ -1,0 +1,74 @@
+.videoTitle {
+  font-size: 1rem;
+  color: #333;
+  margin-top: 0.5rem;
+  text-align: center;
+  font-family: inherit;
+  opacity: 0.8;
+}
+.previewContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.topTitle {
+  font-size: 54px;
+  font-weight: 700;
+  margin: 0;
+  text-align: center;
+}
+
+.strip {
+  width: 100%;
+  color:black;
+  background: rgb(246, 240, 236);
+  padding-top : 5rem;
+    padding-bottom: 4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+}
+
+.sessionTitle {
+  font-size: 88px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  margin: 0;
+  text-align: center;
+}
+
+.videoRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 2rem;
+  width: 100%;
+  padding-top: 2rem;
+  max-width: 1200px;
+}
+
+.videoWrapper {
+  flex: 1 1 0;
+  min-width: 280px;
+  max-width: 400px;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  border-radius:5px;
+  justify-content: center;
+}
+
+@media (max-width: 900px) {
+  .videoRow {
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: center;
+  }
+  .videoWrapper {
+    max-width: 95vw;
+  }
+}
