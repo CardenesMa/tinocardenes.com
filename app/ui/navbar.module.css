@@ -1,24 +1,27 @@
 
 .navbar-header {
-  background: none;
+  background: white;
   position: sticky;
   top: 0;
+  width:100%;
   z-index: 1000;
   /* border-bottom: 1px solid #000000; */
     box-shadow: #222 0px 1px 6px -1px;
+  margin: 0;
 }
 
 .navbar-main {
-  display: flex;
+  display: block;
   width: 100%;
   align-items: center;
   justify-content: center;
-  padding: 1rem 2rem 0.5rem 2rem;
+  padding: 1rem 0 0 2rem;
 }
 
 .navbar-title {
-  font-weight: 100;
-  font-size: 2rem;
+  font-weight: 400;
+  letter-spacing: 4px;
+  font-size: 28px;
   text-align: center;
   background-color: transparent;
 }
@@ -38,14 +41,17 @@
   color: #222;
   text-decoration: none;
   padding: 0.25rem 0.75rem;
-  border-radius: 6px;
-  transition: background 0.2s, color 0.2s;
+  border-top: 1px solid #0000;
+  border-bottom: 1px solid #0000;
+  background: transparent;
+  transition: border 0.1s;
   letter-spacing: 0.03em;
   line-height: 1.5;
   display: inline-block;
 }
 
 .nav-link:hover {
-  background: #f3f3f3;
-  color: #0070f3;
+  border-top: 1px solid #000F;
+  border-bottom: 1px solid #000F;
+  background: transparent;
 }

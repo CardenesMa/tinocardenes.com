@@ -1,9 +1,8 @@
 
 import type { Metadata } from "next";
-import { Figtree } from "next/font/google";
-
 import Navbar from "./ui/Navbar";
-
+import { serif } from "./ui/fonts";
+import "./globals.css"
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -11,7 +10,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
+      {/* Default everything inherit same font */}
+      <body className={`${serif.className} flex flex-col min-h-screen`}>
         <Navbar />
         {children}
       </body>

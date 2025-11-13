@@ -1,0 +1,52 @@
+.projectBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #fff;
+  border-radius: 1rem;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  padding: 2rem;
+  margin: 1rem auto;
+  transition: box-shadow 0.2s;
+}
+
+.projectBox:hover {
+  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+}
+
+.projectImage {
+  border-radius: 0.75rem;
+  object-fit: cover;
+  height: auto;
+  margin-bottom: 1.2rem;
+}
+
+.projectTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0.5rem 0 0.3rem 0;
+  text-align: center;
+}
+
+.projectDescription {
+  font-size: 1rem;
+  color: #444;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.projectButton {
+  display: inline-block;
+  background: #222;
+  color: #fff;
+  padding: 0.7rem 1.5rem;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: background 0.2s;
+}
+
+.projectButton:hover {
+  background: #0070f3;
+}

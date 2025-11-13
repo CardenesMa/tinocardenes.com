@@ -1,0 +1,38 @@
+.container{ 
+    background: rgb(161, 160, 160);
+    width: 100%;
+    display : flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5vh;
+    height: 30vh;
+}
+
+.headerImage{
+    /* unset width /height since defined externally */
+    border-radius : 5px;
+    width: 20%;
+    float: left;
+    padding-left: 20vh;
+    padding-top: 10vh;
+    z-index: inherit
+
+}
+.introTextContainer {
+    background: rgb(255, 195, 104);
+    color: black ; 
+    width: 20%;
+    float: right;
+    padding-right: 20vh;
+    padding-top: 10vh;
+    z-index: calc(inherit + 1 );
+}
+.headline {
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-align: center;
+}
+
+.subheadline{
+    font-size : 1rem;
+}
