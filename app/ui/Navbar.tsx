@@ -15,10 +15,13 @@ const navLinks = [
 const Navbar = () => (
   <header className={styles["navbar-header"]}>
     <nav className={styles["navbar-main"]}>
-    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "2rem", margin: "0 0" }}>
-          <span className={`${nameBigFont.className} antialiased ${styles["navbar-title"]}`}>TINO  CARDENES</span>
+      <div className={"grid grid-cols-3 items-center w-full"}>
+        <div className="col-span-1"></div>
+        <span className={`${nameBigFont.className} col-span-1 antialiased ${styles["navbar-title"]}`}>TINO  CARDENES</span>
+        <div className="col-span-1">
           <SocialButtons />
         </div>
+      </div>
     </nav>
     <div className={styles["navbar-links"]}>
       {navLinks.map((link) => (

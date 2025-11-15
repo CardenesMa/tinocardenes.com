@@ -1,44 +1,30 @@
-
-type Media = { link: string, type: "Image" | "Video" };
+"use client";
+import style from "./media.module.css";
+import gstyle from "../globals.module.css";
 import Image from "next/image";
+import YoutubePlayer from "../ui/YoutubePlayer";
 
-const MEDIA_BOX_SIZE = 500;
+export type Media = { name: string, link: string, type: "Image" | "Video" };
+
+const MEDIA_BOX_SIZE = 300;
 
 const mediaList: Media[] = [
-    { link: "/media/image1.jpg", type: "Image" },
-    { link: "https://www.youtube.com/embed/dQw4w9WgXcQ", type: "Video" },
-    { link: "/media/image2.jpg", type: "Image" },
-    { link: "https://player.vimeo.com/video/76979871", type: "Video" },
+    { name: "", link: "/media/image1.jpg", type: "Image" },
+    { name: "Harlem Noctourne", link: "https://www.youtube.com/embed/z1hGBjZeRz0?si=FP9UI2or-gaPvKrW", type: "Video" },
+    { name: "", link: "/media/image2.jpg", type: "Image" },
+    { name: "Wave", link: "https://www.youtube.com/embed/4eYuc9c5NaY?si=pBg-dM5RqD7w5VJs", type: "Video" },
 ];
 
-const mediaBox = (
-    { link, type }: Media
-) => {
-    if (type === "Image") {
-        return (
-            <Image src={link} alt="Media Image" width={MEDIA_BOX_SIZE} height={MEDIA_BOX_SIZE} />
-        )
-    }
-    else if (type === "Video") {
-        return (<div>
-            <iframe
-                src={link}
-                width={`${MEDIA_BOX_SIZE}px`}
-                height={`${MEDIA_BOX_SIZE}px`}
-                allow="autoplay; fullscreen; picture-in-picture"
-                allowFullScreen
-            ></iframe>
-        </div>
-        )
-    }
-}
-
-
 const MediaGallery = () => (
-    <div style={{ display: "flex", flexWrap: "wrap", gap: "2rem", justifyContent: "center" }}>
+    <div className={style.mediaGallery + " grid grid-flow-row-dense grid-cols-3 gap-2"}>
         {mediaList.map((media, idx) => (
-            <div key={idx} style={{ margin: "1rem" }}>
-                {mediaBox(media)}
+            <div key={idx}>
+                {media.type === "Image" ? (
+                    <Image src={media.link} alt="Media Image" height={MEDIA_BOX_SIZE} width={MEDIA_BOX_SIZE} />
+                ) : (
+                    <YoutubePlayer link={media.link} size={MEDIA_BOX_SIZE} />
+                )}
+                <p className={gstyle.description + " " + style.mediaName}>{media.name}</p>
             </div>
         ))}
     </div>

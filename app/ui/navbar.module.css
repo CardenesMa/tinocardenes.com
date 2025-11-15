@@ -35,6 +35,14 @@
   background: #fff;
 }
 
+.socialIcon {
+  font-size: 1.5rem;
+  width: 100%;
+  height: 100%;
+  color: var(--accent);
+  transition: color 0.2s;
+}
+
 .nav-link {
   font-weight: 400;
   font-size: 1.1rem;
@@ -51,7 +59,7 @@
 }
 
 .nav-link:hover {
-  border-top: 1px solid #000F;
-  border-bottom: 1px solid #000F;
+  border-top: 1px solid var(--foreground);
+  border-bottom: 1px solid var(--foreground);
   background: transparent;
 }

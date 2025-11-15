@@ -1,10 +1,10 @@
 import styles from './VlahakisPreview.module.css';
 import { serif } from './fonts';
-
+import YoutubePlayer from './YoutubePlayer';
 const videos = [
-  'https://www.youtube.com/embed/z1hGBjZeRz0?si=FP9UI2or-gaPvKrW',
-  'https://www.youtube.com/embed/4eYuc9c5NaY?si=pBg-dM5RqD7w5VJs',
-  'https://www.youtube.com/embed/VnlUzmmqrGg?si=q-UDafTx_bkhgIWf',
+  { title: "Harlem Nocturne", link: 'https://www.youtube.com/embed/z1hGBjZeRz0?si=FP9UI2or-gaPvKrW' },
+  { title: "Wave", link: 'https://www.youtube.com/embed/4eYuc9c5NaY?si=pBg-dM5RqD7w5VJs' },
+  { title: "Bach: Fugue in D# Minor", link: 'https://www.youtube.com/embed/VnlUzmmqrGg?si=q-UDafTx_bkhgIWf' },
 ];
 
 const VlahakisPreview = () => {
@@ -14,21 +14,11 @@ const VlahakisPreview = () => {
         <h1 className={styles.topTitle}>Here's a preview of</h1>
         <h2 className={styles.sessionTitle}>The Vlahakis Sessions</h2>
 
-      <div className={styles.videoRow}>
-        {videos.map((src, idx) => (
-          <iframe
-            key={idx}
-            className={styles.videoWrapper}
-            width="100%"
-            height="100%"
-            src={src}
-            title={`YouTube video player ${idx+1}`}
-            referrerPolicy="strict-origin-when-cross-origin"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowFullScreen
-          ></iframe>
-        ))}
-      </div>
+        <div className={styles.videoRow}>
+          {videos.map((file, idx) => (
+            <YoutubePlayer title={file.title} key={idx} link={file.link} size={300} />
+          ))}
+        </div>
       </div>
     </div>
   );

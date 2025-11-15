@@ -2,51 +2,46 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: #fff;
+  background: var(--background);
   border-radius: 1rem;
   box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-  padding: 2rem;
-  margin: 1rem auto;
+  padding: 0;
+  padding-bottom: 4rem; /* Add extra padding to ensure space for the button */
+  margin:0.2rem;
   transition: box-shadow 0.2s;
+  position: relative;
+  min-height: 200px; /* Ensure enough height for consistent layout */
 }
+
 
 .projectBox:hover {
   box-shadow: 0 8px 32px rgba(0,0,0,0.15);
 }
 
+.projectText{
+  padding: 2rem;
+  line-height: 30px !important;
+}
+.projectText::after{
+  line-height: normal;
+}
+
 .projectImage {
-  border-radius: 0.75rem;
-  object-fit: cover;
-  height: auto;
+  border-radius : inherit ;
+  padding:0.5rem;
+  width: 100%; /* Ensure the image fills the height */
+  aspect-ratio: 1;
+  object-fit: cover; /* Clip the image if needed */
   margin-bottom: 1.2rem;
 }
 
-.projectTitle {
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin: 0.5rem 0 0.3rem 0;
-  text-align: center;
-}
-
-.projectDescription {
-  font-size: 1rem;
-  color: #444;
-  margin-bottom: 1.5rem;
-  text-align: center;
-}
 
 .projectButton {
   display: inline-block;
-  background: #222;
-  color: #fff;
-  padding: 0.7rem 1.5rem;
-  border-radius: 0.5rem;
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 1rem;
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
   transition: background 0.2s;
 }
 
-.projectButton:hover {
-  background: #0070f3;
-}

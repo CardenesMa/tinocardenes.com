@@ -4,12 +4,15 @@
   --background: #ffffff;
   --foreground: #171717;
   --accent : #9a75d9;
+  --softBackground: rgb(246, 240, 236);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+    --accent : #bb9ff5;
+    --softBackground:  rgb(86, 81, 77);
   }
 }
 
@@ -29,13 +32,25 @@
   text-align: inherit;
 }
 
+.medheadline {
+    font-size: 32px;
+    font-weight: 600;
+    margin: 0;
+    text-align: inherit;
+}
+
 .description { 
     font-size: 20px;
-    line-height: 40px;
+    line-height: inherit;
     margin: 0;
     padding-top: 1rem;
     font-weight: 100;
 }
+
+.softBackground {
+    background: var(--softBackground);
+}
+
 
 body {
   background: var(--background);
