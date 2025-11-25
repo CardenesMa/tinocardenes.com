@@ -3,6 +3,7 @@ import gstyles from "../globals.module.css";
 import Image from "next/image";
 import { serif } from "./fonts";
 import Button from "./Button";
+import { faFile, faImage } from "@fortawesome/free-solid-svg-icons";
 
 export default function About() {
   return (
@@ -11,17 +12,22 @@ export default function About() {
         <h1 className={gstyles.headline}>About</h1>
         <h2 className={gstyles.subheadline}>Pianist, Producer, Music Technology</h2>
         <p className={gstyles.description}>
-          I'm a Pianist and Computer Scientist based in Pittsburgh.
+          I'm a pianist and music technologist based in Pittsburgh, PA.
+          On this corner of the internet you can find my music, software, and projects that combine the two.
+          I'm currently pursuing a Bachelors in Computer Science and Music Techology at Carnegie Mellon University,
+          and I'm always excited to collaborate with artists and developers to create engaging experiences.
 
-          Fun Facts: I made this website from scratch in Next.js
         </p>
         <div className={styles.buttons}>
           <Button text="Resume"
             link="/resume.pdf"
-            download={true} />
+            download={true}
+            icon={faFile} />
           <Button text="Photo"
             link="/headshot.jpg"
-            download />
+            download={true}
+            icon={faImage}
+          />
         </div>
       </section>
       <aside className={styles.photoPanel + " col-span-1"}>
