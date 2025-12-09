@@ -1,0 +1,106 @@
+1. Add basic SEO foundations
+
+You need to implement what Wix does automatically:
+
+✔ Meta tags per page
+
+Use next/head:
+
+import Head from "next/head";
+
+<Head>
+  <title>My Portfolio</title>
+  <meta name="description" content="..." />
+  <meta name="og:image" content="/og.png" />
+</Head>
+
+
+Or use metadata in Next 13+ App Router.
+
+✔ Canonical tags
+<link rel="canonical" href="https://yoursite.com/page" />
+
+✔ Sitemap
+
+Install a generator like:
+
+next-sitemap (most popular)
+
+npm install next-sitemap
+
+
+Configure and it generates sitemap.xml + robots.txt on build.
+
+✔ Schema.org / Structured Data
+
+Wix auto-adds this for businesses.
+For Next.js, create a JSON-LD block:
+
+<script type="application/ld+json">
+{ ... }
+</script>
+
+
+Or use next-seo.
+
+2. Add dynamic content management (“the Wix editing experience”)
+
+A pure static Next.js site means you must edit code every time you change content.
+Wix solves this through a visual editor.
+
+To approximate that:
+
+Option A — Add a headless CMS (recommended)
+
+Examples:
+
+Sanity (great for portfolio)
+
+Contentful
+
+Strapi
+
+Notion-as-CMS (super simple)
+
+This gives you:
+
+Editable text/images
+
+Blog posts if you want
+
+Portable content across builds
+
+This alone makes a Next.js site feel way closer to Wix.
+
+3. Add forms (Wix has them built-in)
+
+Use:
+
+Vercel Forms (dead simple)
+
+Formspree
+
+React Hook Form + your own backend
+
+For a portfolio, Vercel Forms is perfect.
+
+4. Add analytics (Wix has it built in)
+
+Easy options:
+
+Vercel Analytics
+
+Google Analytics
+
+Plausible
+
+5. Add image optimization
+
+Next.js already gives you next/image — better than Wix.
+
+6. Add basic caching + performance
+
+Next.js does most of this automatically.
+Vercel deploys SSR/SSG pages with proper caching headers.
+
+You do NOT need additional tuning unless you do something advance
