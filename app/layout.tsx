@@ -1,8 +1,8 @@
 
 import type { Metadata } from "next";
-import Navbar from "../ui/Navbar";
-import Footer from "../ui/Footer";
-import { serif } from "../ui/fonts";
+import Navbar from "./ui/Navbar";
+import Footer from "./ui/Footer";
+import { serif } from "./ui/fonts";
 import "./globals.css"
 export default function RootLayout({
   children,
