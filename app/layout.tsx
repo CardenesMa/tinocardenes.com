@@ -1,7 +1,8 @@
 
 import type { Metadata } from "next";
-import Navbar from "./ui/Navbar";
-import { serif } from "./ui/fonts";
+import Navbar from "../ui/Navbar";
+import Footer from "../ui/Footer";
+import { serif } from "../ui/fonts";
 import "./globals.css"
 export default function RootLayout({
   children,
@@ -14,7 +15,9 @@ export default function RootLayout({
       <body className={`${serif.className} flex flex-col min-h-screen`}>
         <Navbar />
         {children}
+        <Footer />
       </body>
+
     </html>
   );
 }

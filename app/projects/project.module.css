@@ -4,34 +4,39 @@
   align-items: center;
   background: var(--background);
   border-radius: 1rem;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
   padding: 0;
-  padding-bottom: 4rem; /* Add extra padding to ensure space for the button */
-  margin:0.2rem;
+  padding-bottom: 4rem;
+  /* Add extra padding to ensure space for the button */
+  margin: 0.2rem;
   transition: box-shadow 0.2s;
   position: relative;
-  min-height: 200px; /* Ensure enough height for consistent layout */
+  min-height: 200px;
+  /* Ensure enough height for consistent layout */
 }
 
 
 .projectBox:hover {
-  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
 }
 
-.projectText{
+.projectText {
   padding: 2rem;
   line-height: 30px !important;
 }
-.projectText::after{
+
+.projectText::after {
   line-height: normal;
 }
 
 .projectImage {
-  border-radius : inherit ;
-  padding:0.5rem;
-  width: 100%; /* Ensure the image fills the height */
+  border-radius: inherit;
+  padding: 0.5rem;
+  width: 100%;
+  /* Ensure the image fills the height */
   aspect-ratio: 1;
-  object-fit: cover; /* Clip the image if needed */
+  object-fit: cover;
+  /* Clip the image if needed */
   margin-bottom: 1.2rem;
 }
 
@@ -44,4 +49,3 @@
   transform: translateX(-50%);
   transition: background 0.2s;
 }
-

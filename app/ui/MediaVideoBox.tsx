@@ -1,25 +1,36 @@
+"use client";
 import Image from "next/image";
+import { useState } from "react";
 import style from "./mediaVideoBox.module.css";
 
 export type MediaVideoBoxProps = {
     link: string;
     thumbnail: string;
-    size: number;
+    size?: number;
 };
 
 export function MediaVideoBox({ link, thumbnail, size }: MediaVideoBoxProps) {
+    const [aspectRatio, setAspectRatio] = useState<string>("16/9");
+
     // Autoplay aktivieren, wenn das Video geladen wird
     function handleClick(e: React.MouseEvent<HTMLDivElement>) {
         const container = e.currentTarget;
         if (container.getAttribute('data-has-video') === 'false') {
             container.setAttribute('data-has-video', 'true');
-            container.innerHTML = `<iframe src='${link}&autoplay=1' width='${size}' height='${size}' class='${style.mediaVideo}' allow='autoplay; fullscreen; picture-in-picture' allowfullscreen style='border-radius:12px;border:0'></iframe>`;
+            const iframeStyle = size
+                ? `width='${size}' height='${size}'`
+                : `style='width:100%; aspect-ratio:${aspectRatio};'`;
+            container.innerHTML = `<iframe src='${link}&autoplay=1' ${iframeStyle} class='${style.mediaVideo}' allow='autoplay; fullscreen; picture-in-picture' allowfullscreen border:0'></iframe>`;
         }
     }
 
+    const containerStyle = size
+        ? { position: "relative" as const, width: size, height: size }
+        : { position: "relative" as const, width: "100%", aspectRatio };
+
     return (
         <div
-            style={{ position: "relative", width: size, height: size }}
+            style={containerStyle}
             data-has-video="false"
             onClick={handleClick}
         >
@@ -28,8 +39,13 @@ export function MediaVideoBox({ link, thumbnail, size }: MediaVideoBoxProps) {
                 alt="Video Thumbnail"
                 fill={true}
                 style={{ objectFit: "cover", borderRadius: 12, cursor: "pointer" }}
-                sizes={`${size}px`}
+                sizes={size ? `${size}px` : "100vw"}
                 priority
+                onLoad={(e) => {
+                    const img = e.target as HTMLImageElement;
+                    const ratio = `${img.naturalWidth}/${img.naturalHeight}`;
+                    setAspectRatio(ratio);
+                }}
             />
             <button
                 style={{

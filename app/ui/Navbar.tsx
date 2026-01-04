@@ -22,18 +22,19 @@ const Navbar = () => (
           <SocialButtons />
         </div>
       </div>
+      <div className={styles["navbar-links"] + " flex flex-row"}>
+        {navLinks.map((link) => (
+          <Link
+            key={link.name}
+            href={link.href}
+            className={`${styles["nav-link"]} ${serif.className} `}
+          >
+            {link.name}
+          </Link>
+        ))}
+      </div>
     </nav>
-    <div className={styles["navbar-links"]}>
-      {navLinks.map((link) => (
-        <Link
-          key={link.name}
-          href={link.href}
-          className={`${styles["nav-link"]} ${serif.className}`}
-        >
-          {link.name}
-        </Link>
-      ))}
-    </div>
+
   </header>
 );
 

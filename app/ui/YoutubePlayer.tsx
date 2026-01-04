@@ -10,16 +10,15 @@ const getYoutubeId = (url: string) => {
 type YoutubePlayerProps = {
     title?: string;
     link: string;
-    size: number;
+    size?: number;
 };
 
 const YoutubePlayer = ({ title, link, size }: YoutubePlayerProps) => {
     const autoplayLink = link.includes("autoplay=1") ? link : `${link}&autoplay=1`;
-    const thumbnail = getYoutubeId(link) ? `https://img.youtube.com/vi/${getYoutubeId(link)}/hqdefault.jpg` : "";
+    const thumbnail = getYoutubeId(link) ? `https://img.youtube.com/vi/${getYoutubeId(link)}/maxresdefault.jpg` : "";
 
     return (
-        <div className="flex flex-col justify-center items-center">
-            <p className={gstyles.subheadline + " text-weight-bold"}>{title}</p>
+        <div className="flex flex-col justify-center items-center w-full">
             <MediaVideoBox link={autoplayLink} thumbnail={thumbnail} size={size} />
         </div>
     );
