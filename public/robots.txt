@@ -1,5 +1,11 @@
-//robots.txt
+# robots.txt for tinocardenes.com
 
 # Allow all crawlers
 User-agent: *
 Allow: /
+
+# Sitemap location
+Sitemap: https://tinocardenes.com/sitemap.xml
+
+# Crawl delay for respectful crawling
+Crawl-delay: 1

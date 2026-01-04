@@ -2,6 +2,19 @@ import styles from "./sonicscore.module.css";
 import gstyles from "../globals.module.css";
 import { sans } from "../ui/fonts";
 import Image from "next/image";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: 'SonicScore Editor',
+  description: 'SonicScore Editor - Create, share, and print fully customizable sound bath notation projects with complete control over colors, fonts, styles, and symbols.',
+  keywords: ['SonicScore', 'sound bath', 'sound practitioner', 'music editor', 'notation software'],
+  openGraph: {
+    title: 'SonicScore Editor - Tino Cardenes',
+    description: 'Create, share, and print fully customizable sound bath notation projects.',
+    url: 'https://tinocardenes.com/sonicscore',
+  },
+};
+
 export default function SonicScore() {
     return (
         <main className={styles.pageBackground + " h-full min-h-screen flex flex-col"}>
@@ -12,7 +25,7 @@ export default function SonicScore() {
                         SonicScore Editor
                     </h1>
                     <p className={gstyles.description}>
-                        Create, share, and print fully customizable SonicScore projects with ease. Enjoy complete control over colors, fonts, styles, and symbols while adjusting text, spacing, and layouts to fit your needs. Your work stays secure with encrypted files for privacy and protection.                    </p>
+                        Create, share, and print fully customizable SonicScore notation projects with ease. Upgrade your sound bath courses with the only notation software designed specifically for sound practitioners. Enjoy complete control over colors, fonts, styles, and symbols while adjusting text, spacing, and layouts to fit your needs. Your work stays secure with encrypted files for privacy and protection.                    </p>
 
                     <button className={styles.downloadButton}>
                         Download for Mac

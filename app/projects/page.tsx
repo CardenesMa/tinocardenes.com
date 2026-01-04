@@ -5,6 +5,9 @@ import { Project } from "./ProjectBox";
 import { projectData } from "./projectData"
 import gstyles from "../globals.module.css";
 
+// Note: metadata export not available in client components
+// SEO is handled through root layout and sitemap
+
 export default function Projects() {
   return (
     <main >
