@@ -10,7 +10,7 @@ export default function About() {
     <main className={`${styles.container} ${serif.className} grid grid-flow-col grid-cols-3`}>
       <section className={styles.panel + " col-span-2 "}>
         <h1 className={gstyles.headline}>About</h1>
-        <h2 className={gstyles.subheadline}>Pianist, Producer, Music Technology</h2>
+        <h2 className={gstyles.subheadline}>Pianist, Music Technologist</h2>
         <p className={gstyles.description}>
           I'm a pianist and music technologist based in Pittsburgh, PA.
           On this corner of the internet you can find my music, software, and projects that combine the two.
@@ -18,7 +18,7 @@ export default function About() {
           and I'm always excited to collaborate with artists and developers to create engaging experiences.
 
         </p>
-        <div className={styles.buttons}>
+        <div className={styles.buttons+ " flex flex-row gap-4 mt-6"}>
           <Button text="Resume"
             link="/resume.pdf"
             download={true}

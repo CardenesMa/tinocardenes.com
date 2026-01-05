@@ -1,7 +1,7 @@
 .button {
   background: var(--background);
-  border: var(--foreground) 2px solid;
-  color: var(--foreground);
+  border: var(--accent) 2px solid;
+  color: var(--accent);
   display: flex;
   align-items: center;
   gap: 0.2rem;
@@ -11,7 +11,7 @@
   text-decoration: none;
   font-weight: 500;
   font-size: 1rem;
-  transition: background-color 0.5s, color 0.5s;
+  transition: background-color 0.3s, color 0.3s;
 }
 .button:hover {
   background-color: var(--accent);
@@ -20,4 +20,5 @@
 }
 .icon {
   width: 1rem;
+  margin : 0 0.5rem 0 0.5rem;
 }

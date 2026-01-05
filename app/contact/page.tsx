@@ -1,16 +1,40 @@
 import Image from "next/image";
-
+import gstyles from "../globals.module.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPhone, faEnvelope } from "@fortawesome/free-solid-svg-icons";
 export default function ContactPage() {
     return (
-        <div className="max-w-sm w-[50%] lg:max-w-full lg:flex shadow-lg my-10 mx-auto">
-            <div className="h-48 lg:h-auto lg:w-48 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden" style={{ backgroundImage: "url('/headshot.avif" }} title="Woman holding a mug">
-            </div>
-            <div className="border-r border-b border-l border-gray-400 lg:border-l-0 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
-                <div className="mb-8">
-                    <p className="text-gray-700 text-base">cardenestino@gmail.com</p>
-                    <p className="text-gray-700 text-base">(412) 758-8290</p>
+        <div className="min-h-[70vh] flex items-center justify-center p-4">
+            <div className="bg-white rounded-2xl shadow-xl overflow-hidden max-w-lg w-full border border-gray-100">
+                <div className="relative w-full h-80 bg-gradient-to-br from-gray-100 to-gray-200">
+                    <Image
+                        src="/headshot.avif"
+                        alt="Tino Cardenes"
+                        fill
+                        className="object-cover"
+                        priority
+                    />
                 </div>
+                <div className="p-8">
+                    <h1 className="text-3xl font-bold text-gray-900 mb-2">Get In Touch</h1>
+                    
+                    <div className="space-y-4">
+                        <div className={ gstyles.description + " flex items-center gap-3 group"}>
+                            <FontAwesomeIcon icon={faEnvelope} className="w-5 h-5" />
+                            <a href="mailto:cardenestino@gmail.com" className={ " hover:underline"}>
+                                cardenestino@gmail.com
+                            </a>
+                        </div>
+                         
+                        <div className={ gstyles.description + " flex items-center gap-3 group"}>
+                                  <FontAwesomeIcon icon={faPhone} className="w-5 h-5" />
 
+                            <a href="tel:+14127588290" className={ " hover:underline"}>
+                                (412) 758-8290
+                            </a> 
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     );

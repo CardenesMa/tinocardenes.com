@@ -7,10 +7,12 @@ export type MediaVideoBoxProps = {
     link: string;
     thumbnail: string;
     size?: number;
+    aspectRatio?: number;
 };
 
-export function MediaVideoBox({ link, thumbnail, size }: MediaVideoBoxProps) {
-    const [aspectRatio, setAspectRatio] = useState<string>("16/9");
+export function MediaVideoBox({ link, thumbnail, size, aspectRatio: providedAspectRatio }: MediaVideoBoxProps) {
+    const [imageAspectRatio, setImageAspectRatio] = useState<string>("16/9");
+    const aspectRatio = providedAspectRatio ? `${providedAspectRatio}` : imageAspectRatio;
 
     // Autoplay aktivieren, wenn das Video geladen wird
     function handleClick(e: React.MouseEvent<HTMLDivElement>) {
@@ -38,13 +40,13 @@ export function MediaVideoBox({ link, thumbnail, size }: MediaVideoBoxProps) {
                 src={thumbnail}
                 alt="Video Thumbnail"
                 fill={true}
-                style={{ objectFit: "cover", borderRadius: 12, cursor: "pointer" }}
+                style={{ objectFit: "cover",  cursor: "pointer" }}
                 sizes={size ? `${size}px` : "100vw"}
                 priority
                 onLoad={(e) => {
                     const img = e.target as HTMLImageElement;
                     const ratio = `${img.naturalWidth}/${img.naturalHeight}`;
-                    setAspectRatio(ratio);
+                    setImageAspectRatio(ratio);
                 }}
             />
             <button
