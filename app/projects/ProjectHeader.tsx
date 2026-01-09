@@ -8,7 +8,7 @@ const ProjectHeader = () => (
         <div className="relative w-full max-w-6xl mx-auto p-10">
 
             {/* --- GRID LAYER 1: IMAGE --- */}
-            <div className="absolute top-0 left-0 grid grid-cols-5 gap-0 w-full">
+            <div className="absolute top-0 left-0 grid grid-cols-5 gap-0 w-full hidden md:grid">
                 <div className="col-span-3 flex items-start">
                     <Image
                         src="/studio.jpg"
@@ -21,8 +21,8 @@ const ProjectHeader = () => (
             </div>
 
             {/* --- GRID LAYER 2: TEXT CARD --- */}
-            <div className="absolute bottom-0 left-0 grid grid-cols-5 min-h-1/2 gap-0 w-full bottom-0">
-                <div className="col-span-3 col-start-3 flex items-start p-10">
+            <div className="absolute bottom-0 left-0 grid grid-cols-1 md:grid-cols-5 min-h-1/2 gap-0 w-full bottom-0">
+                <div className="md:col-span-3 md:col-start-3 flex items-start p-10">
                     <div
                         className={
                             styles.introTextContainer +

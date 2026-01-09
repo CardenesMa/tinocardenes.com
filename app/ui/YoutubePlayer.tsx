@@ -2,6 +2,8 @@
 
 import { MediaVideoBox } from "./MediaVideoBox";
 import gstyles from "../globals.module.css";
+import styles from "./VlahakisPreview.module.css";
+
 const getYoutubeId = (url: string) => {
     const match = url.match(/embed\/([\w-]+)/);
     return match ? match[1] : null;
@@ -19,8 +21,13 @@ const YoutubePlayer = ({ title, link, size, aspectRatio }: YoutubePlayerProps) =
     const thumbnail = getYoutubeId(link) ? `https://img.youtube.com/vi/${getYoutubeId(link)}/maxresdefault.jpg` : "";
 
     return (
-        <div className="w-full">
+        <div className=" relative">
             <MediaVideoBox link={autoplayLink} thumbnail={thumbnail} size={size} aspectRatio={aspectRatio} />
+            {title && (
+                <div className={styles.videoTitleOverlay}>
+                    {title}
+                </div>
+            )}
         </div>
     );
 };

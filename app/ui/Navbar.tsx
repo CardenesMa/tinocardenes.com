@@ -6,7 +6,7 @@ import SocialButtons from "./SocialButtons";
 
 const navLinks = [
   { name: "Home", href: "/" },
-  { name: "Contact", href: "/contact" },
+  { name: "Contact", href: "mailto:cardenestino@gmail.com" },
   { name: "Projects", href: "/projects" },
   { name: "Media", href: "/media" },
   { name: "SonicScore", href: "/sonicscore" },
