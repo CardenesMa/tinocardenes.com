@@ -22,7 +22,7 @@ const ProjectHeader = () => (
 
             {/* --- GRID LAYER 2: TEXT CARD --- */}
             <div className="absolute bottom-0 left-0 grid grid-cols-1 md:grid-cols-5 min-h-1/2 gap-0 w-full bottom-0">
-                <div className="md:col-span-3 md:col-start-3 flex items-start p-10">
+                <div className="md:col-span-3 md:col-start-3 flex items-start md:p-10 sm:p-5">
                     <div
                         className={
                             styles.introTextContainer +
@@ -40,7 +40,7 @@ const ProjectHeader = () => (
 
             {/* Spacer so parent has height */}
             <div className="invisible pointer-events-none">
-                <div className="h-[350px]"></div>
+                <div className="h-[200px] md:h-[350px]"></div>
             </div>
 
         </div>

@@ -15,6 +15,14 @@
   /* Ensure enough height for consistent layout */
 }
 
+@media (max-width: 768px) {
+  .projectBox {
+    min-height: 150px;
+    /* Adjust height for smaller screens */
+    box-shadow: none;
+  }
+}
+
 
 .projectBox:hover {
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);

@@ -91,4 +91,19 @@
   .videoWrapper {
     max-width: 95vw;
   }
+
+  .topTitle {
+    font-size: 28px;
+  }
+
+  .sessionTitle {
+    font-size: 48px;
+  }
+
+  .strip {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
 }

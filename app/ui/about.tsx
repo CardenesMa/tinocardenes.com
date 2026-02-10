@@ -7,8 +7,8 @@ import { faFile, faImage } from "@fortawesome/free-solid-svg-icons";
 
 export default function About() {
   return (
-    <main className={`${styles.container} ${serif.className} grid grid-flow-col grid-cols-3`}>
-      <section className={styles.panel + " col-span-2 "}>
+    <main className={`${styles.container} ${serif.className}`}>
+      <section className={styles.panel}>
         <h1 className={gstyles.headline}>About</h1>
         <h2 className={gstyles.subheadline}>Pianist, Music Technologist</h2>
         <p className={gstyles.description}>
@@ -30,7 +30,7 @@ export default function About() {
           />
         </div>
       </section>
-      <aside className={styles.photoPanel + " col-span-1"}>
+      <aside className={styles.photoPanel}>
         <Image
           src="/headshot.avif"
           alt="Tino Cardenes Headshot"

@@ -15,10 +15,10 @@ const navLinks = [
 const Navbar = () => (
   <header className={styles["navbar-header"]}>
     <nav className={styles["navbar-main"]}>
-      <div className={"grid grid-cols-3 items-center w-full"}>
-        <div className="col-span-1"></div>
+      <div className={"grid grid-cols-1 md:grid-cols-3 items-center w-full gap-2"}>
+        <div className="col-span-1 hidden md:block"></div>
         <span className={`${nameBigFont.className} col-span-1 antialiased ${styles["navbar-title"]}`}>TINO  CARDENES</span>
-        <div className="col-span-1">
+        <div className="col-span-1 flex justify-center md:justify-end">
           <SocialButtons />
         </div>
       </div>
