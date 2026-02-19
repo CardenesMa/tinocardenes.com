@@ -18,7 +18,7 @@ const Navbar = () => (
       <div className={"grid grid-cols-1 md:grid-cols-3 items-center w-full gap-2"}>
         <div className="col-span-1 hidden md:block"></div>
         <span className={`${nameBigFont.className} col-span-1 antialiased ${styles["navbar-title"]}`}>TINO  CARDENES</span>
-        <div className="col-span-1 flex justify-center md:justify-end">
+        <div className="col-span-1 flex justify-center">
           <SocialButtons />
         </div>
       </div>

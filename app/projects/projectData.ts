@@ -1,6 +1,12 @@
 import { ProjectData } from "./ProjectBox";
 export const projectData: Array<ProjectData> = [
     new ProjectData(
+        "/TH26.png",
+        "https://tartanhacks-2026.vercel.app",
+        "TartanHacks 2026",
+        "SliceSwap is what won me 3rd place in the 2026 CMU Hackathon (TartanHacks)! We were challenged with creating a fun, mosaic-themed mobile browser game with a bundle under 15kB, all completed in under 24 hours. Upload an image, and swap tiles to recreate your image. "
+    ),
+    new ProjectData(
         "/sonicscore_logo.png",
         "https://tinocardenes.com/sonicscore",
         "SonicScore",

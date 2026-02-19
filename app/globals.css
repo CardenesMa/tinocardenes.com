@@ -3,3 +3,6 @@
 @tailwind utilities;
 
 /* Vanilla CSS kann weiterhin hier ergänzt werden */
+body {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}

@@ -3,7 +3,7 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --accent : #9a75d9;
+  --accent: #9a75d9;
   --softBackground: rgb(246, 240, 236);
 }
 
@@ -11,8 +11,8 @@
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
-    --accent : #bb9ff5;
-    --softBackground:  rgb(86, 81, 77);
+    --accent: #bb9ff5;
+    --softBackground: rgb(86, 81, 77);
   }
 }
 
@@ -33,19 +33,19 @@
 }
 
 .medheadline {
-    font-size: 32px;
-    font-weight: 600;
-    margin: 0;
-    text-align: inherit;
+  font-size: 32px;
+  font-weight: 600;
+  margin: 0;
+  text-align: inherit;
 }
 
-.description { 
-    font-size: 24px;
-    line-height: inherit;
-    margin: 0;
-    font-weight : 400;
-    padding-top: 1rem;
-    /* font-weight: 100; */
+.description {
+  font-size: 24px;
+  line-height: inherit;
+  margin: 0;
+  font-weight: 400;
+  padding-top: 1rem;
+  /* font-weight: 100; */
 }
 
 @media (max-width: 768px) {
@@ -68,12 +68,11 @@
 }
 
 .softBackground {
-    background: var(--softBackground);
+  background: var(--softBackground);
 }
 
 
 body {
   background: var(--background);
   color: var(--foreground);
-  /* font-family: Arial, Helvetica, sans-serif; */
 }

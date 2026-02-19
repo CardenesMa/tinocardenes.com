@@ -1,4 +1,4 @@
-import { Cormorant_Garamond } from 'next/font/google';
+import { Newsreader } from 'next/font/google';
 import localFont from 'next/font/local';
 
 export const nameBigFont = localFont({
@@ -12,5 +12,5 @@ export const nameBigFont = localFont({
 
     display: 'swap',
 });
-export const serif = Cormorant_Garamond({ subsets: ['latin'] });
+export const serif = Newsreader({ subsets: ['latin'] });
 export const sans = nameBigFont;
