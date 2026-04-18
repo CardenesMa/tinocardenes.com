@@ -39,11 +39,9 @@ const MediaGallery = () => {
                                 />
                             </div>
                         ) : (
-                            <YoutubePlayer link={media.link} aspectRatio={media.aspectRatio} />
+                            <YoutubePlayer link={media.link} title={media.name} aspectRatio={media.aspectRatio} />
                         )}
-                        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent px-4 md:px-6 pt-8 md:pt-12 pb-3 md:pb-2 text-white text-lg md:text-2xl font-black h-full flex flex-col-reverse whitespace-nowrap text-center">
-                            {media.name}
-                        </div>
+
                     </div>
                 ))}
             </Masonry>

@@ -8,7 +8,7 @@ export default function About() {
     <main className={`flex flex-col lg:flex-row items-start justify-center min-h-[50vh] px-4 md:px-8 py-8 gap-4 lg:gap-4 ${serif.className}`}>
       <section className="flex-1 px-4 md:px-8 py-4 flex flex-col gap-4">
         <h1 className="text-4xl md:text-5xl font-bold leading-tight">About</h1>
-        <h2 className="text-lg md:text-2xl font-medium mb-2 md:mb-4">Pianist, Music Technologist</h2>
+        <h2 className="text-lg md:text-2xl font-medium mb-2 md:mb-4">Musician, Computer Scientist</h2>
         <p className="text-lg md:text-2xl font-normal leading-normal md:pt-4">
           I'm a pianist and music technologist based in Pittsburgh, PA.
           On this corner of the internet you can find my music, software, and projects that combine the two.
@@ -24,6 +24,11 @@ export default function About() {
             link="/headshot.jpg"
             download={true}
             icon={faImage}
+          />
+          <Button text="Bio"
+            link="/bio.pdf"
+            download={true}
+            icon={faFile}
           />
         </div>
       </section>

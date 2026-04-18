@@ -1,4 +1,4 @@
-import { Newsreader } from 'next/font/google';
+import { Spectral } from 'next/font/google';
 import localFont from 'next/font/local';
 
 export const nameBigFont = localFont({
@@ -12,5 +12,8 @@ export const nameBigFont = localFont({
 
     display: 'swap',
 });
-export const serif = Newsreader({ subsets: ['latin'] });
+// export const serif = Newsreader({ subsets: ['latin'] });
+export const serif = Spectral({
+    weight: "200"
+});
 export const sans = nameBigFont;
