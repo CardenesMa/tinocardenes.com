@@ -1,7 +1,7 @@
+
 "use client";
 import Image from "next/image";
 import { useState } from "react";
-import style from "./mediaVideoBox.module.css";
 
 export type MediaVideoBoxProps = {
     link: string;
@@ -22,7 +22,7 @@ export function MediaVideoBox({ link, thumbnail, size, aspectRatio: providedAspe
             const iframeStyle = size
                 ? `width='${size}' height='${size}'`
                 : `style='width:100%; aspect-ratio:${aspectRatio};'`;
-            container.innerHTML = `<iframe src='${link}&autoplay=1' ${iframeStyle} class='${style.mediaVideo}' allow='autoplay; fullscreen; picture-in-picture' allowfullscreen border:0'></iframe>`;
+            container.innerHTML = `<iframe src='${link}&autoplay=1' ${iframeStyle} class='border-0' allow='autoplay; fullscreen; picture-in-picture' allowfullscreen border:0'></iframe>`;
         }
     }
 
@@ -40,7 +40,7 @@ export function MediaVideoBox({ link, thumbnail, size, aspectRatio: providedAspe
                 src={thumbnail}
                 alt="Video Thumbnail"
                 fill={true}
-                style={{ objectFit: "cover",  cursor: "pointer" }}
+                style={{ objectFit: "cover", cursor: "pointer" }}
                 sizes={size ? `${size}px` : "100vw"}
                 priority
                 onLoad={(e) => {

@@ -1,13 +1,10 @@
 // SocialButtons.tsx
-// Einfache Social Media Buttons für die Navbar
+// Simple Social Media Buttons for the Navbar
 
 
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub, faInstagram, faYoutube } from "@fortawesome/free-brands-svg-icons";
-import styles from "./navbar.module.css";
-
-const SOCIAL_SIZE = 20;
 const socialLinks = [
   {
     name: "GitHub",
@@ -27,7 +24,7 @@ const socialLinks = [
 ];
 
 const SocialButtons = () => (
-  <div style={{ display: "flex", gap: `${SOCIAL_SIZE / 2}px` }}>
+  <div className="flex gap-2.5">
     {socialLinks.map((link) => (
       <Link
         key={link.name}
@@ -35,15 +32,15 @@ const SocialButtons = () => (
         target="_blank"
         rel="noopener noreferrer"
         aria-label={link.name}
-        style={{ color: "inherit", textDecoration: "none" }}
+        className="text-inherit no-underline"
         passHref
       >
-        <span style={{ display: "inline-block", width: `${SOCIAL_SIZE}px`, height: `${SOCIAL_SIZE}px` }}>
-          <FontAwesomeIcon icon={link.icon} className={styles.socialIcon} />
+        <span className="inline-block w-5 h-5 transition-colors duration-200 text-[var(--accent)] hover:opacity-80">
+          <FontAwesomeIcon icon={link.icon} className="w-full h-full" />
         </span>
       </Link>
     ))}
-  </div >
+  </div>
 );
 
 export default SocialButtons;

@@ -1,5 +1,4 @@
 import React from "react";
-import styles from "./button.module.css";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IconDefinition } from "@fortawesome/free-brands-svg-icons";
@@ -12,7 +11,8 @@ type ButtonProps = React.HTMLAttributes<HTMLAnchorElement> & {
 };
 
 const Button = ({ text, link, download, icon, ...props }: ButtonProps) => {
-    const finalClassName = `${styles.button} ${props.className || ""}`;
+    const baseClasses = "inline-flex items-center gap-2 px-7 py-3 rounded-lg border-2 border-[var(--accent)] text-[var(--accent)] no-underline font-medium text-base transition-all duration-300 hover:bg-[var(--accent)] hover:text-[var(--background)] hover:border-transparent";
+    const finalClassName = `${baseClasses} ${props.className || ""}`;
 
     return (
         <Link href={link}
@@ -21,8 +21,7 @@ const Button = ({ text, link, download, icon, ...props }: ButtonProps) => {
             {...(download ? { download: true } : {})}
         >
             {text}
-            {icon && <FontAwesomeIcon icon={icon} aria-hidden="true" className={styles.icon} />}
-
+            {icon && <FontAwesomeIcon icon={icon} aria-hidden="true" className="w-4" />}
         </Link>
     );
 };

@@ -2,7 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Vanilla CSS kann weiterhin hier ergänzt werden */
+/* CSS Variables for Dark Mode Support */
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  --accent: #9a75d9;
+  --softBackground: rgb(246, 240, 236);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+    --accent: #bb9ff5;
+    --softBackground: rgb(86, 81, 77);
+  }
+}
+
+/* Base styles */
 body {
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  @apply bg-white text-slate-900 dark:bg-slate-950 dark:text-slate-100;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+html {
+  @apply scroll-smooth;
 }
