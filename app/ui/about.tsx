@@ -21,7 +21,7 @@ export default function About() {
             download={true}
             icon={faFile} />
           <Button text="Photo"
-            link="/headshot.jpg"
+            link="/headshot.jpeg"
             download={true}
             icon={faImage}
           />
@@ -34,7 +34,7 @@ export default function About() {
       </section>
       <aside className="flex-1 hidden lg:flex items-center justify-center w-full">
         <Image
-          src="/headshot.avif"
+          src="/headshot.jpeg"
           alt="Tino Cardenes Headshot"
           width={300}
           height={400}

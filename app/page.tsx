@@ -17,7 +17,7 @@ export default function Home() {
     <main>
       <About />
       <VlahakisPreview />
-      
+
       {/* JSON-LD Structured Data */}
       <script
         type="application/ld+json"
@@ -27,7 +27,7 @@ export default function Home() {
             "@type": "Person",
             "name": "Tino Cardenes",
             "url": "https://tinocardenes.com",
-            "image": "https://tinocardenes.com/headshot.avif",
+            "image": "https://tinocardenes.com/headshot.jpeg",
             "jobTitle": "Pianist, Music Technologist",
             "description": "Professional musician and computer scientist specializing in music technology, jazz piano, and media production.",
             "sameAs": [

@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     description: 'Professional musician and computer scientist specializing in music technology, jazz piano, and media production.',
     images: [
       {
-        url: '/headshot.avif',
+        url: '/headshot.jpeg',
         width: 1200,
         height: 630,
         alt: 'Tino Cardenes',

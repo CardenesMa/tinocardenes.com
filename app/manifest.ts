@@ -1,5 +1,5 @@
 import { MetadataRoute } from 'next'
- 
+
 export default function manifest(): MetadataRoute.Manifest {
   return {
     name: 'Tino Cardenes - Pianist, Music Technologist',
@@ -11,7 +11,7 @@ export default function manifest(): MetadataRoute.Manifest {
     theme_color: '#000000',
     icons: [
       {
-        src: '/headshot.avif',
+        src: '/headshot.jpeg',
         sizes: 'any',
         type: 'image/avif',
       },
