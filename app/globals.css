@@ -2,29 +2,45 @@
 @tailwind components;
 @tailwind utilities;
 
-/* CSS Variables for Dark Mode Support */
 :root {
-  --background: #ffffff;
+  --background: #fbfaf8;
   --foreground: #171717;
+  --muted-foreground: #4b5563;
+  --surface: #ffffff;
+  --surface-soft: #f6f0ec;
+  --surface-elevated: #ffffff;
+  --border: rgba(23, 23, 23, 0.1);
   --accent: #9a75d9;
-  --softBackground: rgb(246, 240, 236);
+  --accent-strong: #7b5ab7;
+  --accent-foreground: #ffffff;
+  --footer-background: #2d1f35;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #0b0d10;
+    --foreground: #f5f7fb;
+    --muted-foreground: #c5ccd8;
+    --surface: #11161d;
+    --surface-soft: #141922;
+    --surface-elevated: #171d27;
+    --border: rgba(255, 255, 255, 0.12);
     --accent: #bb9ff5;
-    --softBackground: rgb(86, 81, 77);
+    --accent-strong: #d2bcff;
+    --accent-foreground: #0b0d10;
+    --footer-background: #111420;
   }
 }
 
-/* Base styles */
 body {
-  @apply bg-white text-slate-900 dark:bg-slate-950 dark:text-slate-100;
-  /* font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; */
+  @apply bg-[var(--background)] text-[var(--foreground)] antialiased;
 }
 
 html {
   @apply scroll-smooth;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--accent) 35%, transparent);
+  color: var(--foreground);
 }

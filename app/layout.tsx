@@ -66,8 +66,7 @@ export default function RootLayout({
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
-      {/* Default everything inherit same font */}
-      <body className={`${serif.className} flex flex-col min-h-screen`}>
+      <body className={`${serif.className} flex min-h-screen flex-col bg-[var(--background)] text-[var(--foreground)]`}>
         <Navbar />
         {children}
         <Footer />

@@ -25,7 +25,7 @@ export const projectData: Array<ProjectData> = [
         "SonicScore is the official editor for creating and customizing detailed sound bath notation projects. Easily edit, style, and share your scores using the provided symbols, or make your own!"
     ),
     new ProjectData(
-        "/studio.jpg",
+        "/vlahakis_sessions.jpeg",
         "https://www.youtube.com/playlist?list=PLmCrmQbBrvjYu4IDz8BjJ6X_PdGEhrF4m",
         "The Vlahakis Sessions",
         "The Vlahakis Sessions is a short album of tunes I compiled after some impromptu recording sessions. I worked on all aspects of the production for this album, and was excited to release my first set of works 13 works in 2025."

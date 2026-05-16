@@ -3,7 +3,6 @@ import ProjectBox from "./ProjectBox";
 import ProjectHeader from "./ProjectHeader";
 import { Project } from "./ProjectBox";
 import { projectData } from "./projectData"
-import gstyles from "../globals.module.css";
 
 // Note: metadata export not available in client components
 // SEO is handled through root layout and sitemap
@@ -13,7 +12,7 @@ export default function Projects() {
     <main >
       <ProjectHeader />
 
-      <div className={`${gstyles.softBackground} grid  grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-10`}>
+      <div className="grid grid-cols-1 gap-4 bg-[var(--surface-soft)] px-4 py-10 md:grid-cols-2 md:px-10 lg:grid-cols-3">
         {projectData.map((project: Project, index: number) => (
           <div className="flex col-span-1" key={index}>
             <ProjectBox

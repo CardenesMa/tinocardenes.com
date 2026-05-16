@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 export default function Media() {
   return (
-    <main className="bg-[rgb(246,240,236)] dark:bg-[rgb(86,81,77)] h-full min-h-screen flex flex-col">
+    <main className="flex min-h-screen flex-col bg-[var(--surface-soft)]">
       <div className="w-full flex flex-col gap-4 px-4 py-8 md:py-16 justify-center items-center text-center mb-8">
         <h1 className="text-4xl md:text-5xl font-bold leading-tight">Some videos for your enjoyment</h1>
       </div>

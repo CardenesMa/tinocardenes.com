@@ -14,6 +14,6 @@ export const nameBigFont = localFont({
 });
 // export const serif = Newsreader({ subsets: ['latin'] });
 export const serif = Spectral({
-    weight: "200"
+    weight: "400"
 });
 export const sans = nameBigFont;

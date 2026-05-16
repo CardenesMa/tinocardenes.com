@@ -21,9 +21,9 @@ const ProjectHeader = () => (
             {/* --- GRID LAYER 2: TEXT CARD --- */}
             <div className="absolute bottom-0 left-0 grid grid-cols-1 md:grid-cols-5 gap-0 w-full">
                 <div className="md:col-span-3 md:col-start-3 flex items-start md:p-10 p-5">
-                    <div className="bg-white/95 dark:bg-slate-800/95 backdrop-blur shadow-2xl p-6 md:p-8 rounded-lg">
-                        <h1 className="text-4xl md:text-5xl font-bold leading-tight mb-4">Projects</h1>
-                        <h2 className="text-lg md:text-2xl font-medium">
+                    <div className="rounded-lg border border-[var(--border)] bg-[var(--surface-elevated)] p-6 shadow-2xl backdrop-blur md:p-8">
+                        <h1 className="mb-4 text-4xl font-bold leading-tight md:text-5xl">Projects</h1>
+                        <h2 className="text-lg font-medium md:text-2xl">
                             Here's just some of the cool stuff I've been working on. I invite you
                             to get involved or ask me about any of these initiatives.
                         </h2>
