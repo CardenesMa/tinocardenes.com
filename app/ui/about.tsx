@@ -11,16 +11,16 @@ export default function About() {
         <h1 className="text-4xl md:text-5xl font-bold leading-tight">About</h1>
         <h2 className="text-lg md:text-2xl font-medium mb-2 md:mb-4">Musician, Computer Scientist</h2>
         <p className="text-lg md:text-2xl font-normal leading-normal md:pt-4">
-          I'm a pianist and music technologist based in Pittsburgh, PA.
+          I'm a musician and computer scientist based in Pittsburgh, PA.
           On this corner of the internet you can find my music, software, and projects that combine the two.
-          I'm currently pursuing a Bachelors in Computer Science and Music Techology at Carnegie Mellon University,
+          I'm currently pursuing a Bachelors in Computer Science and Music Technology at Carnegie Mellon University,
           and I'm always excited to collaborate with artists and developers to create engaging experiences.
         </p>
 
       </section>
       <aside className="flex-1 lg:flex flex-col items-center justify-center h-full">
         <Image
-          src="/headshot.jpeg"
+          src="/headshot.jpg"
           alt="Tino Cardenes Headshot"
           width={300}
           height={400}
@@ -33,7 +33,7 @@ export default function About() {
             download={true}
             icon={faFile} />
           <Button text="Photo"
-            link="/headshot.jpeg"
+            link="/headshot.jpg"
             download={true}
             icon={faImage}
           />

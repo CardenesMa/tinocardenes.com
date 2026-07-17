@@ -31,9 +31,9 @@ export const projectData: Array<ProjectData> = [
         "The Vlahakis Sessions is a short album of tunes I compiled after some impromptu recording sessions. I worked on all aspects of the production for this album, and was excited to release my first set of works 13 works in 2025."
     ),
     new ProjectData(
-        "/pc.jpeg.avif", "https://moniquemead.com/porch-concert-rsvp-2024",
+        "/pc.jpeg.avif", "https://moniquemead.com/porch-concerts-2026",
         "Porch Concerts",
-        "The Shadyside Porch Concert series was created in 2020 by Tino Cardenes and Monique Mead to foster community around music. The concert series features Pittsburgh's best ensembles of all genres. Thanks to our generous donors all proceeds are donated to local music projects."
+        "The Shadyside Porch Concert series was created in 2020 by Tino Cardenes and Monique Mead to foster community around music. The concert series features Pittsburgh's best ensembles of all genres and has supported hundreds of local musicians, and provided a community to countless audiences over the years. "
     ),
     new ProjectData(
         "/azure.png.avif",
