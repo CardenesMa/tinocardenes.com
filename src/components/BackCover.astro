@@ -1,0 +1,30 @@
+---
+import Page from './Page.astro';
+import { site } from '../site';
+---
+
+<Page side="left" plate={false} class="page--back">
+  <div class="back-text">
+    <svg class="back-ornament" viewBox="-30 -30 60 60" aria-hidden="true">
+      {[0, 60, 120, 180, 240, 300].map((deg) => <ellipse cx="0" cy="-17" rx="9.5" ry="16" transform={`rotate(${deg})`} />)}
+      <circle r="8" class="gold"></circle>
+    </svg>
+    <p class="back-name">{site.name}</p>
+    <p class="back-roles">{site.edition.roles.join(' · ')}</p>
+
+    <dl class="back-contact">
+      <dt>Correspondence</dt>
+      <dd><a href={`mailto:${site.email}`}>{site.email}</a></dd>
+      <dt>Elsewhere</dt>
+      <dd>
+        {site.socials.map((s) => <a href={s.href} target="_blank" rel="noopener noreferrer">{s.label}</a>)}
+      </dd>
+    </dl>
+
+    <p class="back-colophon">
+      Set in EB Garamond and Cormorant.<br />
+      © {new Date().getFullYear()} {site.name}. All rights reserved.
+    </p>
+    <p class="cover-plate">{site.edition.plate}</p>
+  </div>
+</Page>

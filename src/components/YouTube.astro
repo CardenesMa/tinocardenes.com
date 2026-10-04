@@ -1,0 +1,47 @@
+---
+// A click-to-load YouTube player. Only a thumbnail is fetched until the
+// reader presses play; the player is torn down again when the page turns.
+interface Props {
+  id: string;
+  title: string;
+  aspect: string;
+}
+
+const { id, title, aspect } = Astro.props;
+const [w, h] = aspect.split('/').map(Number);
+// Cap the height (in page widths) so tall videos leave room for the notes.
+const style = `aspect-ratio: ${w} / ${h}; max-width: calc(60cqi * ${(w / h).toFixed(4)})`;
+---
+
+<div class="yt" style={style} data-yt={id} data-title={title}>
+  <button type="button" class="yt-play" aria-label={`Play ${title}`}>
+    <img src={`https://i.ytimg.com/vi/${id}/hqdefault.jpg`} alt="" loading="lazy" decoding="async" />
+    <span class="yt-icon" aria-hidden="true"></span>
+  </button>
+</div>
+
+<script>
+  document.addEventListener('click', (event) => {
+    const button = (event.target as Element).closest<HTMLButtonElement>('.yt-play');
+    const box = button?.closest<HTMLElement>('[data-yt]');
+    if (!button || !box) return;
+
+    const iframe = document.createElement('iframe');
+    iframe.src = `https://www.youtube-nocookie.com/embed/${box.dataset.yt}?autoplay=1&rel=0`;
+    iframe.title = box.dataset.title ?? 'YouTube video';
+    iframe.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+    iframe.allowFullscreen = true;
+    button.hidden = true;
+    box.append(iframe);
+    iframe.focus();
+  });
+
+  // Stop playback when the reader turns away from the spread.
+  document.addEventListener('spread:leave', (event) => {
+    for (const box of (event.target as Element).querySelectorAll<HTMLElement>('[data-yt]')) {
+      box.querySelector('iframe')?.remove();
+      const button = box.querySelector<HTMLButtonElement>('.yt-play');
+      if (button) button.hidden = false;
+    }
+  });
+</script>

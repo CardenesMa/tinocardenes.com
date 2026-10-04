@@ -1,0 +1,27 @@
+---
+// The top of a score's first page: title centred, subtitle beneath,
+// a tempo marking at the left and the composer's name at the right,
+// then the opening staff.
+interface Props {
+  title: string;
+  subtitle?: string;
+  marking?: string;
+  attribution?: string;
+}
+
+const { title, subtitle, marking, attribution } = Astro.props;
+---
+
+<header class="score-heading">
+  <h2 class="score-title">{title}</h2>
+  {subtitle && <p class="score-subtitle">{subtitle}</p>}
+  {
+    (marking || attribution) && (
+      <div class="score-meta">
+        <span class="score-marking">{marking}</span>
+        <span class="score-attribution">{attribution}</span>
+      </div>
+    )
+  }
+  <div class="staff" aria-hidden="true"><span class="staff-clef">𝄞</span></div>
+</header>

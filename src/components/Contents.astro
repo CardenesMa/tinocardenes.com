@@ -1,0 +1,50 @@
+---
+import Page from './Page.astro';
+import type { TocEntry } from '../lib/book';
+
+interface Props {
+  entries: TocEntry[];
+  number: number | null;
+}
+
+const { entries, number } = Astro.props;
+
+// Consecutive entries sharing a group are printed under one group heading.
+const blocks: { group?: string; items: TocEntry[] }[] = [];
+for (const entry of entries) {
+  const last = blocks.at(-1);
+  if (last && entry.group && last.group === entry.group) last.items.push(entry);
+  else blocks.push({ group: entry.group, items: [entry] });
+}
+---
+
+<Page side="left" number={number} class="page--contents">
+  <span class="dog-ear" aria-hidden="true"></span>
+  <header class="contents-heading">
+    <h2 class="score-title">Contents</h2>
+    <p class="score-subtitle">Inhalt · Table des matières</p>
+  </header>
+  <nav aria-label="Table of contents">
+    {
+      blocks.map((block) => (
+        <section class="toc-block">
+          {block.group && <h3 class="toc-group">{block.group}</h3>}
+          <ol class="toc">
+            {block.items.map((item) => (
+              <li>
+                <a href={`#${item.id}`} class="toc-link">
+                  <span class="toc-title">
+                    {item.title}
+                    {item.detail && <span class="toc-detail">{item.detail}</span>}
+                  </span>
+                  <span class="toc-leader" aria-hidden="true" />
+                  <span class="toc-page">{item.page}</span>
+                </a>
+              </li>
+            ))}
+          </ol>
+        </section>
+      ))
+    }
+  </nav>
+</Page>

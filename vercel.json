@@ -1,0 +1,7 @@
+{
+  "redirects": [
+    { "source": "/projects", "destination": "/#works", "permanent": true },
+    { "source": "/media", "destination": "/#contents", "permanent": true },
+    { "source": "/sonicscore", "destination": "/#sonicscore", "permanent": true }
+  ]
+}
