@@ -28,9 +28,9 @@ export function initReader(book: HTMLElement) {
     showCover: true,
     usePortrait: true,
     startPage: fromUrl(),
-    flippingTime: 800,
+    flippingTime: 500,
     maxShadowOpacity: 0.4,
-    disableFlipByClick: true,
+    disableFlipByClick: false,
   });
   flipbook.loadFromHTML(pages);
 
@@ -81,7 +81,7 @@ export function initReader(book: HTMLElement) {
     if (index >= 0 && !visible().includes(pages[index])) flipbook.flip(index);
   };
 
-  // In-page links (contents, ribbon, cross-references) and the arrow buttons.
+  // In-page links (contents,  cross-references) and the arrow buttons.
   document.addEventListener('click', (event) => {
     if (event.defaultPrevented || event.metaKey || event.ctrlKey || event.shiftKey) return;
     const control = (event.target as Element).closest<HTMLElement>('[data-turn], a[href^="#"]');

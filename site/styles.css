@@ -10,7 +10,6 @@
 
   --henle: #829fb7;
   --cover-ink: #16191d;
-  --ribbon: #7c1f2b;
 
   --desk: #ffffff;
   --desk-ink: #4f4b44;
@@ -87,7 +86,6 @@ button {
   margin: 3rem auto;
   padding: 1rem 1.25rem;
   background: var(--paper);
-  border-left: 3px solid var(--ribbon);
   font-size: 1.05rem;
 }
 
@@ -788,9 +786,7 @@ button {
   border-color: transparent transparent transparent var(--paper);
 }
 
-.yt-play:hover .yt-icon {
-  background: var(--ribbon);
-}
+
 
 .yt iframe {
   position: absolute;
@@ -871,7 +867,7 @@ button {
 }
 
 /* The first paragraph is the title, set as large as the label. */
-.cover-text > p:first-child {
+.cover-text>p:first-child {
   font-size: 1.7em;
   line-height: 1.22;
 }
@@ -882,7 +878,7 @@ button {
   border-top: 1px solid var(--cover-ink);
 }
 
-.cover-text p + p {
+.cover-text p+p {
   margin-top: 1em;
 }
 
@@ -965,31 +961,6 @@ button {
   opacity: 0.6;
 }
 
-/* ───────────────────────── Ribbon bookmark ───────────────────────── */
-
-/* A silk ribbon sewn into the spine. It always returns to the contents;
-   on the contents spread it lies down the gutter. */
-.ribbon {
-  position: absolute;
-  top: -0.6rem;
-  left: calc(50% + 1.2%);
-  z-index: 6;
-  width: 1.7%;
-  min-width: 14px;
-  height: 9%;
-  background: linear-gradient(90deg, rgb(255 255 255 / 0.12), transparent 40%, rgb(0 0 0 / 0.18)), var(--ribbon);
-  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% calc(100% - 0.55rem), 0 100%);
-  filter: drop-shadow(1px 2px 1.5px rgb(0 0 0 / 0.3));
-  transition: height 0.35s ease;
-}
-
-.ribbon:hover {
-  height: 11%;
-}
-
-.book-frame[data-at-toc] .ribbon {
-  height: calc(100% + 2.2rem);
-}
 
 /* ───────────────────────── Small screens: one page at a time ───────────────────────── */
 
@@ -1002,7 +973,7 @@ button {
     --book-w: min(100%, 640px);
   }
 
-  .ribbon,
+
   .edge,
   .hint {
     display: none;

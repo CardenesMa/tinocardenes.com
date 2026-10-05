@@ -78,7 +78,7 @@ Supported Markdown: headings, paragraphs, `-` lists, `---` rules, `*em*`,
 | `::part[Recordings]` | Group the following titles under a heading in the contents. |
 | `::score{src}` | Full-page score or lead sheet (placeholder if no `src`). Optional `alt`, `caption`. |
 | `::plate{src kind}` | Full-page photo (`kind=portrait`, framed) or illustration (`kind=figure`). Optional `alt`, `caption`. |
-| `::contents` | The table of contents. The ribbon and the <kbd>C</kbd> key return here. |
+| `::contents` | The table of contents.
 | `::youtube{id aspect}` | Click-to-play video. `aspect` is `16/9` (default), `4/3`, or `1/1`. |
 | `::figure{src caption width}` | An image within the text. |
 | `:::work{title role year href label}` … `:::` | A numbered catalogue entry; the body is its description. |
