@@ -264,6 +264,9 @@ function typeset(text: string, before: string) {
 /** The plain text of inline content, e.g. for ids and labels. */
 export function plainText(nodes: Inline[]): string {
   return nodes
-    .map((n) => (n.type === 'text' ? n.value : n.type === 'break' ? ' ' : 'children' in n ? plainText(n.children) : plainText(n.label)))
+    .map((n) => (n.type === 'text' ? n.value :
+      n.type === 'break' ? ' ' :
+        'children' in n ? plainText(n.children)
+          : plainText(n.label)))
     .join('');
 }
