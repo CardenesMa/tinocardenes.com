@@ -1,73 +1,117 @@
 # tinocardenes.com
 
-The site is a single page laid out as a printed score: a cover, a table of
-contents, then two-page spreads you turn like a book. Built with
-[Astro](https://astro.build) as a static site; Vercel deploys it with no
-configuration.
-
-## Running locally
-
-Requires Node 22.12 or newer.
+The whole site is one Markdown file, [`content/book.md`](content/book.md),
+rendered as a bound music score: a cover, a table of contents, and two-page
+spreads you turn like a book.
 
 ```sh
 pnpm install
-pnpm dev        # http://localhost:4321
-pnpm build      # static output in dist/
-pnpm check      # type-check
+pnpm dev      # http://localhost:4321, rebuilds and reloads on save
+pnpm build    # writes the static site to dist/
+pnpm check    # type-check the build code
 ```
 
-## Editing content
+Vercel runs `pnpm build` and serves `dist/` (see `vercel.json`). Files in
+`public/` are copied as-is and referenced by absolute path, e.g.
+`/images/portrait.jpg`.
 
-All content is Markdown with typed frontmatter (schemas in
-`src/content.config.ts`). A typo in a field name or a missing image fails the
-build with a message pointing at the file.
+## How Markdown becomes pages
 
-| What | Where |
+| You write | You get |
 | --- | --- |
-| Name, email, socials, cover text | `src/site.ts` |
-| Preface, Biography, SonicScore | `src/content/sections/*.md` |
-| Works catalogue entries | `src/content/works/*.md` (sorted by `order`) |
-| Recordings (one spread each) | `src/content/recordings/*.md` (sorted by `order`) |
-| Order of the book | `OUTLINE` in `src/lib/book.ts` |
-| Downloadable PDFs and photo | `public/` |
+| `# Title` | A new spread. The title opens a left-hand page, set like the head of a score (title, staff, folio). A blank manuscript page fills the gap if the previous page was a left page. |
+| `## Title` at the top of a page | A titled page that doesn't force a new spread (e.g. the Preface facing the Contents). Elsewhere `##` is an ordinary subheading. |
+| `::pagebreak` | Continue on the next page. |
+| `::score` or `::plate` | A page of its own. Put one after a section's text to fill the facing page. |
+| Anything else | Flows onto the current page. Long text makes the page taller. |
 
-Page numbers and the table of contents are computed from the outline, so they
-update on their own.
+Every page title appears in the contents with its page number unless you add
+`toc=false`.
+
+### Heading attributes
+
+Add attributes in braces at the end of a page title:
+
+```md
+# Wave {composer="Antônio Carlos Jobim" subtitle="with the Tartan Quartet" marking="Bossa nova"}
+```
+
+| Attribute | Effect |
+| --- | --- |
+| `subtitle` | Italic line under the title |
+| `marking` | Tempo marking, top left above the staff |
+| `composer` | Attribution, top right above the staff; also shown in the contents |
+| `id` | The page's link (`/#id`); defaults to the title, slugified |
+| `toc=false` | Leave this page out of the contents |
+
+## Directives
+
+Syntax follows the [generic directives proposal](https://talk.commonmark.org/t/generic-directives-plugins-syntax/444):
+`:inline`, `::block`, `:::container … :::`. Quote attribute values containing
+spaces or `=`. A misspelled directive, missing attribute, or missing file fails
+the build with its line number.
+
+### Structure
+
+| Directive | Purpose |
+| --- | --- |
+| `:::cover` … `:::` | The front cover (solid blue). `##` is the name, `#` the title; the last paragraph sits at the foot. Must come first. |
+| `:::back` … `:::` | The back cover, alone on a left-hand page. |
+| `::pagebreak` | Continue on the next page. |
+| `::part[Recordings]` | Groups the following page titles under a heading in the contents. |
+
+### Full pages
+
+| Directive | Purpose |
+| --- | --- |
+| `::score{src="/scores/wave.png"}` | An engraved score or lead sheet filling the page. White backgrounds blend into the paper. Omit `src` for the placeholder. Optional `alt`, `caption`. |
+| `::plate{src="/images/x.jpg" kind=portrait}` | A full-page photograph (`kind=portrait`, framed) or illustration (`kind=figure`, the default). Optional `alt`, `caption`. |
+
+### Blocks
+
+| Directive | Purpose |
+| --- | --- |
+| `::contents` | The table of contents. The ribbon bookmark and the <kbd>C</kbd> key return here. |
+| `::youtube{id=4eYuc9c5NaY aspect=1/1}` | A click-to-play video with a "Watch on YouTube" link. `aspect` is `16/9` (default), `4/3`, or `1/1`. |
+| `::figure{src="/images/x.jpg" caption="…" width=60%}` | An image within the text. |
+| `:::work{title="…" role="…" year=2025 href="…" label="…"}` … `:::` | A numbered catalogue entry (No. 1, No. 2, …). The body is its description. |
+| `:::links` … `:::` | A Markdown list of links, set as a centred row at the foot of the page. |
+| `::staff[Con spirito]` | A short staff with a clef, with an optional tempo marking. |
+| `::signature[T. C. · Pittsburgh]` | A right-aligned sign-off. |
+| `::continued[Works]` | The running head "Works (continued)". |
+
+### Inline
+
+| Directive | Purpose |
+| --- | --- |
+| `:download[Résumé (PDF)]{href="/resume.pdf"}` | A link that downloads the file. |
+| `:sc[Correspondence]` | Small capitals. |
+| `:pageref{to=biography}` | "p. 4", linked. With a label, `:pageref[Biography]{to=biography}` gives "Biography, p. 4". |
 
 ### Adding a recording
 
-Create `src/content/recordings/<slug>.md`:
-
 ```md
----
-title: Body and Soul
-attribution: Johnny Green        # printed top right, like a composer credit
-subtitle: Live at the Vlahakis   # optional, italic under the title
-marking: Ballad                  # optional, tempo marking top left
-order: 9                         # position among the recordings
-youtubeId: dQw4w9WgXcQ           # the 11 characters after watch?v=
-aspect: 16/9                     # 16/9, 4/3, or 1/1
-leadSheet: ../../assets/scores/body-and-soul.png   # optional
----
+# Body and Soul {composer="Johnny Green" marking="Ballad"}
 
-A sentence or two of notes about the recording.
+::youtube{id=XXXXXXXXXXX}
+
+A sentence or two about the recording.
+
+::score{src="/scores/body-and-soul.png"}
 ```
 
-The slug becomes its link: `tinocardenes.com/#body-and-soul`.
+Put it after the other recordings to keep it under the Recordings part.
 
-### Lead sheets and score images
+## Code
 
-Put PNGs in `src/assets/scores/` and point to them with `leadSheet:` (recordings)
-or `plate:` (sections). Without one, a placeholder page is shown. White
-backgrounds blend into the paper colour automatically, and images are resized
-and converted to WebP at build time, so full-resolution scans are fine.
+| File | Role |
+| --- | --- |
+| `src/book.ts` | Parses `book.md` and paginates it into pages and spreads |
+| `src/directives.ts` | Every directive: syntax, required attributes, rendering |
+| `src/render.ts` | Writes the HTML document |
+| `src/build.ts` | Build and dev-server entry point |
+| `src/client/reader.ts` | In the browser: page turning, keys, swipe, history, videos |
+| `src/client/styles.css` | All styling |
 
-## How it works
-
-- `src/lib/book.ts` builds the list of spreads and numbers the pages.
-- `src/pages/index.astro` renders every spread into one HTML page, so all text
-  is crawlable and the site still reads top-to-bottom with JavaScript off.
-- `src/scripts/reader.ts` shows one spread at a time and handles links, arrow
-  keys, swipes, browser history, and the page-turn animation.
-- The ribbon bookmark (and the <kbd>C</kbd> key) always returns to the contents.
-- Old URLs (`/projects`, `/media`, `/sonicscore`) redirect via `vercel.json`.
+To add a directive, add an entry to `directives` in `src/directives.ts` and a
+row to the tables above.

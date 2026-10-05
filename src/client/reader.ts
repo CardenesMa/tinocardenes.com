@@ -4,13 +4,15 @@
 
 const TURN_MS = 850;
 
-export function initReader() {
-  const book = document.querySelector<HTMLElement>('[data-book]');
-  if (!book) return;
+const book = document.querySelector<HTMLElement>('[data-book]');
+if (book) initReader(book);
+initVideos();
 
+function initReader(book: HTMLElement) {
   const spreads = [...book.querySelectorAll<HTMLElement>('[data-spread]')];
   const pagerPages = document.querySelector<HTMLElement>('[data-pager-pages]');
   const announcer = document.querySelector<HTMLElement>('[data-announcer]');
+  const toc = document.getElementById('toc');
   const twoUp = matchMedia('(min-width: 860px)');
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 
@@ -19,12 +21,16 @@ export function initReader() {
   // A request made mid-turn (e.g. pressing Back twice) runs once the page lands.
   let queued: { target: number; record: boolean } | null = null;
 
-  const indexOf = (id: string) => spreads.findIndex((s) => s.id === id);
+  /** Index of the spread containing the element with this id. */
+  const spreadOf = (id: string) => {
+    const spread = id ? document.getElementById(id)?.closest<HTMLElement>('[data-spread]') : null;
+    return spread ? spreads.indexOf(spread) : -1;
+  };
 
   function updateChrome() {
     const spread = spreads[current];
-    book!.dataset.mode = spread.dataset.mode;
-    book!.dataset.current = spread.id;
+    book.dataset.mode = spread.dataset.mode;
+    book.toggleAttribute('data-at-toc', !!toc && spread.contains(toc));
     if (pagerPages) pagerPages.textContent = spread.dataset.pages ?? '';
     for (const el of document.querySelectorAll<HTMLButtonElement>('button[data-turn="prev"]')) el.disabled = current === 0;
     for (const el of document.querySelectorAll<HTMLButtonElement>('button[data-turn="next"]')) el.disabled = current === spreads.length - 1;
@@ -58,8 +64,8 @@ export function initReader() {
     }
     turning = false;
 
-    if (record) history.pushState(null, '', to.id === 'cover' ? location.pathname : `#${to.id}`);
-    if (book!.getBoundingClientRect().top < 0) book!.scrollIntoView({ block: 'start' });
+    if (record) history.pushState(null, '', to.dataset.anchor === 'cover' ? location.pathname : `#${to.dataset.anchor}`);
+    if (book.getBoundingClientRect().top < 0) book.scrollIntoView({ block: 'start' });
     to.focus({ preventScroll: true });
     if (announcer) announcer.textContent = `${to.dataset.title}, page ${to.dataset.pages}`;
 
@@ -97,7 +103,7 @@ export function initReader() {
     from.classList.remove('is-current');
     to.classList.add('is-current');
     updateChrome();
-    book!.append(overlay);
+    book.append(overlay);
 
     const timing = { duration: TURN_MS, easing: 'cubic-bezier(.45,.05,.25,1)', fill: 'forwards' } as const;
     // Darken each face as it stands upright, as a lifted page catches less light.
@@ -115,6 +121,7 @@ export function initReader() {
     if (!page) return el('div', 'page page--empty');
     const copy = page.cloneNode(true) as HTMLElement;
     for (const node of copy.querySelectorAll('[id]')) node.removeAttribute('id');
+    copy.removeAttribute('id');
     for (const node of copy.querySelectorAll('iframe')) node.remove();
     for (const node of copy.querySelectorAll<HTMLElement>('.yt-play')) node.hidden = false;
     for (const img of copy.querySelectorAll('img')) img.loading = 'eager';
@@ -122,13 +129,13 @@ export function initReader() {
     return copy;
   }
 
-  // In-page links (table of contents, ribbon, works entries) turn pages instead of jumping.
+  // In-page links (contents, ribbon, cross-references) turn pages instead of jumping.
   document.addEventListener('click', (event) => {
     if (event.defaultPrevented || event.metaKey || event.ctrlKey || event.shiftKey) return;
     const control = (event.target as Element).closest<HTMLElement>('[data-turn], a[href^="#"]');
     if (!control) return;
     const turn = control.dataset.turn;
-    const target = turn === 'next' ? current + 1 : turn === 'prev' ? current - 1 : indexOf(control.getAttribute('href')!.slice(1));
+    const target = turn === 'next' ? current + 1 : turn === 'prev' ? current - 1 : spreadOf(control.getAttribute('href')!.slice(1));
     if (target < 0) return;
     event.preventDefault();
     go(target);
@@ -144,13 +151,13 @@ export function initReader() {
       PageUp: () => current - 1,
       Home: () => 0,
       End: () => spreads.length - 1,
-      c: () => indexOf('contents'),
-      C: () => indexOf('contents'),
+      c: () => spreadOf('toc'),
+      C: () => spreadOf('toc'),
     };
-    const next = keys[event.key];
-    if (!next) return;
+    const next = keys[event.key]?.();
+    if (next === undefined || next < 0) return;
     event.preventDefault();
-    go(next());
+    go(next);
   });
 
   let touchStart: { x: number; y: number } | null = null;
@@ -168,14 +175,38 @@ export function initReader() {
   );
 
   // Back/forward buttons and hand-edited hashes.
-  const syncFromUrl = () => {
-    const i = indexOf(decodeURIComponent(location.hash.slice(1)));
-    go(i < 0 ? 0 : i, { record: false });
-  };
+  const syncFromUrl = () => go(Math.max(0, spreadOf(decodeURIComponent(location.hash.slice(1)))), { record: false });
   addEventListener('popstate', syncFromUrl);
   addEventListener('hashchange', syncFromUrl);
 
   updateChrome();
+}
+
+// Click-to-load YouTube players: only a thumbnail is fetched until the reader
+// presses play, and the player is torn down again when the page turns.
+function initVideos() {
+  document.addEventListener('click', (event) => {
+    const button = (event.target as Element).closest<HTMLButtonElement>('.yt-play');
+    const box = button?.closest<HTMLElement>('[data-yt]');
+    if (!button || !box) return;
+
+    const iframe = document.createElement('iframe');
+    iframe.src = `https://www.youtube-nocookie.com/embed/${box.dataset.yt}?autoplay=1&rel=0`;
+    iframe.title = box.dataset.title ?? 'YouTube video';
+    iframe.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+    iframe.allowFullscreen = true;
+    button.hidden = true;
+    box.append(iframe);
+    iframe.focus();
+  });
+
+  document.addEventListener('spread:leave', (event) => {
+    for (const box of (event.target as Element).querySelectorAll<HTMLElement>('[data-yt]')) {
+      box.querySelector('iframe')?.remove();
+      const button = box.querySelector<HTMLButtonElement>('.yt-play');
+      if (button) button.hidden = false;
+    }
+  });
 }
 
 function el(tag: string, className: string) {

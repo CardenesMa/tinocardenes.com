@@ -1,3 +1,13 @@
+@import '@fontsource/eb-garamond/400.css';
+@import '@fontsource/eb-garamond/400-italic.css';
+@import '@fontsource/eb-garamond/500.css';
+@import '@fontsource/cormorant-garamond/400.css';
+@import '@fontsource/cormorant-garamond/400-italic.css';
+@import '@fontsource/cormorant-garamond/500.css';
+@import '@fontsource/cormorant-garamond/600-italic.css';
+@import '@fontsource/cormorant-sc/500.css';
+@import '@fontsource/noto-music/music-400.css';
+
 /* ───────────────────────── Tokens ───────────────────────── */
 
 :root {
@@ -10,8 +20,6 @@
 
   --henle: #8da6bf;
   --cover-ink: #1f2e46;
-  --cover-panel: #f3ecdc;
-  --gold: #b48c4c;
   --ribbon: #7c1f2b;
 
   --desk: #d6d1c7;
@@ -470,15 +478,35 @@ html:not(.js) .spread + .spread {
   translate: 0 -50%;
 }
 
-.prose p {
+/* Plain Markdown elements only: anything with a class styles itself. */
+.prose p:not([class]) {
   margin: 0;
   text-align: justify;
   hyphens: auto;
   text-wrap: pretty;
 }
 
-.prose p + p {
+.prose p:not([class]) + p:not([class]) {
   text-indent: 1.4em;
+}
+
+.prose h3:not([class]) {
+  margin: 1.2em 0 0.3em;
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 1.25em;
+}
+
+.prose ul,
+.prose ol {
+  margin: 0.5em 0;
+  padding-left: 1.4em;
+}
+
+.sc {
+  font-family: var(--caps);
+  font-weight: 500;
+  letter-spacing: 0.08em;
 }
 
 .prose em {
@@ -492,29 +520,67 @@ html:not(.js) .spread + .spread {
   color: var(--ink-soft);
 }
 
+/* :::links sits at the foot of the page. */
 .page-links {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.3em 1.2em;
-  margin: auto 0 0;
-  padding: 1.2em 0 0;
-  list-style: none;
+  margin-top: auto;
+  padding-top: 1.2em;
   font-family: var(--caps);
   font-weight: 500;
   letter-spacing: 0.05em;
 }
 
+.page-links ul {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.3em 1.2em;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
 .page-links a,
-.work-link {
+.small-link {
   color: var(--accent);
   text-decoration: none;
   border-bottom: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
 }
 
 .page-links a:hover,
-.work-link:hover {
+.small-link:hover {
   border-bottom-color: currentColor;
+}
+
+.small-link {
+  font-family: var(--caps);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  font-size: 0.95em;
+}
+
+.staff-block {
+  margin: 0.5em 0 1.5em;
+}
+
+.staff-block .staff {
+  margin: 0.3em 0 0;
+}
+
+.figure {
+  margin: 1em 0;
+  text-align: center;
+}
+
+.figure img {
+  max-width: 100%;
+  height: auto;
+}
+
+.figure figcaption {
+  margin-top: 0.4em;
+  font-style: italic;
+  font-size: 0.9em;
+  color: var(--ink-soft);
 }
 
 .running-head {
@@ -529,6 +595,7 @@ html:not(.js) .spread + .spread {
 
 .plate {
   flex: 1;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -577,20 +644,15 @@ html:not(.js) .spread + .spread {
   position: absolute;
   top: 0;
   left: 0;
-  z-index: 2;
+  z-index: 3;
   width: 9cqi;
   height: 9cqi;
   background: linear-gradient(135deg, var(--desk) 0 50%, var(--paper-edge) 50%);
   filter: drop-shadow(2px 2px 2px rgb(0 0 0 / 0.18));
 }
 
-.contents-heading {
-  text-align: center;
-  margin-bottom: 1.8em;
-}
-
-.toc-block + .toc-block {
-  margin-top: 0.5em;
+.toc {
+  margin-top: 0.4em;
 }
 
 .toc-group {
@@ -601,13 +663,13 @@ html:not(.js) .spread + .spread {
   letter-spacing: 0.12em;
 }
 
-.toc {
+.toc-list {
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.toc-group + .toc .toc-link {
+.toc-list--grouped .toc-link {
   padding-left: 1.2em;
 }
 
@@ -646,12 +708,6 @@ html:not(.js) .spread + .spread {
 
 /* ───────────────────────── Works ───────────────────────── */
 
-.works {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
 .work + .work {
   margin-top: 1.05em;
 }
@@ -679,26 +735,51 @@ html:not(.js) .spread + .spread {
   color: var(--ink-soft);
 }
 
-.work-link {
+.work .small-link {
   display: inline-block;
   margin-top: 0.3em;
-  font-family: var(--caps);
-  font-weight: 500;
-  letter-spacing: 0.05em;
-  font-size: 0.95em;
 }
 
-.page-body > .work-link {
-  align-self: flex-start;
-  margin-top: 0.9em;
+/* ───────────────────────── Blank pages: manuscript paper ───────────────────────── */
+
+.page--blank .page-body {
+  --line: rgb(28 27 25 / 0.22);
+  --gap: 1.15cqi;
+  background-image: linear-gradient(
+    to bottom,
+    var(--line) 0 1px,
+    transparent 1px var(--gap),
+    var(--line) var(--gap) calc(var(--gap) + 1px),
+    transparent calc(var(--gap) + 1px) calc(var(--gap) * 2),
+    var(--line) calc(var(--gap) * 2) calc(var(--gap) * 2 + 1px),
+    transparent calc(var(--gap) * 2 + 1px) calc(var(--gap) * 3),
+    var(--line) calc(var(--gap) * 3) calc(var(--gap) * 3 + 1px),
+    transparent calc(var(--gap) * 3 + 1px) calc(var(--gap) * 4),
+    var(--line) calc(var(--gap) * 4) calc(var(--gap) * 4 + 1px),
+    transparent calc(var(--gap) * 4 + 1px)
+  );
+  background-size: 100% 10cqi;
+  /* Stretch the spacing slightly so only whole staves fit. */
+  background-repeat: repeat round;
+  background-origin: content-box;
+  background-clip: content-box;
 }
 
 /* ───────────────────────── Recordings ───────────────────────── */
 
+.yt-figure {
+  margin: 0 0 1.2em;
+}
+
+.yt-figure figcaption {
+  margin-top: 0.45em;
+  text-align: right;
+}
+
 .yt {
   position: relative;
   width: 100%;
-  margin: 0 auto 1.2em;
+  margin: 0 auto;
   background: #111;
   box-shadow: 0 2px 10px rgb(0 0 0 / 0.25);
 }
@@ -758,160 +839,94 @@ html:not(.js) .spread + .spread {
 
 .page--cover,
 .page--back {
-  background-color: var(--henle);
+  background: var(--henle);
   color: var(--cover-ink);
 }
 
-.cover-art {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.cover-art .frame {
-  fill: none;
-  stroke: var(--cover-ink);
-  stroke-width: 2.5;
-}
-
-.cover-art .thin {
-  stroke-width: 0.8;
-}
-
-.cover-art .rays line {
-  stroke: var(--cover-ink);
-  stroke-width: 0.8;
-  opacity: 0.4;
-}
-
-.cover-art .panel {
-  fill: var(--cover-panel);
-  stroke: var(--cover-ink);
-  stroke-width: 2.5;
-}
-
-.cover-art .halo {
-  fill: none;
-  stroke: var(--gold);
-  stroke-width: 1.2;
-  opacity: 0.75;
-}
-
-.cover-art .halo.dotted {
-  stroke-width: 3;
-  stroke-dasharray: 0.1 8;
-  stroke-linecap: round;
-}
-
-.back-ornament ellipse {
-  fill: var(--cover-panel);
-  stroke: var(--cover-ink);
-  stroke-width: 1.3;
-}
-
-.back-ornament .gold {
-  fill: var(--gold);
-  stroke: var(--cover-ink);
-  stroke-width: 1;
-}
-
-.cover-text > *,
-.cover-incipit {
-  position: absolute;
-  left: 0;
-  right: 0;
-  margin: 0;
+.page--cover .page-body,
+.page--back .page-body {
+  align-items: center;
   text-align: center;
+  font-size: max(11px, 2.9cqi);
+  line-height: 1.35;
 }
 
-.cover-name {
-  top: 25.5%;
+.page--cover .page-body {
+  padding-top: 20cqi;
+}
+
+.page--back .page-body {
+  justify-content: center;
+  gap: 0.2em;
+  font-size: max(12px, 2.5cqi);
+}
+
+.page--cover :is(h1, h2, p),
+.page--back :is(h1, h2, p) {
+  margin: 0;
+}
+
+.page--cover h2,
+.page--back h2 {
   font-family: var(--caps);
   font-weight: 500;
-  font-size: 4.3cqi;
+  font-size: 1.5em;
   letter-spacing: 0.24em;
   text-indent: 0.24em;
 }
 
-.cover-work {
-  top: 30.5%;
+.page--cover h1 {
+  margin: 0.35em 0 0.25em;
   font-family: var(--display);
   font-weight: 600;
   font-style: italic;
-  font-size: 9.2cqi;
+  font-size: 3.3em;
   line-height: 1;
 }
 
-.cover-scoring {
-  top: 41%;
+.page--cover em,
+.page--back em {
   font-family: var(--display);
-  font-style: italic;
-  font-size: 3.7cqi;
+  font-size: 1.15em;
 }
 
-.cover-incipit {
-  top: 47%;
-  left: 31%;
-  right: 31%;
-  font-size: 2.9cqi;
+.page--cover p + p,
+.page--back p + p {
+  margin-top: 1.2em;
+}
+
+.page--cover .staff-block {
+  width: 46%;
+  margin: 2.2em 0 2.4em;
   text-align: left;
 }
 
-.cover-incipit .staff {
-  --gap: 0.36em;
-  margin: 0.3em 0 0;
+.page--cover .staff,
+.page--cover .staff::before,
+.page--cover .staff::after,
+.page--cover .staff-clef {
+  --rule: rgb(31 46 70 / 0.55);
+  color: var(--cover-ink);
 }
 
-.cover-marking {
-  font-family: var(--display);
-  font-weight: 600;
-  font-style: italic;
-}
-
-.cover-roles {
-  top: 59%;
+/* The last line of the cover sits at its foot, like a publisher's imprint. */
+.page--cover .page-body > :last-child {
+  margin-top: auto;
   font-family: var(--caps);
   font-weight: 500;
-  font-size: 2.45cqi;
-  letter-spacing: 0.07em;
+  font-size: 0.85em;
+  letter-spacing: 0.3em;
 }
 
-.cover-place {
-  top: 63.4%;
-  font-family: var(--display);
-  font-style: italic;
-  font-size: 3cqi;
+.page--cover a,
+.page--back a {
+  text-decoration: none;
+  border-bottom: 1px solid rgb(31 46 70 / 0.35);
 }
 
-.cover-urtext {
-  top: 70.5%;
-  left: 50%;
-  right: auto;
-  translate: -50% 0;
-  padding: 0.25em 0.6em 0.25em 1.2em;
-  border-block: 1px solid var(--cover-ink);
-  font-family: var(--caps);
-  font-weight: 500;
-  font-size: 2.7cqi;
-  letter-spacing: 0.6em;
-}
-
-.cover-publisher {
-  top: 86.6%;
-  font-family: var(--caps);
-  font-weight: 500;
-  font-size: 2.6cqi;
-  letter-spacing: 0.42em;
-  text-indent: 0.42em;
-}
-
-.cover-plate {
-  top: 90.4%;
-  font-family: var(--caps);
-  font-size: 1.9cqi;
-  letter-spacing: 0.22em;
-  opacity: 0.8;
+.page--cover::after,
+.page--back::after {
+  opacity: 0.6;
 }
 
 .cover-open {
@@ -924,89 +939,6 @@ html:not(.js) .spread + .spread {
   box-shadow:
     0 1px 2px rgb(0 0 0 / 0.12),
     0 18px 40px -8px rgb(0 0 0 / 0.38);
-}
-
-.page--back::before {
-  content: '';
-  position: absolute;
-  inset: 3cqi;
-  border: 2px solid var(--cover-ink);
-  outline: 0.8px solid var(--cover-ink);
-  outline-offset: -1.4cqi;
-}
-
-.page--back::after {
-  content: none;
-}
-
-.back-text {
-  position: relative;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.6em;
-  text-align: center;
-}
-
-.back-text > * {
-  margin: 0;
-}
-
-.back-ornament {
-  width: 4.5em;
-}
-
-.back-name {
-  font-family: var(--caps);
-  font-weight: 500;
-  font-size: 1.7em;
-  letter-spacing: 0.2em;
-  text-indent: 0.2em;
-}
-
-.back-roles {
-  font-family: var(--display);
-  font-style: italic;
-  font-size: 1.1em;
-}
-
-.back-contact {
-  margin: 2em 0 1.5em;
-  display: grid;
-  gap: 0.2em;
-}
-
-.back-contact dt {
-  margin-top: 0.8em;
-  font-family: var(--caps);
-  font-weight: 500;
-  letter-spacing: 0.15em;
-  font-size: 0.85em;
-}
-
-.back-contact dd {
-  margin: 0;
-  display: flex;
-  justify-content: center;
-  gap: 1.1em;
-}
-
-.back-contact a {
-  text-decoration: none;
-  border-bottom: 1px solid rgb(31 46 70 / 0.35);
-}
-
-.back-colophon {
-  font-style: italic;
-  font-size: 0.85em;
-  opacity: 0.85;
-}
-
-.back-text .cover-plate {
-  position: static;
-  font-size: 0.75em;
 }
 
 /* ───────────────────────── Ribbon bookmark ───────────────────────── */
@@ -1037,7 +969,7 @@ html:not(.js) .spread + .spread {
   left: calc(50% - 2.9%);
 }
 
-.book[data-current='contents'] .ribbon {
+.book[data-at-toc] .ribbon {
   height: calc(100% + 2.2rem);
 }
 
