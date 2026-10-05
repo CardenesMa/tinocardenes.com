@@ -1,5 +1,5 @@
-# build output
-dist/
+# compiled TypeScript
+site/js/
 
 # dependencies
 node_modules/

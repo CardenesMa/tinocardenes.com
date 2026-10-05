@@ -1,13 +1,3 @@
-@import '@fontsource/eb-garamond/400.css';
-@import '@fontsource/eb-garamond/400-italic.css';
-@import '@fontsource/eb-garamond/500.css';
-@import '@fontsource/cormorant-garamond/400.css';
-@import '@fontsource/cormorant-garamond/400-italic.css';
-@import '@fontsource/cormorant-garamond/500.css';
-@import '@fontsource/cormorant-garamond/600-italic.css';
-@import '@fontsource/cormorant-sc/500.css';
-@import '@fontsource/noto-music/music-400.css';
-
 /* ───────────────────────── Tokens ───────────────────────── */
 
 :root {
@@ -18,11 +8,11 @@
   --rule: rgb(28 27 25 / 0.42);
   --accent: #2b4a73;
 
-  --henle: #8da6bf;
-  --cover-ink: #1f2e46;
+  --henle: #829fb7;
+  --cover-ink: #16191d;
   --ribbon: #7c1f2b;
 
-  --desk: #d6d1c7;
+  --desk: #ffffff;
   --desk-ink: #4f4b44;
   --bar: #f3f0e9;
   --bar-ink: #2a2926;
@@ -34,7 +24,6 @@
   --music: 'Noto Music', 'Bravura Text', 'Apple Symbols', serif;
 
   --bar-h: 3rem;
-  --turn: 850ms;
 
   color-scheme: light;
 }
@@ -87,6 +76,19 @@ button {
 :focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+.book-error {
+  max-width: 36rem;
+  margin: 3rem auto;
+  padding: 1rem 1.25rem;
+  background: var(--paper);
+  border-left: 3px solid var(--ribbon);
+  font-size: 1.05rem;
 }
 
 .visually-hidden {
@@ -174,12 +176,6 @@ button {
   display: none;
 }
 
-html:not(.js) .pager,
-html:not(.js) .edge,
-html:not(.js) .hint {
-  display: none;
-}
-
 .desk {
   position: relative;
   padding: 1.75rem 4.5rem 1rem;
@@ -245,60 +241,35 @@ html:not(.js) .hint {
 
 /* ───────────────────────── The book ───────────────────────── */
 
-.book {
+/* Sized to fit a two-page spread in the window. StPageFlip lays the pages
+   out inside .book and keeps the 760 × 1000 page ratio. */
+.book-frame {
   --book-w: min(calc(100vw - 9rem), max(860px, calc((100dvh - var(--bar-h) - 5rem) * 1.52)), 1560px);
   position: relative;
   width: var(--book-w);
   margin: 0 auto;
-  container-type: inline-size;
-  transition: translate var(--turn) cubic-bezier(0.45, 0.05, 0.25, 1);
+  transition: translate 0.8s cubic-bezier(0.45, 0.05, 0.25, 1);
 }
 
-.js .book[data-mode='cover'] {
+/* A closed book shows one cover on one half; shift it to the middle. */
+.book-frame[data-closed='front'] {
   translate: -25% 0;
 }
 
-.js .book[data-mode='back'] {
+.book-frame[data-closed='back'] {
   translate: 25% 0;
-}
-
-.spread {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  align-items: stretch;
-}
-
-.spread:focus {
-  outline: none;
-}
-
-.spread {
-  scroll-margin-top: calc(var(--bar-h) + 1rem);
-}
-
-.js .spread:not(.is-current) {
-  display: none;
-}
-
-html:not(.js) .spread + .spread {
-  margin-top: 2.5rem;
 }
 
 /* ───────────────────────── Pages ───────────────────────── */
 
+/* StPageFlip positions and sizes each page; --left and --right are its classes. */
 .page {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  /* Pages are 760 × 1000; cqi here is the book's width, half of which is one page. */
-  min-height: calc(50cqi * 1000 / 760);
+  overflow: hidden;
   container-type: inline-size;
   background-color: var(--paper);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .4 0 0 0 0 .35 0 0 0 0 .25 0 0 0 .05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   color: var(--ink);
-  box-shadow:
-    0 1px 2px rgb(0 0 0 / 0.12),
-    0 12px 32px -8px rgb(0 0 0 / 0.28);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.14);
 }
 
 /* Shading where the paper curves into the spine. */
@@ -310,37 +281,33 @@ html:not(.js) .spread + .spread {
   pointer-events: none;
 }
 
-.page--left::after {
+.page.--left::after {
   background: linear-gradient(to left, rgb(60 45 20 / 0.16), rgb(60 45 20 / 0.04) 4%, transparent 9%);
 }
 
-.page--right::after {
+.page.--right::after {
   background: linear-gradient(to right, rgb(60 45 20 / 0.18), rgb(60 45 20 / 0.05) 4%, transparent 9%);
 }
 
-.page--empty {
-  background: none;
-  box-shadow: none;
-}
-
-.page--empty::after {
-  content: none;
-}
-
+/* Pages are a fixed size, so anything too long scrolls within its page,
+   in the band between the page number and the plate number. */
 .page-body {
-  flex: 1;
+  position: absolute;
+  inset: 8cqi 0 7.5cqi;
   display: flex;
   flex-direction: column;
-  padding: 10cqi 10cqi 11cqi;
-  font-size: clamp(13.5px, 2.45cqi, 19.5px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  padding: 2cqi 10cqi 3.5cqi;
+  font-size: clamp(13px, 2.45cqi, 19.5px);
   line-height: 1.42;
 }
 
-.page--left .page-body {
+.page.--left .page-body {
   padding-right: 9cqi;
 }
 
-.page--right .page-body {
+.page.--right .page-body {
   padding-left: 9cqi;
 }
 
@@ -353,11 +320,11 @@ html:not(.js) .spread + .spread {
   font-variant-numeric: oldstyle-nums;
 }
 
-.page--left .folio {
+.page.--left .folio {
   left: 6cqi;
 }
 
-.page--right .folio {
+.page.--right .folio {
   right: 6cqi;
 }
 
@@ -432,7 +399,7 @@ html:not(.js) .spread + .spread {
   background: repeating-linear-gradient(to bottom, var(--rule) 0 1px, transparent 1px var(--gap));
 }
 
-.score-meta + .staff {
+.score-meta+.staff {
   margin-top: 0.35em;
 }
 
@@ -486,7 +453,7 @@ html:not(.js) .spread + .spread {
   text-wrap: pretty;
 }
 
-.prose p:not([class]) + p:not([class]) {
+.prose p:not([class])+p:not([class]) {
   text-indent: 1.4em;
 }
 
@@ -708,7 +675,7 @@ html:not(.js) .spread + .spread {
 
 /* ───────────────────────── Works ───────────────────────── */
 
-.work + .work {
+.work+.work {
   margin-top: 1.05em;
 }
 
@@ -745,19 +712,17 @@ html:not(.js) .spread + .spread {
 .page--blank .page-body {
   --line: rgb(28 27 25 / 0.22);
   --gap: 1.15cqi;
-  background-image: linear-gradient(
-    to bottom,
-    var(--line) 0 1px,
-    transparent 1px var(--gap),
-    var(--line) var(--gap) calc(var(--gap) + 1px),
-    transparent calc(var(--gap) + 1px) calc(var(--gap) * 2),
-    var(--line) calc(var(--gap) * 2) calc(var(--gap) * 2 + 1px),
-    transparent calc(var(--gap) * 2 + 1px) calc(var(--gap) * 3),
-    var(--line) calc(var(--gap) * 3) calc(var(--gap) * 3 + 1px),
-    transparent calc(var(--gap) * 3 + 1px) calc(var(--gap) * 4),
-    var(--line) calc(var(--gap) * 4) calc(var(--gap) * 4 + 1px),
-    transparent calc(var(--gap) * 4 + 1px)
-  );
+  background-image: linear-gradient(to bottom,
+      var(--line) 0 1px,
+      transparent 1px var(--gap),
+      var(--line) var(--gap) calc(var(--gap) + 1px),
+      transparent calc(var(--gap) + 1px) calc(var(--gap) * 2),
+      var(--line) calc(var(--gap) * 2) calc(var(--gap) * 2 + 1px),
+      transparent calc(var(--gap) * 2 + 1px) calc(var(--gap) * 3),
+      var(--line) calc(var(--gap) * 3) calc(var(--gap) * 3 + 1px),
+      transparent calc(var(--gap) * 3 + 1px) calc(var(--gap) * 4),
+      var(--line) calc(var(--gap) * 4) calc(var(--gap) * 4 + 1px),
+      transparent calc(var(--gap) * 4 + 1px));
   background-size: 100% 10cqi;
   /* Stretch the spacing slightly so only whole staves fit. */
   background-repeat: repeat round;
@@ -835,98 +800,116 @@ html:not(.js) .spread + .spread {
   border: 0;
 }
 
-/* ───────────────────────── Cover & back cover ───────────────────────── */
+/* ───────────────────────── Cover: an Urtext edition ───────────────────────── */
 
+/* Henle-blue board with the paper texture showing through. */
 .page--cover,
 .page--back {
-  background: var(--henle);
+  background-color: var(--henle);
   color: var(--cover-ink);
 }
 
-.page--cover .page-body,
-.page--back .page-body {
-  align-items: center;
-  text-align: center;
-  font-size: max(11px, 2.9cqi);
-  line-height: 1.35;
-}
-
+/* The cover is laid out against the whole page, not the text area. */
 .page--cover .page-body {
-  padding-top: 20cqi;
+  inset: 0;
+  padding: 0;
+  overflow: visible;
 }
 
-.page--back .page-body {
-  justify-content: center;
-  gap: 0.2em;
-  font-size: max(12px, 2.5cqi);
+.cover {
+  position: absolute;
+  inset: 0;
+  font-family: var(--serif);
 }
 
-.page--cover :is(h1, h2, p),
-.page--back :is(h1, h2, p) {
+.cover :where(p) {
   margin: 0;
 }
 
-.page--cover h2,
-.page--back h2 {
-  font-family: var(--caps);
-  font-weight: 500;
-  font-size: 1.5em;
-  letter-spacing: 0.24em;
-  text-indent: 0.24em;
+/* The composer's name, large, set flush left across the top. */
+.cover-name {
+  position: absolute;
+  top: 9%;
+  left: 10%;
+  right: 6%;
+  font-size: 11.5cqi;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
 }
 
-.page--cover h1 {
-  margin: 0.35em 0 0.25em;
-  font-family: var(--display);
+/* Below it, two columns: a label on the left, the title block on the right,
+   with hairline rules spanning the right column. */
+.cover-grid {
+  position: absolute;
+  top: 30.5%;
+  bottom: 6%;
+  left: 10%;
+  right: 8%;
+  display: grid;
+  grid-template-columns: 28cqi 1fr;
+  grid-template-rows: auto 1fr auto;
+}
+
+.cover-label {
+  grid-column: 1;
+  padding-top: 6cqi;
   font-weight: 600;
-  font-style: italic;
-  font-size: 3.3em;
+  font-size: 3.9cqi;
+}
+
+.cover-text {
+  grid-column: 2;
+  padding-top: 6cqi;
+  border-top: 1px solid var(--cover-ink);
+  font-size: 2.3cqi;
+  line-height: 1.3;
+}
+
+.cover-text strong {
+  font-weight: 600;
+}
+
+/* The first paragraph is the title, set as large as the label. */
+.cover-text > p:first-child {
+  font-size: 1.7em;
+  line-height: 1.22;
+}
+
+.cover-text hr {
+  margin: 6.5cqi 0 2cqi;
+  border: 0;
+  border-top: 1px solid var(--cover-ink);
+}
+
+.cover-text p + p {
+  margin-top: 1em;
+}
+
+.cover-imprint {
+  grid-column: 2;
+  grid-row: 3;
+}
+
+.cover-publisher {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3cqi;
+  font-size: 4cqi;
+}
+
+.cover-mark {
+  font-family: var(--music);
+  font-size: 1.6em;
   line-height: 1;
 }
 
-.page--cover em,
-.page--back em {
-  font-family: var(--display);
-  font-size: 1.15em;
-}
-
-.page--cover p + p,
-.page--back p + p {
-  margin-top: 1.2em;
-}
-
-.page--cover .staff-block {
-  width: 46%;
-  margin: 2.2em 0 2.4em;
-  text-align: left;
-}
-
-.page--cover .staff,
-.page--cover .staff::before,
-.page--cover .staff::after,
-.page--cover .staff-clef {
-  --rule: rgb(31 46 70 / 0.55);
-  color: var(--cover-ink);
-}
-
-/* The last line of the cover sits at its foot, like a publisher's imprint. */
-.page--cover .page-body > :last-child {
-  margin-top: auto;
-  font-family: var(--caps);
-  font-weight: 500;
-  font-size: 0.85em;
-  letter-spacing: 0.3em;
-}
-
-.page--cover a,
-.page--back a {
-  text-decoration: none;
-  border-bottom: 1px solid rgb(31 46 70 / 0.35);
-}
-
-.page--cover::after,
-.page--back::after {
-  opacity: 0.6;
+.cover-number {
+  margin-top: 5cqi;
+  padding-top: 7cqi;
+  border-top: 1px solid var(--cover-ink);
+  font-size: 2cqi;
 }
 
 .cover-open {
@@ -935,10 +918,51 @@ html:not(.js) .spread + .spread {
   z-index: 3;
 }
 
-.js .page--cover:hover {
+.page--cover:hover {
   box-shadow:
     0 1px 2px rgb(0 0 0 / 0.12),
     0 18px 40px -8px rgb(0 0 0 / 0.38);
+}
+
+/* The back cover: centred colophon on the same board. */
+.page--back .page-body {
+  align-items: center;
+  justify-content: center;
+  gap: 0.2em;
+  text-align: center;
+  font-size: max(12px, 2.5cqi);
+  line-height: 1.35;
+}
+
+.page--back :is(h1, h2, p) {
+  margin: 0;
+}
+
+.page--back h2 {
+  font-family: var(--caps);
+  font-weight: 500;
+  font-size: 1.5em;
+  letter-spacing: 0.24em;
+  text-indent: 0.24em;
+}
+
+.page--back em {
+  font-family: var(--display);
+  font-size: 1.15em;
+}
+
+.page--back p+p {
+  margin-top: 1.2em;
+}
+
+.page--back a {
+  text-decoration: none;
+  border-bottom: 1px solid rgb(22 25 29 / 0.35);
+}
+
+.page--cover::after,
+.page--back::after {
+  opacity: 0.6;
 }
 
 /* ───────────────────────── Ribbon bookmark ───────────────────────── */
@@ -956,90 +980,15 @@ html:not(.js) .spread + .spread {
   background: linear-gradient(90deg, rgb(255 255 255 / 0.12), transparent 40%, rgb(0 0 0 / 0.18)), var(--ribbon);
   clip-path: polygon(0 0, 100% 0, 100% 100%, 50% calc(100% - 0.55rem), 0 100%);
   filter: drop-shadow(1px 2px 1.5px rgb(0 0 0 / 0.3));
-  transition:
-    height 0.35s ease,
-    left var(--turn) ease;
+  transition: height 0.35s ease;
 }
 
 .ribbon:hover {
   height: 11%;
 }
 
-.book[data-mode='back'] .ribbon {
-  left: calc(50% - 2.9%);
-}
-
-.book[data-at-toc] .ribbon {
+.book-frame[data-at-toc] .ribbon {
   height: calc(100% + 2.2rem);
-}
-
-html:not(.js) .ribbon {
-  display: none;
-}
-
-/* ───────────────────────── Page turn ───────────────────────── */
-
-.turn {
-  position: absolute;
-  inset: 0;
-  z-index: 5;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  perspective: 2800px;
-  pointer-events: none;
-}
-
-.turn-still,
-.turn-leaf {
-  position: relative;
-  grid-row: 1;
-}
-
-.turn[data-direction='next'] .turn-still {
-  grid-column: 1;
-}
-
-.turn[data-direction='next'] .turn-leaf {
-  grid-column: 2;
-  transform-origin: left center;
-}
-
-.turn[data-direction='prev'] .turn-still {
-  grid-column: 2;
-}
-
-.turn[data-direction='prev'] .turn-leaf {
-  grid-column: 1;
-  transform-origin: right center;
-}
-
-.turn-leaf {
-  transform-style: preserve-3d;
-}
-
-.turn-face {
-  position: absolute;
-  inset: 0;
-  backface-visibility: hidden;
-}
-
-.turn-face::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-  background: linear-gradient(to right, rgb(0 0 0 / 0.28), rgb(0 0 0 / 0.06));
-  opacity: 0;
-  pointer-events: none;
-}
-
-.turn-back {
-  transform: rotateY(180deg);
-}
-
-.turn .page {
-  min-height: 100%;
-  height: 100%;
 }
 
 /* ───────────────────────── Small screens: one page at a time ───────────────────────── */
@@ -1049,40 +998,14 @@ html:not(.js) .ribbon {
     padding: 1rem 0.75rem 2rem;
   }
 
-  .book {
+  .book-frame {
     --book-w: min(100%, 640px);
   }
 
-  .js .book[data-mode] {
-    translate: none;
-  }
-
-  .spread {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 1rem;
-  }
-
-  .page {
-    min-height: calc(100cqi * 1000 / 760);
-  }
-
-  .page--empty {
-    min-height: 0;
-  }
-
-  .page--empty,
   .ribbon,
   .edge,
   .hint {
     display: none;
-  }
-
-  .page-body {
-    font-size: clamp(15px, 2.45cqi, 19px);
-  }
-
-  .page::after {
-    content: none;
   }
 
   .toolbar {

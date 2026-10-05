@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tino Cardenes · Pianist, Composer, Computer Scientist</title>
+    <meta name="description" content="Classical and jazz pianist, composer, and computer scientist based in Pittsburgh. Recordings, lead sheets, software, and projects that combine music and computation." />
+    <link rel="canonical" href="https://tinocardenes.com" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://tinocardenes.com" />
+    <meta property="og:title" content="Tino Cardenes · Pianist, Composer, Computer Scientist" />
+    <meta property="og:description" content="Classical and jazz pianist, composer, and computer scientist based in Pittsburgh." />
+    <meta property="og:image" content="https://tinocardenes.com/images/portrait.jpg" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="theme-color" content="#2b3d57" />
+    <link rel="icon" href="/favicon.ico" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,600&family=Cormorant+SC:wght@500&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Music&display=swap" />
+    <link rel="stylesheet" href="/styles.css" />
+    <!-- Page turning is done by StPageFlip (MIT), pinned to one version. -->
+    <script type="importmap">
+      { "imports": { "page-flip": "https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/js/page-flip.module.js" } }
+    </script>
+    <script type="module" src="/js/main.js"></script>
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Tino Cardenes",
+        "url": "https://tinocardenes.com",
+        "image": "https://tinocardenes.com/images/portrait.jpg",
+        "jobTitle": "Pianist, Composer, Computer Scientist",
+        "sameAs": [
+          "https://www.youtube.com/@tinocardenes",
+          "https://www.instagram.com/tinocardenes/",
+          "https://github.com/CardenesMa"
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <header class="toolbar">
+      <a class="toolbar-title" href="#cover">tinocardenes.com<span></span></a>
+      <div class="pager">
+        <button type="button" class="pager-btn" data-turn="prev" aria-label="Previous pages">‹</button>
+        <span class="pager-label"><span data-pager-pages>1</span> / <span data-pager-total></span></span>
+        <button type="button" class="pager-btn" data-turn="next" aria-label="Next pages">›</button>
+      </div>
+      <a class="toolbar-contents" href="#toc" data-needs-toc hidden>Contents</a>
+    </header>
+
+    <main class="desk">
+      <button type="button" class="edge edge--prev" data-turn="prev" aria-label="Previous pages"></button>
+      <button type="button" class="edge edge--next" data-turn="next" aria-label="Next pages"></button>
+
+      <div class="book-frame">
+        <a class="ribbon" href="#toc" title="Return to contents" data-needs-toc hidden>
+          <span class="visually-hidden">Return to contents</span>
+        </a>
+        <!-- The pages are built from book.md. data-plate is printed at the foot of every page. -->
+        <div class="book" data-book data-source="/book.md" data-plate="T.C. 2026"></div>
+      </div>
+
+      <p class="hint">Drag a page corner or use ← → to turn pages · <kbd>C</kbd> for contents</p>
+      <p class="visually-hidden" aria-live="polite" data-announcer></p>
+
+      <noscript>
+        <p class="book-error">
+          This site is a book that needs JavaScript to turn its pages.
+          Reach Tino at <a href="mailto:cardenestino@gmail.com">cardenestino@gmail.com</a>
+          or on <a href="https://www.youtube.com/@tinocardenes">YouTube</a>.
+        </p>
+      </noscript>
+    </main>
+  </body>
+</html>

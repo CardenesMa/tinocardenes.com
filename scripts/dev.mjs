@@ -1,0 +1,35 @@
+// pnpm dev: recompiles the TypeScript on save and serves site/ at
+// http://localhost:4321. Reload the browser to see changes to book.md.
+
+import { spawn } from 'node:child_process';
+import { createReadStream, existsSync, statSync } from 'node:fs';
+import { createServer } from 'node:http';
+import path from 'node:path';
+
+const root = path.resolve('site');
+const port = Number(process.env.PORT ?? 4321);
+const types = {
+  '.html': 'text/html; charset=utf-8',
+  '.md': 'text/markdown; charset=utf-8',
+  '.css': 'text/css',
+  '.js': 'text/javascript',
+  '.json': 'application/json',
+  '.svg': 'image/svg+xml',
+  '.png': 'image/png',
+  '.jpg': 'image/jpeg',
+  '.ico': 'image/x-icon',
+  '.pdf': 'application/pdf',
+  '.txt': 'text/plain',
+  '.xml': 'application/xml',
+};
+
+spawn('tsc', ['--watch', '--preserveWatchOutput'], { stdio: 'inherit' });
+
+createServer((req, res) => {
+  let file = path.join(root, decodeURIComponent(new URL(req.url, 'http://x').pathname));
+  if (!file.startsWith(root)) return res.writeHead(403).end();
+  if (existsSync(file) && statSync(file).isDirectory()) file = path.join(file, 'index.html');
+  if (!existsSync(file)) return res.writeHead(404).end('Not found');
+  res.writeHead(200, { 'content-type': types[path.extname(file)] ?? 'application/octet-stream', 'cache-control': 'no-store' });
+  createReadStream(file).pipe(res);
+}).listen(port, () => console.log(`Serving http://localhost:${port}`));

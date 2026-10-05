@@ -2,7 +2,7 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
   "buildCommand": "pnpm build",
-  "outputDirectory": "dist",
+  "outputDirectory": "site",
   "redirects": [
     { "source": "/projects", "destination": "/#works", "permanent": true },
     { "source": "/media", "destination": "/#contents", "permanent": true },

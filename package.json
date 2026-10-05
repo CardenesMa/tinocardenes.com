@@ -4,38 +4,13 @@
   "version": "1.0.0",
   "private": true,
   "engines": {
-    "node": ">=20.11"
+    "node": ">=20"
   },
   "scripts": {
-    "dev": "tsx watch --clear-screen=false src/build.ts --dev",
-    "build": "tsx src/build.ts",
-    "check": "tsc --noEmit"
-  },
-  "dependencies": {
-    "@fontsource/cormorant-garamond": "^5.3.0",
-    "@fontsource/cormorant-sc": "^5.3.0",
-    "@fontsource/eb-garamond": "^5.3.0",
-    "@fontsource/noto-music": "^5.3.0",
-    "github-slugger": "^2.0.0",
-    "hast-util-to-html": "^9.0.5",
-    "hastscript": "^9.0.1",
-    "mdast-util-directive": "^3.1.1",
-    "mdast-util-to-hast": "^13.2.1",
-    "mdast-util-to-string": "^4.0.0",
-    "remark-directive": "^4.0.0",
-    "remark-frontmatter": "^5.0.0",
-    "remark-gfm": "^4.0.1",
-    "remark-parse": "^11.0.0",
-    "remark-smartypants": "^3.0.3",
-    "unified": "^11.0.5",
-    "yaml": "^2.9.1"
+    "dev": "node scripts/dev.mjs",
+    "build": "tsc && node scripts/check-book.mjs"
   },
   "devDependencies": {
-    "@types/hast": "^3.0.5",
-    "@types/mdast": "^4.0.4",
-    "@types/node": "^22.20.5",
-    "esbuild": "^0.28.2",
-    "tsx": "^4.23.15",
     "typescript": "^6.0.3"
   }
 }

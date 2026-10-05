@@ -1,32 +1,13 @@
----
-# Site details. Directives and page rules are documented in README.md.
-name: Tino Cardenes
-work: Collected Works
-title: Tino Cardenes · Pianist, Composer, Computer Scientist
-description: Classical and jazz pianist, composer, and computer scientist based in Pittsburgh. Recordings, lead sheets, software, and projects that combine music and computation.
-url: https://tinocardenes.com
-image: /images/portrait.jpg
-jobTitle: Pianist, Composer, Computer Scientist
-plate: T.C. 2026
-sameAs:
-  - https://www.youtube.com/@tinocardenes
-  - https://www.instagram.com/tinocardenes/
-  - https://github.com/CardenesMa
+<!-- The whole site. Page rules and directives are documented in README.md. -->
+
+:::cover{name="Tino Cardenes" label="Urtext" publisher="tinocardenes.com" number="2026"}
+**Works for Piano & Computer**\
+Volume I
+
 ---
 
-:::cover
-## Tino Cardenes
-
-# Collected Works
-
-*for Piano & Computer*
-
-::staff[Con spirito]
-
-Pianist · Composer · Computer Scientist\
-*Pittsburgh, Pennsylvania*
-
-tinocardenes.com · T.C. 2026
+**Pianist · Composer · Computer Scientist**\
+Pittsburgh, Pennsylvania
 :::
 
 # Contents {toc=false subtitle="Inhalt · Table des matières"}
@@ -35,15 +16,15 @@ tinocardenes.com · T.C. 2026
 
 ::pagebreak
 
-## Preface {marking="Andante con moto"}
+## Preface
 
 I'm a musician and computer scientist based in Pittsburgh, Pennsylvania. This volume collects my music, my software, and the projects that combine the two. I'm pursuing a Bachelor of Science in Computer Science and Music Technology at Carnegie Mellon University, and I'm always glad to collaborate with artists and developers on new work.
 
 Each recording in this edition is printed with its lead sheet on the facing page, so you can read along while you listen. Turn the pages with the arrows or your keyboard. The ribbon at the top of the book always brings you back to the contents.
 
-::signature[T. C. · Pittsburgh, 2026]
+::signature[Tino Cardenes · Pittsburgh, 2026]
 
-# Biography {subtitle="Pianist · Composer · Computer Scientist" marking="Moderato"}
+# Biography {subtitle="Pianist · Composer · Computer Scientist"}
 
 Tino Cardenes is a classical and jazz pianist, composer, and computer scientist whose work spans performance, composition, and music technology. He began studying piano at age four at the Carnegie Mellon Prep School with Luz Manriquez and grew up in a musical family, where someone was always practicing. His classical training expanded into jazz piano and improvisation in his high school years, which remain central to his musical life.
 
@@ -111,6 +92,14 @@ Enjoy complete control over colors, fonts, styles, and symbols while adjusting t
 ::plate{src=/images/sonicscore.png kind=figure alt="SonicScore logo" caption="SonicScore"}
 
 ::part[Recordings]
+
+# Sinfonietta for Piano 4 Hands {composer="Nikolai Kapustin" subtitle="Live in Kresge"}
+
+::youtube{id=MX0yz8_xb8s aspect=16/9}
+
+Sung-Im Kim and I both loved this piece and found a reason to prepare it! It's a fun and jazzy piece to play. Recorded in Kresge in August 2026. 
+
+::score
 
 # Harlem Nocturne {composer="Earle Hagen" subtitle="from The Vlahakis Sessions"}
 
