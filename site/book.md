@@ -10,7 +10,7 @@ Volume I
 Pittsburgh, Pennsylvania
 :::
 
-# Contents {toc=false subtitle="Inhalt · Table des matières"}
+# Contents  {toc=false subtitle="Inhalt · Table des matières"}
 
 ::contents
 
@@ -20,7 +20,9 @@ Pittsburgh, Pennsylvania
 
 I'm a musician and computer scientist based in Pittsburgh, Pennsylvania. This volume collects my music, my software, and the projects that combine the two. I'm pursuing a Bachelor of Science in Computer Science and Music Technology at Carnegie Mellon University, and I'm always glad to collaborate with artists and developers on new work.
 
-Each recording in this edition is printed with its lead sheet on the facing page, so you can read along while you listen. Turn the pages with the arrows or your keyboard.
+Each recording in this edition is printed with its lead sheet on the facing page, so you can read along while you listen. 
+
+Turn the pages with the arrows, click, or your keyboard.
 
 ::signature[Tino Cardenes · Pittsburgh, 2026]
 
@@ -101,13 +103,13 @@ Sung-Im Kim and I both loved this piece and found a reason to prepare it! It's a
 
 ::score
 
-# Harlem Nocturne {composer="Earle Hagen" subtitle="from The Vlahakis Sessions"}
+# Harlem Nocturne { subtitle="from The Vlahakis Sessions"}
 
 ::youtube{id=z1hGBjZeRz0 aspect=1/1}
 
 Earle Hagen's 1939 standard, recorded for *The Vlahakis Sessions* (2025).
 
-::score
+::score{src=/scores/harlem_nocturne.jpg alt="A Lead Sheet of Harlem Nocturne"}
 
 # Wave {composer="Antônio Carlos Jobim" subtitle="with the Tartan Quartet" marking="Bossa nova"}
 
@@ -171,9 +173,9 @@ Performed at age seven.
 :sc[Correspondence]\
 [cardenestino@gmail.com](mailto:cardenestino@gmail.com)
 
-:sc[Elsewhere]\
+:sc[Other Connections]\
 [YouTube](https://www.youtube.com/@tinocardenes) · [Instagram](https://www.instagram.com/tinocardenes/) · [GitHub](https://github.com/CardenesMa)
 
-*Set in EB Garamond and Cormorant.*\
+*Set in Merriweather*\
 *© 2026 Tino Cardenes. All rights reserved.*
 :::

@@ -1,4 +1,6 @@
 # tinocardenes.com
+Alas this version of the website is a massive overhaul and greatly benefited from the recent advances of Anthropic. 
+The PDF rendering scheme is inspired by Brian McFee's DSP book, and from my work with CMU's 15-322/622 class. 
 
 The site is one Markdown file, [`site/book.md`](site/book.md), shown as a bound
 music score: an Urtext-style cover, a table of contents, and two-page spreads
@@ -6,24 +8,28 @@ you turn like a book.
 
 ```
 site/              everything Vercel serves
-  index.html       the page shell: <head> metadata, toolbar, book container
+  index.html       the page shell: <head> metadata, toolbar, book container,
+                   and the <template>s each part of a page is built from,
+                   styled with Tailwind classes
+  styles.css       compiled from src/styles.css (not committed)
   book.md          all the content
-  styles.css       all the styling
   images/ scores/  pictures and lead sheets (plus PDFs, favicon, …)
   js/              compiled from src/ (not committed)
 src/               TypeScript, compiled into site/js/
   markdown.ts      a small Markdown + directive parser
   book.ts          the directive table and pagination
-  render.ts        builds the pages as DOM elements
+  render.ts        fills index.html's templates with book.md's content
   reader.ts        connects StPageFlip to links, keys, the URL and the toolbar
   page-flip.d.ts   types for the parts of StPageFlip we use
   main.ts          loads book.md and puts it together
+  styles.css       Tailwind setup: theme colours and fonts, page variants,
+                   drawn details, and styles for book.md's own Markdown
 scripts/
   dev.mjs          local server
   check-book.mjs   build-time check of book.md
 ```
 
-The only dependency is TypeScript. Page turning (the animation, dragging a
+The only dependencies are TypeScript and Tailwind CSS (its CLI, v4). Page turning (the animation, dragging a
 corner, swiping, one page at a time on phones) is done by
 [StPageFlip](https://github.com/Nodlik/StPageFlip), loaded from jsDelivr through
 the import map in `index.html`. Pages are a fixed size, so text that doesn't
@@ -31,13 +37,20 @@ fit scrolls within its page.
 
 ```sh
 pnpm install
-pnpm dev      # http://localhost:4321; recompiles on save, refresh to see changes
-pnpm build    # compiles, then checks book.md
+pnpm dev      # http://localhost:4321; recompiles TS and CSS on save, refresh to see changes
+pnpm build    # compiles TS and CSS, then checks book.md
 ```
 
 Vercel runs `pnpm build` and serves `site/`. The build fails, naming the line,
 if `book.md` uses an unknown directive, misses a required attribute, or points
 to a file that isn't in `site/`.
+
+Styling is Tailwind classes on the elements in `index.html`, mostly on the
+templates. `src/styles.css` adds the site's colours (`bg-paper`, `text-ink-soft`,
+…) and fonts (`font-display`, `font-caps`, …), variants for styling by page
+(`cover-page:`, `left-page:`, …), and the CSS that can't be inline: Markdown
+from `book.md` (plain `<p>`, `<ul>`, `<em>`) and drawn details like the staff.
+There's no Tailwind Preflight, so elements keep the browser's default styles.
 
 Page titles, descriptions, and social-preview tags live in `index.html`. So
 does `data-plate`, the plate number printed at the foot of every page.
@@ -104,5 +117,9 @@ A sentence or two about the recording.
 
 ### Adding a directive
 
-Add its name and rules to `DIRECTIVES` in `src/book.ts`, and how it looks to
-`BLOCKS` or `INLINES` in `src/render.ts`.
+Add its name and rules to `DIRECTIVES` in `src/book.ts`, its markup as a
+`<template data-template="name">` in `index.html`, and a line to `BLOCKS` or
+`INLINES` in `src/render.ts` that fills the template. In a template, `{{key}}`
+is replaced by text, `<slot name="key">` by content from book.md, and
+`data-if="key"` drops the element when `key` is empty (see the comment above
+the templates).

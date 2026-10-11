@@ -16,3 +16,6 @@ pnpm-debug.log*
 
 # macOS
 .DS_Store
+
+# compiled CSS (from src/styles.css)
+site/styles.css

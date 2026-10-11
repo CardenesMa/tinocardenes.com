@@ -3,7 +3,7 @@
 import { parseBook } from './book.js';
 import { BookError } from './markdown.js';
 import { initReader, initVideos } from './reader.js';
-import { h, renderBook } from './render.js';
+import { fill, renderBook } from './render.js';
 
 const root = document.querySelector<HTMLElement>('[data-book]')!;
 const source = root.dataset.source ?? '/book.md';
@@ -24,5 +24,5 @@ try {
 } catch (error) {
   console.error(error);
   const where = error instanceof BookError && error.line ? `${source}, line ${error.line}: ` : '';
-  root.append(h('p.book-error', {}, where + (error as Error).message));
+  root.append(fill('book-error', { message: where + (error as Error).message }));
 }

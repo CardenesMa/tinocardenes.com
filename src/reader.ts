@@ -21,7 +21,9 @@ export function initReader(book: HTMLElement) {
     width: 760,
     height: 1000,
     size: 'stretch',
-    minWidth: 300,
+    // One page at a time when the book is narrower than 2 × minWidth. The book is
+    // at most 640px wide below the max-spread: breakpoint, so it's always one page there.
+    minWidth: 330,
     maxWidth: 1000,
     minHeight: 395,
     maxHeight: 1316,
@@ -31,6 +33,8 @@ export function initReader(book: HTMLElement) {
     flippingTime: 500,
     maxShadowOpacity: 0.4,
     disableFlipByClick: false,
+    mobileScrollSupport: true,
+    showPageCorners: false
   });
   flipbook.loadFromHTML(pages);
 
@@ -51,6 +55,9 @@ export function initReader(book: HTMLElement) {
     const anchor = shown[0].id === 'cover' ? '' : (shown.map((p) => p.querySelector('.score-title')?.id).find(Boolean) ?? shown[0].id);
 
     if (pagerPages) pagerPages.textContent = label;
+    // How much of the book is still ahead, for the stack of page edges (.page-stack).
+    const last = pages.indexOf(shown.at(-1)!);
+    book.style.setProperty('--stack', String((pages.length - 1 - last) / (pages.length - 1)));
     if (announcer) announcer.textContent = `${title}, page ${label}`;
     frame.toggleAttribute('data-at-toc', shown.some((p) => p.querySelector('#toc')));
     // A closed book (front or back cover alone) is centred; see .book-frame[data-closed].
@@ -71,10 +78,13 @@ export function initReader(book: HTMLElement) {
   flipbook.on('init', update);
   flipbook.on('flip', update);
   flipbook.on('changeOrientation', update);
-  // Slide the book open while the cover turns, not after.
+  showHint(flipbook);
+  // Slide the book open while the cover turns, not after. Only once it's really
+  // turning: hovering a corner lifts it ('fold_corner'), and sliding then would
+  // move the corner away from the mouse and back, over and over.
   flipbook.on('changeState', (e) => {
     if (e.data === 'read') update();
-    else delete frame.dataset.closed;
+    else if (e.data === 'flipping') delete frame.dataset.closed;
   });
 
   const go = (index: number) => {
@@ -96,6 +106,7 @@ export function initReader(book: HTMLElement) {
     }
     event.preventDefault();
   });
+
 
   document.addEventListener('keydown', (event) => {
     if (event.metaKey || event.ctrlKey || event.altKey) return;
@@ -126,6 +137,32 @@ export function initReader(book: HTMLElement) {
   });
   history.scrollRestoration = 'manual';
   scrollTo(0, 0);
+}
+
+/** On a first visit, shows how to turn pages until the reader turns one or closes the hint. */
+function showHint(flipbook: PageFlip) {
+  const hint = document.querySelector<HTMLElement>('[data-hint]');
+  const key = 'hint-seen';
+  try {
+    if (!hint || localStorage.getItem(key)) return;
+  } catch {
+    // Storage blocked (private mode): show it anyway.
+  }
+  let done = false;
+  const setShown = (shown: boolean) => {
+    hint!.dataset.shown = String(shown);
+    hint!.setAttribute('aria-hidden', String(!shown));
+  };
+  const dismiss = () => {
+    done = true;
+    setShown(false);
+    try {
+      localStorage.setItem(key, '1');
+    } catch {}
+  };
+  setTimeout(() => done || setShown(true), 1200);
+  flipbook.on('flip', dismiss);
+  hint!.querySelector('[data-hint-close]')?.addEventListener('click', dismiss);
 }
 
 // Click-to-load YouTube players: only a thumbnail is fetched until the reader

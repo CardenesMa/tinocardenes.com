@@ -1,5 +1,5 @@
-// pnpm dev: recompiles the TypeScript on save and serves site/ at
-// http://localhost:4321. Reload the browser to see changes to book.md.
+// pnpm dev: recompiles the TypeScript and the Tailwind CSS on save and serves
+// site/ at http://localhost:4321. Reload the browser to see changes.
 
 import { spawn } from 'node:child_process';
 import { createReadStream, existsSync, statSync } from 'node:fs';
@@ -24,6 +24,7 @@ const types = {
 };
 
 spawn('tsc', ['--watch', '--preserveWatchOutput'], { stdio: 'inherit' });
+spawn('tailwindcss', ['-i', 'src/styles.css', '-o', 'site/styles.css', '--watch'], { stdio: 'inherit' });
 
 createServer((req, res) => {
   let file = path.join(root, decodeURIComponent(new URL(req.url, 'http://x').pathname));
