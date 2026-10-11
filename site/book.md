@@ -1,6 +1,6 @@
 <!-- The whole site. Page rules and directives are documented in README.md. -->
 
-:::cover{name="Tino Cardenes" label="Original" publisher="Concert Alert! Kapustin Concerto No. 2, October 31st @ 2pm, Heinz Hall" number="2026"}
+:::cover{name="Tino Cardenes" label="" publisher="Upcoming Concert! Kapustin Concerto No. 2, October 31st @ 2pm, Heinz Hall" number="2026"}
 **Works for Piano & Computer**\
 An Interactive Website
 
@@ -37,13 +37,13 @@ Turn the pages with the arrows, click, or your keyboard.
 # Recordings {id=index}
 
 :::incipits
-::incipit{to=sinfonietta-for-piano-4-hands}
-::incipit{to=harlem-nocturne}
-::incipit{to=wave}
-::incipit{to=recorda-me}
-::incipit{to=fugue-no-8-in-d-sharp-minor}
-::incipit{to=there-will-never-be-another-you}
-::incipit{to=allegro}
+::incipit{to=sinfonietta-for-piano-4-hands src="/scores/incipits/sinfonietta.png"}
+::incipit{to=harlem-nocturne src="/scores/incipits/harlem.png"}
+::incipit{to=wave src="/scores/incipits/wave.png"}
+::incipit{to=recorda-me src="/scores/incipits/recordame.png"}
+::incipit{to=fugue-no-8-in-d-sharp-minor src="/scores/incipits/fugue8.png"}
+::incipit{to=there-will-never-be-another-you src="/scores/incipits/another_you.png"}
+::incipit{to=allegro src="/scores/incipits/allegro.png"}
 ::incipit{to=piano-concerto-no-2-in-b-flat-major}
 ::incipit{to=piano-concerto-in-c}
 :::
@@ -193,7 +193,6 @@ Performed at age seven.
 
 :::back
 ## Tino Cardenes
-
 *Pianist · Composer · Computer Scientist*
 
 :sc[Get In Touch]\

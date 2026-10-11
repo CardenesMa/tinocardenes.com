@@ -12,7 +12,8 @@
     <meta property="og:description" content="Classical and jazz pianist, composer, and computer scientist based in Pittsburgh." />
     <meta property="og:image" content="https://tinocardenes.com/images/portrait.jpg" />
     <meta name="twitter:card" content="summary" />
-    <meta name="theme-color" content="#2b3d57" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#111926" media="(prefers-color-scheme: dark)" />
     <!-- Icons from site/favicon/. /favicon.ico stays at the root, where browsers and crawlers look by default. -->
     <link rel="icon" href="/favicon.ico" sizes="48x48" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png" />
@@ -23,8 +24,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,600&family=Cormorant+SC:wght@500&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Music&display=swap" /> -->
-    <!-- Icons in the toolbar (fa-brands, fa-solid). -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
     <link rel="stylesheet" href="/styles.css" />
     <!-- Page turning is done by StPageFlip (MIT), pinned to one version. -->
     <script type="importmap">
@@ -48,29 +47,31 @@
       }
     </script>
   </head>
-  <body class="m-0 min-h-dvh bg-desk text-ink font-serif antialiased">
+  <body class="desk">
     <!-- Three columns: the site and its links on the left, the pager in the middle, elsewhere on the right.
          On narrow screens only Menu, the pager and the icons stay. -->
     <header class="sticky top-0 z-20 grid grid-cols-[1fr_auto_1fr] items-center gap-4 h-bar px-6 bg-bar/95 backdrop-blur text-bar-ink border-b border-bar-line max-spread:gap-2 max-spread:px-3">
       <nav class="flex items-baseline gap-5 font-caps tracking-wide" aria-label="Site">
         <!-- .nav-link: an underline that fades in on hover (src/styles.css). -->
-        <a class="nav-link text-henle text-lg" href="#cover">Tino Cardenes</a>
+        <a class="nav-link text-bar-accent text-lg" href="#cover">Tino Cardenes</a>
         <span class="max-spread:hidden" aria-hidden="true">|</span>
-        <a class="nav-link text-lg hover:text-henle" href="#toc">Contents</a>
-        <a class="nav-link text-lg hover:text-henle max-spread:hidden" href="#back">Contact</a>
+        <a class="nav-link text-lg hover:text-bar-hover" href="#toc">Contents</a>
+        <a class="nav-link text-lg hover:text-bar-hover max-spread:hidden" href="#back">Contact</a>
       </nav>
 
       <div class="flex items-center gap-1 tabular-nums">
-        <button type="button" class="tool text-xl" data-turn="prev" aria-label="Previous pages"><i class="fa-solid fa-chevron-left"></i></button>
+        <button type="button" class="tool text-sm" data-turn="first" aria-label="Front page"><span class="icon [--icon:url(/icons/angles-left.svg)]" aria-hidden="true"></span></button>
+        <button type="button" class="tool text-xl" data-turn="prev" aria-label="Previous pages"><span class="icon [--icon:url(/icons/chevron-left.svg)]" aria-hidden="true"></span></button>
         <span class="min-w-[5.5em] text-center"><span data-pager-pages>1</span> / <span data-pager-total></span></span>
-        <button type="button" class="tool text-xl" data-turn="next" aria-label="Next pages"><i class="fa-solid fa-chevron-right"></i></button>
+        <button type="button" class="tool text-xl" data-turn="next" aria-label="Next pages"><span class="icon [--icon:url(/icons/chevron-right.svg)]" aria-hidden="true"></span></button>
+        <button type="button" class="tool text-sm" data-turn="last" aria-label="Back Page"><span class="icon [--icon:url(/icons/angles-right.svg)]" aria-hidden="true"></span></button>
       </div>
 
       <nav class="flex gap-4 justify-self-end text-bar-ink/65" aria-label="Elsewhere">
-        <a class="tool" href="https://www.youtube.com/@tinocardenes" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fa-brands fa-youtube nav-link" aria-hidden="true"></i></a>
-        <a class="tool" href="https://www.instagram.com/tinocardenes/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fa-brands fa-instagram nav-link" aria-hidden="true"></i></a>
-        <a class="tool" href="https://github.com/CardenesMa" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i class="fa-brands fa-github nav-link" aria-hidden="true"></i></a>
-        <a class="tool" href="mailto:cardenestino@gmail.com" aria-label="Email"><i class="fa-solid fa-envelope nav-link" aria-hidden="true"></i></a>
+        <a class="tool" href="https://www.youtube.com/@tinocardenes" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><span class="icon [--icon:url(/icons/youtube.svg)]" aria-hidden="true"></span></a>
+        <a class="tool" href="https://www.instagram.com/tinocardenes/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><span class="icon [--icon:url(/icons/instagram.svg)]" aria-hidden="true"></span></a>
+        <a class="tool" href="https://github.com/CardenesMa" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><span class="icon [--icon:url(/icons/github.svg)]" aria-hidden="true"></span></a>
+        <a class="tool" href="mailto:cardenestino@gmail.com" aria-label="Email"><span class="icon [--icon:url(/icons/envelope.svg)]" aria-hidden="true"></span></a>
       </nav>
     </header>
 
@@ -143,7 +144,7 @@
             <p class="m-0 mt-[5cqi] pt-[7cqi] border-t border-cover-ink text-[2cqi]">{{number}}</p>
           </div>
         </div>
-        <p class="absolute bottom-[3%] right-[3%] text-black m-0 text-[5cqi] animate-pulse"><i class="fa-regular fa-hand-pointer"></i></p>
+        <p class="absolute bottom-[3%] right-[3%] text-black m-0 text-[6cqi] animate-pulse"><span class="icon [--icon:url(/icons/hand-pointer.svg)]" aria-hidden="true"></span></p>
       </div>
     </template>
 
@@ -207,7 +208,7 @@
           <span class="row-span-2 text-right oldstyle-nums tabular-nums" data-page-of="{{id}}"></span>
           <img class="col-2 block w-full aspect-[10/1] object-cover object-left mix-blend-multiply" src="{{src}}" alt="" data-if="src" />
           <!-- Until there's an image: an empty staff. -->
-          <span class="col-2 flex items-center aspect-[10/1]" data-if="noSrc">TODO: Fill </span>
+          <span class="col-2 flex items-center aspect-[10/1]" data-if="noSrc">(Placeholder. Tell Tino to fire up Sibelius!)</span>
         </a>
       </li>
     </template>

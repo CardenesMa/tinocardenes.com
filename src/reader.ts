@@ -103,7 +103,9 @@ export function initReader(book: HTMLElement, build: (size: PageSize) => HTMLEle
     else delete frame.dataset.closed;
     const index = flipbook.getCurrentPageIndex();
     for (const b of document.querySelectorAll<HTMLButtonElement>('button[data-turn="prev"]')) b.disabled = index === 0;
+    for (const b of document.querySelectorAll<HTMLButtonElement>('button[data-turn="first"]')) b.disabled = index === 0;
     for (const b of document.querySelectorAll<HTMLButtonElement>('button[data-turn="next"]')) b.disabled = shown.includes(pages.at(-1)!);
+    for (const b of document.querySelectorAll<HTMLButtonElement>('button[data-turn="last"]')) b.disabled = shown.includes(pages.at(-1)!);
     stopVideos(shown);
 
     // update() runs more than once per turn, so only add history when the page really changed.
@@ -129,11 +131,15 @@ export function initReader(book: HTMLElement, build: (size: PageSize) => HTMLEle
   // In-page links (contents, cross-references) and the arrow buttons.
   document.addEventListener('click', (event) => {
     if (event.defaultPrevented || event.metaKey || event.ctrlKey || event.shiftKey) return;
+    // some elements are given teh data-turn propety and we extract which one is given 
     const control = (event.target as Element).closest<HTMLElement>('[data-turn], a[href^="#"]');
     if (!control) return;
+
     const turn = control.dataset.turn;
     if (turn === 'next') flipbook.flipNext();
     else if (turn === 'prev') flipbook.flipPrev();
+    else if (turn === 'first') flipbook.flip(0);
+    else if (turn === 'last') flipbook.flip(flipbook.getPageCount() - 1);
     else {
       const index = pageOf(control.getAttribute('href')!.slice(1));
       if (index < 0) return;

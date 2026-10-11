@@ -30,11 +30,20 @@
   --color-henle: #829fb7;
   --color-cover-ink: #16191d;
 
-  --color-desk: #b7c0ce;
-  --color-bar: #ffffff;
-  --color-bar-ink: #2a2926;
-  --color-bar-line: rgb(0 0 0 / 0.1);
+  /* Behind the book: a wash from pale sky blue (top left) to warm cream (bottom right). */
+  --color-desk: #e2edfa;
+  --color-desk-end: #fbeee4;
 
+  /* The toolbar: white, slate ink, the Henle blue made dark enough to read
+     (≈ 5:1 on white), and a warm coral when something is hovered. */
+  --color-bar: #ffffff;
+  --color-bar-ink: #1f2a37;
+  --color-bar-accent: #2f6db0;
+  --color-bar-hover: #c4462b;
+  --color-bar-line: rgb(31 42 55 / 0.1);
+
+  /* textures used to make it look more realistic */
+  --texture-paper: url("/images/paper.png");
   /* font-serif, font-display, font-caps, font-music */
   --font-serif: 'Merriweather', 'EB Garamond', Garamond, 'Times New Roman', serif;
   --font-display: 'Cormorant Garamond', 'EB Garamond', Garamond, serif;
@@ -52,9 +61,13 @@
   :root {
     --color-paper: #efe9db;
     --color-paper-edge: #ddd4c1;
-    --color-desk: #1f2023;
-    --color-bar: #151618;
-    --color-bar-ink: #e8e4dc;
+    /* Midnight blue fading to plum, so the paper glows against it. */
+    --color-desk: #172131;
+    --color-desk-end: #2a2033;
+    --color-bar: #111926;
+    --color-bar-ink: #e6ebf2;
+    --color-bar-accent: #8fb8e8;
+    --color-bar-hover: #ff9a7a;
     --color-bar-line: rgb(255 255 255 / 0.08);
     color-scheme: dark;
   }
@@ -116,6 +129,19 @@
   .page :is(a, button) * {
     pointer-events: none;
   }
+
+  .desk {
+    margin: 0;
+    min-height: 100dvh;
+    color: var(--color-ink);
+    font-family: var(--font-serif);
+    /* antialiased: true; */
+    /* webkit-font-smoothing: antialiased; */
+    -moz-osx-font-smoothing: grayscale;
+    background-color: var(--color-desk);
+    background-image: linear-gradient(135deg, var(--color-desk), var(--color-desk-end));
+    background-attachment: fixed;
+  }
 }
 
 /* ───────────────────────── Around the book ───────────────────────── */
@@ -136,6 +162,18 @@
     }
   }
 
+  /* An icon from site/icons/ (Font Awesome's SVGs), named in --icon:
+     <span class="icon [--icon:url(/icons/github.svg)]">. The SVG is a mask
+     over the text colour, so it changes colour with hover:, dark mode, … */
+  .icon {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.125em;
+    background-color: currentColor;
+    mask: var(--icon) center / contain no-repeat;
+  }
+
   /* A round toolbar button or icon link. */
   .tool {
     display: grid;
@@ -149,7 +187,13 @@
     text-decoration: none;
     cursor: pointer;
     font-size: 150%;
-    color: var(--color-henle);
+    color: var(--color-bar-accent);
+    transition: color 0.2s;
+
+    &:hover:not(:disabled),
+    &:focus-visible {
+      color: var(--color-bar-hover);
+    }
 
     &:disabled {
       opacity: 0.3;
@@ -179,6 +223,7 @@
 
     &[data-closed='front'] {
       translate: -25% 0;
+
     }
 
     &[data-closed='back'] {
@@ -193,9 +238,10 @@
       content: '';
       position: absolute;
       inset: 0;
-      z-index: 1;
+      z-index: 2;
       pointer-events: none;
-      background: url('/images/paper.png') 0 0 / 5% auto;
+      background: var(--texture-paper) 0 0 / 5% auto;
+      opacity: 50%;
       mix-blend-mode: multiply;
     }
 
@@ -220,6 +266,8 @@
     position: relative;
     isolation: isolate;
     transition: --stack 0.5s ease;
+    z-index: 2;
+
 
     &::after {
       --leaf: calc(var(--stack) * 1.5px);
@@ -254,33 +302,6 @@
     }
   }
 
-  /* How to get around, shown on a first visit (see reader.ts). */
-  .hint {
-    position: fixed;
-    bottom: 1.5rem;
-    left: 50%;
-    z-index: 30;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    max-width: calc(100vw - 2rem);
-    padding: 0.375rem 0.5rem 0.375rem 1.25rem;
-    border-radius: 9999px;
-    background: color-mix(in srgb, var(--color-bar) 95%, transparent);
-    backdrop-filter: blur(8px);
-    color: var(--color-bar-ink);
-    font-size: 0.95rem;
-    font-style: italic;
-    box-shadow: 0 6px 24px rgb(0 0 0 / 0.18);
-    translate: -50% 0;
-    transition: opacity 0.5s, translate 0.5s;
-
-    &[data-shown='false'] {
-      opacity: 0;
-      translate: -50% 0.75rem;
-      pointer-events: none;
-    }
-  }
 }
 
 @property --stack {
@@ -302,9 +323,11 @@
     color: var(--color-ink);
     /* (The paper's texture lies over the whole book: see .book-frame::after.) */
     background-color: var(--color-paper);
-    /* The page's shadow on the desk, and the edges of the paper a shade darker with age. */
+    /* The page's shadow on the desk (a close, crisp one and a wide, faint one, so
+       it stands just off the wood), and the edges of the paper a shade darker with age. */
     box-shadow:
-      0 1px 3px rgb(0 0 0 / 0.14),
+      0 1px 2px rgb(0 0 0 / 0.22),
+      0 6px 18px -4px rgb(0 0 0 / 0.35),
       inset 0 0 6cqi rgb(140 105 50 / 0.09);
 
     /* Shading where the paper curves into the spine (none one page at a time). */
