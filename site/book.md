@@ -44,8 +44,6 @@ Turn the pages with the arrows, click, or your keyboard.
 ::incipit{to=fugue-no-8-in-d-sharp-minor src="/scores/incipits/fugue8.png"}
 ::incipit{to=there-will-never-be-another-you src="/scores/incipits/another_you.png"}
 ::incipit{to=allegro src="/scores/incipits/allegro.png"}
-::incipit{to=piano-concerto-no-2-in-b-flat-major}
-::incipit{to=piano-concerto-in-c}
 :::
 
 ::pagebreak
@@ -121,15 +119,17 @@ Enjoy complete control over colors, fonts, styles, and symbols while adjusting t
 
 ::part[Videos]
 
-# Sinfonietta for Piano 4 Hands {composer="Nikolai Kapustin" subtitle="Live in Kresge"}
+# Sinfonietta for Piano 4 Hands {composer="Nikolai Kapustin" subtitle="Live in Kresge" }
 
 ::youtube{id=MX0yz8_xb8s aspect=16/9}
 
 Sung-Im Kim and I both loved this piece and found a reason to prepare it! It's a fun and jazzy piece to play. Recorded in Kresge in August 2026. 
 
-::score
+::score{src="scores/rondo_full.png"}
+
 ::pagebreak
-::score{src=/scores/harlem_nocturne.jpg alt="A Lead Sheet of Harlem Nocturne"}
+
+::score{src=/scores/harlem_nocturne_full.png alt="A Lead Sheet of Harlem Nocturne"}
 ## Harlem Nocturne { subtitle="from The Vlahakis Sessions"}
 
 ::youtube{id=z1hGBjZeRz0 aspect=1/1}
@@ -137,31 +137,32 @@ Sung-Im Kim and I both loved this piece and found a reason to prepare it! It's a
 Earle Hagen's 1939 standard, recorded for *The Vlahakis Sessions* (2025).
 
 
-# Wave {subtitle="with the Tartan Quartet"}
+# Wave {subtitle="with the Tartan Quartet" }
 
 ::youtube{id=4eYuc9c5NaY aspect=1/1}
 
 Jobim's bossa nova, played with the Tartan Quartet.
 
-::score
+::score{src="scores/wave_full.png"}
 
-# Recorda Me { subtitle="with the Tartan Quartet"}
+# Recorda Me { subtitle="with the Tartan Quartet" }
 
-::score
 ::youtube{id=1MmuILlKXMs aspect=1/1}
-
 Joe Henderson's tune, played with the Tartan Quartet.
+::score{src="scores/recordame_full.png"}
 
 
-# Fugue No.&nbsp;8 in D-sharp minor {subtitle="The Well-Tempered Clavier, Book I · BWV 853"}
+::pagebreak 
+
+::score{src="scores/fugue8_full.png"}
+## Fugue No.&nbsp;8 in D-sharp minor {subtitle="The Well-Tempered Clavier, Book I · BWV 853" }
 
 ::youtube{id=VnlUzmmqrGg}
 
 From the first book of *The Well-Tempered Clavier*, recorded for *The Vlahakis Sessions*.
 
-::score
 
-# There Will Never Be Another You {ubtitle="Live"}
+# There Will Never Be Another You {subtitle="Live" }
 
 ::youtube{id=MdaJb28w_9Q}
 
@@ -169,27 +170,12 @@ Harry Warren and Mack Gordon's standard, recorded live.
 
 ::score
 
-# Allegro {composer="Peterson"}
+# Allegro {composer="Peterson" }
 
 ::youtube{id=YaTAE7Da26o}
 
-::score
+::score{src="scores/allegro_full.png"}
 
-# Piano Concerto No.&nbsp;2 in B-flat major {subtitle="Op. 19 · III. Rondo"}
-
-::youtube{id=7I83NEO6O_I}
-
-The finale of Beethoven's Second Piano Concerto, performed at age fourteen.
-
-::score
-
-# Piano Concerto in C {composer="Howard Kasschau"}
-
-::youtube{id=nVpjuSUunGE}
-
-Performed at age seven.
-
-::score
 
 :::back
 ## Tino Cardenes

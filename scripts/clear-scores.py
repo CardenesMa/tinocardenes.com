@@ -1,17 +1,17 @@
-# Makes the incipits' backgrounds transparent, so the music sits on the page's
+# Makes the scores backgrounds transparent, so the music sits on the page's
 # paper rather than on a photo of other paper.
 #
-#   python3 scripts/clear-incipits.py [--lo 18] [--hi 110] [files…]
+#   python3 scripts/clear-scores.py [--lo 18] [--hi 110] file…
 #
-# Reads the originals in design/incipits/ (any image Pillow opens: .png, .jpg, …)
-# and writes site/scores/incipits/<name>.png. Re-run it with other --lo/--hi to
-# taste; the originals are never touched.
+# Each file is relative to site/scores/ (e.g. wave_full.png, incipits/wave.png)
+# and is replaced by a transparent .png of the same name: a .png is overwritten,
+# a .jpg gets a .png beside it (point book.md at that). Keep the originals
+# somewhere else if you may want to run it again with other --lo/--hi.
 #
 # Each pixel keeps the page's ink colour and gets an alpha from how much darker it
-# is than the paper around it. The paper's own level is measured locally, so
-# uneven light across a photo (a shadow at one end) doesn't show up as grey.
-# Darker than the paper by --lo or less: clear. By --hi or more: solid ink.
-# Light pencil lands in between, faint.
+# is than the paper around it, measured locally so uneven light doesn't show up
+# as grey. Darker than the paper by --lo or less: clear. By --hi or more: solid
+# ink. Light pencil lands in between, faint.
 #
 # Needs Pillow: `brew install pillow` (or `pip install pillow` in a venv).
 
@@ -20,8 +20,7 @@ from pathlib import Path
 
 from PIL import Image, ImageChops, ImageFilter
 
-ORIGINALS = Path('design/incipits')
-OUT = Path('site/scores/incipits')
+SCORES = Path('site/scores')
 INK = (0x1C, 0x1B, 0x19)  # --color-ink in src/styles.css
 
 
@@ -47,21 +46,22 @@ def clear(src: Path, lo: int, hi: int) -> Path:
 
     out = Image.new('RGBA', gray.size, INK + (0,))
     out.putalpha(alpha)
-    dest = OUT / f'{src.stem}.png'
+    dest = src.with_suffix('.png')
     out.save(dest, optimize=True)
     return dest
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('files', nargs='*', type=Path, help=f'default: everything in {ORIGINALS}/')
+    parser = argparse.ArgumentParser(description='Make the backgrounds of images in site/scores/ transparent.')
+    parser.add_argument('files', nargs='+', type=Path, help=f'images, relative to {SCORES}/')
     parser.add_argument('--lo', type=int, default=18, help='this much darker than the paper or less is clear')
     parser.add_argument('--hi', type=int, default=110, help='this much darker or more is solid ink')
     args = parser.parse_args()
 
-    files = args.files or sorted(p for p in ORIGINALS.iterdir() if not p.name.startswith('.'))
-    OUT.mkdir(parents=True, exist_ok=True)
-    for src in files:
+    for file in args.files:
+        src = SCORES / file
+        if not src.is_file():
+            parser.error(f'{src} not found')
         print(f'{src} → {clear(src, args.lo, args.hi)}')
 
 
