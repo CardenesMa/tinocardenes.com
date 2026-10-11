@@ -33,6 +33,10 @@ declare module 'page-flip' {
   export class PageFlip {
     constructor(element: HTMLElement, settings: FlipSettings);
     loadFromHTML(pages: HTMLElement[]): void;
+    /** Swaps in a new set of pages, staying on the current index. */
+    updateFromHtml(pages: HTMLElement[]): void;
+    /** Shows a page without animating the turn. */
+    turnToPage(page: number): void;
     /** Animated turn to a page (one flip, however far away it is). */
     flip(page: number): void;
     flipNext(): void;

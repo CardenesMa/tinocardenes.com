@@ -3,38 +3,47 @@
 // connects it to the rest of the site: links, keys, toolbar, URL.
 
 import { PageFlip } from 'page-flip';
+import type { PageSize } from './layout.js';
 
-export function initReader(book: HTMLElement) {
+// The page's proportions, and the sizes between which it scales with the window.
+const PAGE = { width: 760, height: 1000, minWidth: 330, maxWidth: 1000 };
+
+/** The size StPageFlip will give each page in `book` (see its Render.calculateBoundsRect). */
+function pageSize(book: HTMLElement): PageSize {
+  const width = Math.max(book.offsetWidth, PAGE.minWidth);
+  // One page at a time when the book is narrower than two minWidth pages. The book is
+  // at most 640px wide below the max-spread: breakpoint, so it's always one page there.
+  const portrait = width < PAGE.minWidth * 2;
+  const pageWidth = Math.min(portrait ? width : width / 2, PAGE.maxWidth);
+  return { width: pageWidth, height: (pageWidth * PAGE.height) / PAGE.width, portrait };
+}
+
+/** Opens the book. `build` lays the pages out for a page size; it runs again whenever that changes. */
+export function initReader(book: HTMLElement, build: (size: PageSize) => HTMLElement[]) {
   const frame = book.parentElement!;
-  const pages = [...book.querySelectorAll<HTMLElement>(':scope > .page')];
+  let size = pageSize(book);
+  let pages = build(size);
   const pagerPages = document.querySelector<HTMLElement>('[data-pager-pages]');
+  const pagerTotal = document.querySelector<HTMLElement>('[data-pager-total]');
   const announcer = document.querySelector<HTMLElement>('[data-announcer]');
 
-  /** Index of the page containing the element with this id. */
-  const pageOf = (id: string) => {
-    const page = id ? document.getElementById(id)?.closest<HTMLElement>('.page') : null;
-    return page ? pages.indexOf(page) : -1;
-  };
+  /** Index of the page that is, or contains, the element with this id. */
+  const pageOf = (id: string) => (id ? pages.findIndex((page) => page.id === id || page.querySelector(`#${CSS.escape(id)}`)) : -1);
   const fromUrl = () => Math.max(0, pageOf(decodeURIComponent(location.hash.slice(1))));
 
   const flipbook = new PageFlip(book, {
-    width: 760,
-    height: 1000,
+    ...PAGE,
     size: 'stretch',
-    // One page at a time when the book is narrower than 2 × minWidth. The book is
-    // at most 640px wide below the max-spread: breakpoint, so it's always one page there.
-    minWidth: 330,
-    maxWidth: 1000,
     minHeight: 395,
     maxHeight: 1316,
     showCover: true,
     usePortrait: true,
     startPage: fromUrl(),
-    flippingTime: 500,
+    flippingTime: 300,
     maxShadowOpacity: 0.4,
     disableFlipByClick: false,
     mobileScrollSupport: true,
-    showPageCorners: false
+    showPageCorners: false,
   });
   flipbook.loadFromHTML(pages);
 
@@ -46,6 +55,33 @@ export function initReader(book: HTMLElement) {
     return pages.slice(left, left + 2);
   };
 
+  /** The id of the title nearest before `page` (or of the cover or back cover itself). */
+  const placeOf = (page: HTMLElement) => {
+    for (let i = pages.indexOf(page); i >= 0; i--) {
+      const id = pages[i].querySelector('.score-title')?.id ?? (/^(cover|back)$/.test(pages[i].id) ? pages[i].id : undefined);
+      if (id) return id;
+    }
+    return 'cover';
+  };
+
+  // A new page size fits a different amount of text on each page, so lay the
+  // pages out again, then return to the same title.
+  let resizing: ReturnType<typeof setTimeout>;
+  addEventListener('resize', () => {
+    clearTimeout(resizing);
+    resizing = setTimeout(() => {
+      const next = pageSize(book);
+      if (next.width === size.width && next.portrait === size.portrait) return;
+      const place = placeOf(visible()[0]);
+      size = next;
+      pages = build(size);
+      recordHistory = false;
+      flipbook.updateFromHtml(pages);
+      flipbook.turnToPage(Math.max(0, pageOf(place)));
+      update();
+    }, 250);
+  });
+
   let recordHistory = false; // false while following the URL rather than setting it
   function update() {
     const shown = visible();
@@ -55,12 +91,12 @@ export function initReader(book: HTMLElement) {
     const anchor = shown[0].id === 'cover' ? '' : (shown.map((p) => p.querySelector('.score-title')?.id).find(Boolean) ?? shown[0].id);
 
     if (pagerPages) pagerPages.textContent = label;
-    // How much of the book is still ahead, for the stack of page edges (.page-stack).
+    if (pagerTotal) pagerTotal.textContent = String(pages.length);
+    // How much of the book is still ahead, for the stack of page edges (.book::after in src/styles.css).
     const last = pages.indexOf(shown.at(-1)!);
     book.style.setProperty('--stack', String((pages.length - 1 - last) / (pages.length - 1)));
     if (announcer) announcer.textContent = `${title}, page ${label}`;
-    frame.toggleAttribute('data-at-toc', shown.some((p) => p.querySelector('#toc')));
-    // A closed book (front or back cover alone) is centred; see .book-frame[data-closed].
+    // A closed book (front or back cover alone) is centred; see .book-frame in src/styles.css.
     const closed = shown.length === 1 && flipbook.getOrientation() === 'landscape';
     if (closed && shown[0].id === 'cover') frame.dataset.closed = 'front';
     else if (closed && shown[0].id === 'back') frame.dataset.closed = 'back';
@@ -78,7 +114,6 @@ export function initReader(book: HTMLElement) {
   flipbook.on('init', update);
   flipbook.on('flip', update);
   flipbook.on('changeOrientation', update);
-  showHint(flipbook);
   // Slide the book open while the cover turns, not after. Only once it's really
   // turning: hovering a corner lifts it ('fold_corner'), and sliding then would
   // move the corner away from the mouse and back, over and over.
@@ -91,7 +126,7 @@ export function initReader(book: HTMLElement) {
     if (index >= 0 && !visible().includes(pages[index])) flipbook.flip(index);
   };
 
-  // In-page links (contents,  cross-references) and the arrow buttons.
+  // In-page links (contents, cross-references) and the arrow buttons.
   document.addEventListener('click', (event) => {
     if (event.defaultPrevented || event.metaKey || event.ctrlKey || event.shiftKey) return;
     const control = (event.target as Element).closest<HTMLElement>('[data-turn], a[href^="#"]');
@@ -106,7 +141,6 @@ export function initReader(book: HTMLElement) {
     }
     event.preventDefault();
   });
-
 
   document.addEventListener('keydown', (event) => {
     if (event.metaKey || event.ctrlKey || event.altKey) return;
@@ -137,32 +171,6 @@ export function initReader(book: HTMLElement) {
   });
   history.scrollRestoration = 'manual';
   scrollTo(0, 0);
-}
-
-/** On a first visit, shows how to turn pages until the reader turns one or closes the hint. */
-function showHint(flipbook: PageFlip) {
-  const hint = document.querySelector<HTMLElement>('[data-hint]');
-  const key = 'hint-seen';
-  try {
-    if (!hint || localStorage.getItem(key)) return;
-  } catch {
-    // Storage blocked (private mode): show it anyway.
-  }
-  let done = false;
-  const setShown = (shown: boolean) => {
-    hint!.dataset.shown = String(shown);
-    hint!.setAttribute('aria-hidden', String(!shown));
-  };
-  const dismiss = () => {
-    done = true;
-    setShown(false);
-    try {
-      localStorage.setItem(key, '1');
-    } catch {}
-  };
-  setTimeout(() => done || setShown(true), 1200);
-  flipbook.on('flip', dismiss);
-  hint!.querySelector('[data-hint-close]')?.addEventListener('click', dismiss);
 }
 
 // Click-to-load YouTube players: only a thumbnail is fetched until the reader

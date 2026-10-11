@@ -7,10 +7,11 @@ import { parseBook } from '../site/js/book.js';
 const file = 'site/book.md';
 try {
   const book = parseBook(readFileSync(file, 'utf8'));
+  // ensure that all required directives are there and not missing
   const missing = book.files.filter((f) => !existsSync(`site${f.path}`));
   for (const f of missing) console.error(`${file}:${f.line}  ${f.path} not found in site/`);
   if (missing.length) process.exit(1);
-  console.log(`${file}: ${book.pages.length} pages, ${book.toc.length} contents entries`);
+  console.log(`${file}: ${book.pages.length} pages before text flows on, ${book.toc.length} contents entries`);
 } catch (error) {
   console.error(error.line ? `${file}:${error.line}  ${error.message}` : error);
   process.exit(1);

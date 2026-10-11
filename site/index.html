@@ -13,7 +13,12 @@
     <meta property="og:image" content="https://tinocardenes.com/images/portrait.jpg" />
     <meta name="twitter:card" content="summary" />
     <meta name="theme-color" content="#2b3d57" />
-    <link rel="icon" href="/favicon.ico" />
+    <!-- Icons from site/favicon/. /favicon.ico stays at the root, where browsers and crawlers look by default. -->
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
+    <link rel="manifest" href="/favicon/site.webmanifest" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -47,58 +52,41 @@
     <!-- Three columns: the site and its links on the left, the pager in the middle, elsewhere on the right.
          On narrow screens only Menu, the pager and the icons stay. -->
     <header class="sticky top-0 z-20 grid grid-cols-[1fr_auto_1fr] items-center gap-4 h-bar px-6 bg-bar/95 backdrop-blur text-bar-ink border-b border-bar-line max-spread:gap-2 max-spread:px-3">
-      <nav class="flex items-baseline gap-5 min-w-0 justify-self-start" aria-label="Site">
-        <a class="text-[1.15rem] tracking-[0.08em] no-underline truncate max-spread:hidden" href="#cover">tinocardenes.com</a>
-        <p>|</p>
-        <a class="font-caps text-[0.95rem] tracking-[0.06em] no-underline text-bar-ink transition-colors" href="#toc">Menu</a>
-        <a class="font-caps text-[0.95rem] tracking-[0.06em] no-underline text-bar-ink transition-colors max-spread:hidden" href="#back">Contact</a>
+      <nav class="flex items-baseline gap-5 font-caps tracking-wide" aria-label="Site">
+        <!-- .nav-link: an underline that fades in on hover (src/styles.css). -->
+        <a class="nav-link text-henle text-lg" href="#cover">Tino Cardenes</a>
+        <span class="max-spread:hidden" aria-hidden="true">|</span>
+        <a class="nav-link text-lg hover:text-henle" href="#toc">Contents</a>
+        <a class="nav-link text-lg hover:text-henle max-spread:hidden" href="#back">Contact</a>
       </nav>
 
-      <div class="flex items-center gap-1 text-[0.95rem] tabular-nums">
-        <button type="button" class="size-8 border-0 rounded-full bg-transparent text-[1.4rem] leading-none cursor-pointer enabled:hover:bg-bar-line disabled:opacity-30 disabled:cursor-default" data-turn="prev" aria-label="Previous pages">‹</button>
+      <div class="flex items-center gap-1 tabular-nums">
+        <button type="button" class="tool text-xl" data-turn="prev" aria-label="Previous pages"><i class="fa-solid fa-chevron-left"></i></button>
         <span class="min-w-[5.5em] text-center"><span data-pager-pages>1</span> / <span data-pager-total></span></span>
-        <button type="button" class="size-8 border-0 rounded-full bg-transparent text-[1.4rem] leading-none cursor-pointer enabled:hover:bg-bar-line disabled:opacity-30 disabled:cursor-default" data-turn="next" aria-label="Next pages">›</button>
+        <button type="button" class="tool text-xl" data-turn="next" aria-label="Next pages"><i class="fa-solid fa-chevron-right"></i></button>
       </div>
 
-      <nav class="flex items-center gap-1 justify-self-end" aria-label="Elsewhere">
-        <a class="grid place-items-center size-10 text-[1.5em] no-underline text-henle" href="https://www.youtube.com/@tinocardenes" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fa-brands fa-youtube" aria-hidden="true"></i></a>
-        <a class="grid place-items-center size-10 text-[1.5em] no-underline text-henle" href="https://www.instagram.com/tinocardenes/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a>
-        <a class="grid place-items-center size-10 text-[1.5em] no-underline text-henle" href="https://github.com/CardenesMa" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i></a>
-        <a class="grid place-items-center size-10 text-[1.5em] no-underline text-henle" href="mailto:cardenestino@gmail.com" aria-label="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i></a>
+      <nav class="flex gap-4 justify-self-end text-bar-ink/65" aria-label="Elsewhere">
+        <a class="tool" href="https://www.youtube.com/@tinocardenes" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fa-brands fa-youtube nav-link" aria-hidden="true"></i></a>
+        <a class="tool" href="https://www.instagram.com/tinocardenes/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fa-brands fa-instagram nav-link" aria-hidden="true"></i></a>
+        <a class="tool" href="https://github.com/CardenesMa" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i class="fa-brands fa-github nav-link" aria-hidden="true"></i></a>
+        <a class="tool" href="mailto:cardenestino@gmail.com" aria-label="Email"><i class="fa-solid fa-envelope nav-link" aria-hidden="true"></i></a>
       </nav>
     </header>
 
-    <main class="relative pt-7 px-18 pb-4 overflow-x-clip max-spread:pt-4 max-spread:px-3 max-spread:pb-8">
-      <!-- <button type="button" class="fixed top-bar bottom-0 left-2 z-10 w-10 border-0 bg-transparent text-desk-ink cursor-pointer opacity-55 transition-[background] duration-500 hover:bg-white enabled:hover:opacity-100 disabled:opacity-0 disabled:pointer-events-none before:font-serif before:text-[3.2rem] before:content-['‹'] max-spread:hidden" data-turn="prev" aria-label="Previous pages"></button>
-      <button type="button" class="fixed top-bar bottom-0 right-2 z-10 w-10 border-0 bg-transparent text-desk-ink cursor-pointer opacity-55 transition-[background] duration-500 hover:bg-white enabled:hover:opacity-100 disabled:opacity-0 disabled:pointer-events-none before:font-serif before:text-[3.2rem] before:content-['›'] max-spread:hidden" data-turn="next" aria-label="Next pages"></button> -->
-
-      <!-- Sized to fit a two-page spread in the window (one page below the spread
-           breakpoint). StPageFlip lays the pages out inside .book and keeps the
-           760 × 1000 page ratio. A closed book shows one cover on one half, so
-           data-closed (set by reader.ts) shifts it to the middle. -->
-      <div class="relative mx-auto w-[min(100vw_-_5rem,max(860px,(100dvh_-_5rem)*1.52),1560px)]
-       max-spread:w-[min(100%,640px)] transition-[translate] 
-       duration-800 ease-[cubic-bezier(0.45,0.05,0.25,1)] 
-       data-[closed=front]:-translate-x-1/4
-        data-[closed=back]:translate-x-1/4">
+    <!-- The vertical padding adds up to 2.75rem at every size; .book-frame (src/styles.css) counts on it to fit the window. -->
+    <main class="relative pt-7 px-18 pb-4 overflow-x-clip max-spread:p-3 max-spread:pb-8">
+      <div class="book-frame">
         <!-- The pages are built from book.md. data-plate is printed at the foot of every page. -->
-        <div class="book relative isolate page-stack" data-book data-source="/book.md" data-plate="©Tino Cardenes 2026"></div>
+        <div class="book" data-book data-source="/book.md" data-plate="©Tino Cardenes 2026"></div>
       </div>
       <p class="sr-only" aria-live="polite" data-announcer></p>
 
-      <!-- How to get around, shown on a first visit until the reader turns a page or closes it (see reader.ts). -->
-      <div class="fixed bottom-6 left-1/2 z-30 flex items-center gap-3 max-w-[calc(100vw_-_2rem)] -translate-x-1/2 pl-5 pr-2 py-1.5 rounded-full bg-bar/95 backdrop-blur text-bar-ink text-[0.95rem] shadow-[0_6px_24px_rgb(0_0_0/0.18)] transition-[opacity,translate] duration-500 data-[shown=false]:opacity-0 data-[shown=false]:translate-y-3 data-[shown=false]:pointer-events-none"
-           data-hint data-shown="false" aria-hidden="true">
-        <span class="italic max-spread:hidden">Click a page or press <kbd class="inline-block min-w-[1.7em] px-1 rounded border border-bar-line font-sans text-[0.8em] leading-[1.6] text-center not-italic">←</kbd> <kbd class="inline-block min-w-[1.7em] px-1 rounded border border-bar-line font-sans text-[0.8em] leading-[1.6] text-center not-italic">→</kbd> to turn it, <kbd class="inline-block min-w-[1.7em] px-1 rounded border border-bar-line font-sans text-[0.8em] leading-[1.6] text-center not-italic">C</kbd> for the contents</span>
-        <span class="italic hidden max-spread:inline">Tap or swipe a page to turn it</span>
-        <button type="button" class="grid place-items-center shrink-0 size-7 border-0 rounded-full bg-transparent text-[1.2rem] leading-none text-bar-ink/65 cursor-pointer hover:bg-bar-line hover:text-bar-ink" aria-label="Dismiss" data-hint-close>×</button>
-      </div>
 
       <noscript>
-        <p class="max-w-[36rem] mx-auto my-12 px-5 py-4 bg-paper text-[1.05rem]">
+        <p class="max-w-xl mx-auto my-12 px-5 py-4 bg-paper text-lg">
           This site is a book that needs JavaScript to turn its pages.
           Reach Tino at <a href="mailto:cardenestino@gmail.com">cardenestino@gmail.com</a>
-          <!-- or on <a href="https://www.youtube.com/@tinocardenes">YouTube</a>. -->
         </p>
       </noscript>
     </main>
@@ -111,114 +99,85 @@
         data-style="…"        becomes style="…" (so the editor doesn't flag {{key}} as broken CSS).
       Line breaks and indentation between tags are ignored, so lay them out freely.
 
-      Styling is Tailwind classes. Besides Tailwind's own, src/styles.css defines:
-        colours      paper, paper-edge, ink, ink-soft, rule, accent, henle, cover-ink, desk, …
-        fonts        font-serif, font-display, font-caps, font-music
-        variants     left-page: right-page: cover-page: back-page: blank-page: contents-page:
-                     (style by the page an element is on), max-spread: (one page at a time)
-        drawings     paper, spine, staff, manuscript
-      Lengths in cqi are fractions of the page's width (1cqi = 1%), so the pages scale as a whole.
-      Classes like page, score-title, yt-play, prose and cover-text are hooks for
-      reader.ts and src/styles.css, not styles; keep them.
+      Styling is Tailwind classes for one-off layout, and named classes from
+      src/styles.css for what recurs or depends on the page (.page, .staff,
+      .text-link, …). Colours: paper, ink, ink-soft, rule, accent, henle, cover-ink,
+      desk. Fonts: font-serif, font-display, font-caps, font-music.
+      Lengths in cqi are fractions of the page's width (1cqi = 1%).
+      Attributes like data-body and data-page-of are hooks for the scripts; keep them.
     -->
 
     <!-- ── Pages ─────────────────────────────────────────────────────────── -->
 
-    <!-- Every page kind is cover, back, text, full or blank. -->
+    <!-- Every page. kind is cover, back, text, full or blank. The page number and
+         the numbers in [data-page-of] are filled in by layout.ts. -->
     <template data-template="page">
-      <div
-        class="page page--{{kind}} {{contentsClass}} @container overflow-hidden paper spine text-ink shadow-[0_1px_3px_rgb(0_0_0/0.14)]
-               cover-page:bg-henle cover-page:text-cover-ink cover-page:after:opacity-60 
-               back-page:bg-henle back-page:text-cover-ink back-page:after:opacity-60"
-        id="{{id}}" data-title="{{title}}" data-density="{{density}}">
-        <!-- The contents page is dog-eared, so the book falls open there. -->
-        <span class="absolute top-0 left-0 z-3 size-[9cqi] bg-linear-135 from-desk from-50% to-paper-edge to-50% drop-shadow-[2px_2px_2px_rgb(0_0_0/0.18)]" aria-hidden="true" data-if="isContents"></span>
-        <span class="absolute top-[4.5cqi] z-1 font-display text-[max(20px,2.6cqi)] oldstyle-nums left-page:left-[6cqi] right-page:right-[6cqi] contents-page:left-[13cqi]" aria-label="Page {{number}}" data-if="numbered">{{number}}</span>
-        <!-- Pages are a fixed size, so anything too long scrolls within its page,
-             in the band between the page number and the plate number. -->
-        <div
-          class="{{bodyClass}} absolute inset-x-0 top-[8cqi] bottom-[7.5cqi] flex flex-col 
-          overflow-y-auto [scrollbar-width:thin] px-[10cqi] pt-[2cqi] pb-[3.5cqi] 
-                text-[1rem] max-spread:text-[1.125rem]
-                leading-[1.42]
-                 left-page:pr-[9cqi] right-page:pl-[9cqi]
-                 cover-page:inset-0 cover-page:p-0 cover-page:overflow-visible
-                 back-page:items-center back-page:justify-center back-page:gap-[0.2em] back-page:text-center back-page:text-[length:max(12px,2.5cqi)] back-page:leading-[1.35]
-                 blank-page:manuscript">
-          <slot name="body"></slot>
-        </div>
-        <span class="absolute inset-x-0 bottom-[3.6cqi] z-1 text-center font-caps text-[max(9px,1.55cqi)] tracking-[0.18em] text-ink-soft" aria-hidden="true" data-if="plate">{{plate}}</span>
-        <a class="absolute inset-0 z-3" href="#p2" data-turn="next" data-if="isCover">
-          <span class="sr-only">Open</span>
-        </a>
+      <div class="page page--{{kind}} {{contentsClass}}" id="{{id}}" data-title="{{title}}" data-density="{{density}}" data-left="{{left}}">
+        <span class="page-number" data-page-number data-if="numbered"></span>
+        <div class="page-body {{bodyClass}}" data-body><slot name="body"></slot></div>
+        <span class="page-plate" aria-hidden="true" data-if="plate">{{plate}}</span>
+        <a class="absolute inset-0 z-3" href="#p2" data-turn="next" data-if="isCover"><span class="sr-only">Open</span></a>
       </div>
     </template>
 
-    <!-- :::cover-->
+    <!-- :::back: the main part centred on the page, and what follows its --- at the foot, under a rule. -->
+    <template data-template="back">
+      <div class="flex-1 flex flex-col justify-center gap-[0.2em]"><slot name="main"></slot></div>
+      <footer class="back-foot" data-if="foot"><slot name="foot"></slot></footer>
+    </template>
+
+    <!-- :::cover -->
     <template data-template="cover">
-      <div class="absolute inset-0 font-serif">
+      <div class="absolute inset-0">
         <!-- The composer's name, large, set flush left across the top. -->
-        <p class="absolute top-[15%] left-[10%] right-[6%] m-0 text-[11.5cqi] leading-none tracking-[-0.01em] whitespace-nowrap" data-if="name">{{name}}</p>
+        <p class="absolute top-[15%] left-[10%] m-0 text-[3em] leading-none whitespace-nowrap" data-if="name">{{name}}</p>
         <!-- Below it, two columns: a label on the left, the title block on the right,
              with hairline rules spanning the right column. -->
         <div class="absolute top-[30.5%] bottom-[6%] left-[10%] right-[8%] grid grid-cols-[28cqi_1fr] grid-rows-[auto_1fr_auto]">
-          <p class="col-1 m-0 pt-[6cqi] font-semibold text-[length:3.9cqi]">{{label}}</p>
-          <div class="cover-text col-2 pt-[6cqi] border-t border-cover-ink text-[length:2.3cqi] leading-[1.3]">
+          <p class="m-0 pt-[6cqi] font-semibold text-[3.9cqi]">{{label}}</p>
+          <div class="cover-text pt-[6cqi] border-t border-cover-ink text-[2.3cqi] leading-[1.3]">
             <slot name="text"></slot>
           </div>
           <div class="col-2 row-3">
-            <p class="inline-flex flex-col items-center gap-[3cqi] m-0 text-[length:4cqi]" data-if="publisher">{{publisher}}</p>
-            <!-- <p class="inline-flex flex-col items-center gap-[3cqi] m-0 text-[length:4cqi]" ></p> -->
-            <p class="m-0 mt-[5cqi] pt-[7cqi] border-t border-cover-ink text-[length:2cqi]">{{number}}</p>
+            <p class="m-0 text-[4cqi]" data-if="publisher">{{publisher}}</p>
+            <p class="m-0 mt-[5cqi] pt-[7cqi] border-t border-cover-ink text-[2cqi]">{{number}}</p>
           </div>
         </div>
+        <p class="absolute bottom-[3%] right-[3%] text-black m-0 text-[5cqi] animate-pulse"><i class="fa-regular fa-hand-pointer"></i></p>
       </div>
     </template>
 
-    <!-- A page title (# or ##), set like the head of a score: title, subtitle,
-         marking (top left), composer (top right), staff. -->
+    <!-- A page title (# or ##): title, subtitle composer (top right), staff. -->
     <template data-template="score-heading">
-      <header class="mb-[0.4em] text-center">
-        <h1 class="score-title m-0 font-display font-bold text-[1.5em] leading-[1.1] tracking-[0.12em] uppercase text-balance" id="{{id}}" data-if="h1"><slot name="title"></slot></h1>
-        <h2 class="score-title m-0 font-display font-bold text-[1.5em] leading-[1.1] tracking-[0.12em] uppercase text-balance" id="{{id}}" data-if="h2"><slot name="title"></slot></h2>
+      <!-- The gap below shrinks with --squeeze, like the line spacing (see .page-body). -->
+      <header class="mb-[calc(2rem*var(--squeeze,1))] text-center">
+        <h1 class="score-title" id="{{id}}" data-if="h1"><slot name="title"></slot></h1>
+        <h2 class="score-title" id="{{id}}" data-if="h2"><slot name="title"></slot></h2>
         <p class="mt-[0.35em] mb-0 font-display italic text-[1.12em] text-ink-soft" data-if="subtitle">{{subtitle}}</p>
-        <div class="flex justify-between items-baseline gap-[1em] mt-[1.4em] text-[0.95em]" data-if="hasMeta">
-          <span class="font-display font-semibold italic text-[1.12em]">{{marking}}</span>
-          <span class="font-caps font-medium tracking-[0.04em] text-right">{{composer}}</span>
-        </div>
-        <div class="staff mt-[0.35em] mb-[1.5em]" aria-hidden="true" data-if="marking">
-          <span class="absolute top-1/2 left-[0.25em] -translate-y-[54%] font-music text-[length:calc(var(--staff-gap)*4.6)] leading-none text-ink opacity-75">𝄞</span>
-        </div>
       </header>
     </template>
 
     <!-- ── Block directives ──────────────────────────────────────────────── -->
 
-    <!-- ::score and ::plate. kind is score, portrait or figure. -->
+    <!-- ::score and ::plate. kind is score, portrait or figure; fill is true when it fills the rest of the page. -->
     <template data-template="plate">
-      <figure class="group flex-1 w-full flex flex-col items-center justify-center gap-[1em] m-0" data-kind="{{kind}}">
-        <img
-          class="block max-w-full h-auto
-                 group-data-[kind=score]:w-full group-data-[kind=score]:mix-blend-multiply
-                 group-data-[kind=portrait]:w-[78%] group-data-[kind=portrait]:p-[0.5em] group-data-[kind=portrait]:border group-data-[kind=portrait]:border-rule group-data-[kind=portrait]:outline group-data-[kind=portrait]:outline-rule group-data-[kind=portrait]:outline-offset-3
-                 group-data-[kind=figure]:w-[55%] group-data-[kind=figure]:mix-blend-multiply"
-          src="{{src}}" alt="{{alt}}" loading="lazy" decoding="async" />
-        <figcaption class="font-caps tracking-[0.1em] text-ink-soft" data-if="caption">{{caption}}</figcaption>
+      <figure class="plate plate--{{kind}}" data-fill="{{fill}}" data-style="--plate-width: {{width}}">
+        <img src="{{src}}" alt="{{alt}}" loading="{{loading}}" decoding="async" />
+        <figcaption data-if="caption">{{caption}}</figcaption>
       </figure>
     </template>
 
-    <!-- ::contents. Each group is a ::part (or the entries before the first one). -->
+    <!-- ::contents, the site map: each title, each ::part once, and the back cover. -->
     <template data-template="contents">
-      <nav class="mt-[0.4em]" id="toc" aria-label="Table of contents">
-        <slot name="groups"></slot>
-      </nav>
-    </template>
-
-    <!-- indented is true under a ::part heading. -->
-    <template data-template="contents-group">
-      <h3 class="mt-[1em] mb-[0.35em] font-caps font-medium text-[1em] tracking-[0.12em]" data-if="name">{{name}}</h3>
-      <ol class="my-[0.5em] mx-0 pl-[1.4em] list-none data-[indented=true]:pl-[2.6em]" data-indented="{{indented}}">
+      <ol class="mt-[0.4em] pl-[1.4em] list-none" id="toc" aria-label="Contents">
         <slot name="entries"></slot>
+        <li data-if="hasBack">
+          <a class="group flex items-baseline py-[0.18em] no-underline" href="#back">
+            <span class="group-hover:text-accent">Contact</span>
+            <span class="leader" aria-hidden="true"></span>
+            <span class="italic text-ink-soft">back cover</span>
+          </a>
+        </li>
       </ol>
     </template>
 
@@ -226,9 +185,29 @@
       <li>
         <a class="group flex items-baseline py-[0.18em] no-underline" href="#{{id}}">
           <span class="group-hover:text-accent">{{title}}<span class="ml-[0.5em] italic text-[0.9em] text-ink-soft" data-if="detail">{{detail}}</span></span>
-          <!-- Dot leaders out to the page number. -->
-          <span class="flex-[1_0_1.5em] mx-[0.4em] border-0 border-b-[1.5px] border-dotted border-rule -translate-y-[0.25em]" aria-hidden="true"></span>
-          <span class="oldstyle-nums tabular-nums">{{page}}</span>
+          <span class="leader" aria-hidden="true"></span>
+          <span class="oldstyle-nums tabular-nums" data-page-of="{{id}}"></span>
+        </a>
+      </li>
+    </template>
+
+    <!-- :::incipits, a thematic index: number, title centred over the first line of
+         music, page number. Every image is clipped to the same 10:1 strip. -->
+    <template data-template="incipits">
+      <ol class="m-0 p-0 list-none" aria-label="Thematic index">
+        <slot name="entries"></slot>
+      </ol>
+    </template>
+
+    <template data-template="incipit">
+      <li class="[&+&]:mt-[2em]">
+        <a class="group grid grid-cols-[1.5em_1fr_1.5em] items-center gap-x-[0.75em] no-underline" href="#{{id}}">
+          <span class="row-span-2 font-caps text-ink-soft/80 text-sm ">{{number}}</span>
+          <span class="mb-[0.15em] leading-tight text-center group-hover:text-accent">{{title}}<span class="ml-[0.5em] italic text-[0.9em] text-ink-soft" data-if="detail">{{detail}}</span></span>
+          <span class="row-span-2 text-right oldstyle-nums tabular-nums" data-page-of="{{id}}"></span>
+          <img class="col-2 block w-full aspect-[10/1] object-cover object-left mix-blend-multiply" src="{{src}}" alt="" data-if="src" />
+          <!-- Until there's an image: an empty staff. -->
+          <span class="col-2 flex items-center aspect-[10/1]" data-if="noSrc">TODO: Fill </span>
         </a>
       </li>
     </template>
@@ -238,56 +217,40 @@
       <!-- my-auto centres the video in the space between the title and the text below it.
            (pb rather than mb keeps the gap when the page is full and the auto margins are 0.) -->
       <figure class="mx-0 my-auto pb-[1.2em]">
-        <div
-          class="relative w-full mx-auto bg-[#111] shadow-[0_2px_10px_rgb(0_0_0/0.25)] [&>iframe]:absolute [&>iframe]:inset-0 [&>iframe]:size-full [&>iframe]:border-0"
-          data-style="aspect-ratio: {{width}} / {{height}}; max-width: calc(60cqi * {{ratio}})" data-yt="{{id}}" data-title="{{title}}">
-          <button type="button" class="yt-play absolute inset-0 p-0 border-0 bg-transparent cursor-pointer" aria-label="Play {{title}}">
-            <img class="block size-full object-cover" src="https://i.ytimg.com/vi/{{id}}/hqdefault.jpg" alt="" loading="lazy" decoding="async" />
-            <span class="absolute top-1/2 left-1/2 size-[4.2em] -translate-1/2 rounded-full bg-[rgb(20_20_20/0.72)]" aria-hidden="true">
-              <svg class="absolute top-1/2 left-[54%] -translate-1/2 w-[1.25em] h-[1.5em] fill-paper" viewBox="0 0 5 6"><path d="M0 0 5 3 0 6z" /></svg>
-            </span>
+        <div class="video" data-style="aspect-ratio: {{width}} / {{height}}; max-width: calc(60cqi * {{ratio}})" data-yt="{{id}}" data-title="{{title}}">
+          <button type="button" class="yt-play" aria-label="Play {{title}}">
+            <img src="https://i.ytimg.com/vi/{{id}}/hqdefault.jpg" alt="" loading="lazy" decoding="async" />
+            <span aria-hidden="true"><svg viewBox="0 0 5 6"><path d="M0 0 5 3 0 6z" /></svg></span>
           </button>
         </div>
         <figcaption class="mt-[0.45em] text-center">
-          <a class="italic text-[0.8em] text-accent no-underline border-b border-accent/35 hover:border-current" href="https://www.youtube.com/watch?v={{id}}">Watch on YouTube →</a>
+          <a class="text-link italic text-[0.8em]" href="https://www.youtube.com/watch?v={{id}}">Watch on YouTube →</a>
         </figcaption>
       </figure>
     </template>
 
-    <!-- ::figure -->
-    <template data-template="figure">
-      <figure class="mx-0 my-[1em] text-center">
-        <img class="max-w-full h-auto" src="{{src}}" alt="{{alt}}" loading="lazy" data-style="width: {{width}}" />
-        <figcaption class="mt-[0.4em] italic text-[0.9em] text-ink-soft" data-if="caption">{{caption}}</figcaption>
-      </figure>
-    </template>
-
-    <!-- :::work. number counts up through the book. -->
+    <!-- :::work, a page to itself: number, title, role, picture (a filling ::plate), description, link.
+         number counts up through the book. -->
     <template data-template="work">
-      <section class="work [.work+&]:mt-[1.05em]">
-        <h3 class="m-0 font-display font-medium text-[1.3em] leading-[1.15]"><span class="mr-[0.3em] font-caps text-[0.75em] tracking-[0.08em] text-ink-soft">No. {{number}}</span> {{title}}</h3>
-        <p class="mt-[0.05em] mb-[0.3em] italic text-[0.92em] text-ink-soft" data-if="role">{{role}}</p>
-        <slot name="body"></slot>
-        <a class="inline-block mt-[0.3em] font-caps font-medium tracking-[0.05em] text-[0.95em] text-accent no-underline border-b border-accent/35 hover:border-current" href="{{href}}" data-if="href">{{label}} →</a>
+      <section class="work">
+        <header class="mb-[1em] text-center">
+          <p class="m-0 font-caps tracking-[0.12em] text-ink-soft">No. {{number}}</p>
+          <h3 class="mt-[0.1em] mb-0 font-display font-medium text-[1.6em] leading-[1.15] text-balance">{{title}}</h3>
+          <p class="mt-[0.2em] mb-0 italic text-ink-soft" data-if="role">{{role}}</p>
+        </header>
+        <slot name="image"></slot>
+        <div class="mt-[1em]"><slot name="body"></slot></div>
+        <a class="text-link self-center mt-auto pt-[1em] font-caps font-medium tracking-wide" href="{{href}}" data-if="href">{{label}} →</a>
       </section>
     </template>
 
     <!-- :::links, a row of links at the foot of the page (the list and links are styled in src/styles.css). -->
     <template data-template="links">
-      <nav class="page-links mt-auto pt-[1.2em] font-caps font-medium tracking-[0.05em]">
+      <nav class="page-links mt-auto pt-[calc(1.2em*var(--squeeze,1))] font-caps font-medium tracking-wide">
         <slot name="body"></slot>
       </nav>
     </template>
 
-    <!-- ::staff[marking] -->
-    <template data-template="staff">
-      <div class="mt-[0.5em] mb-[1.5em]" aria-hidden="true">
-        <span class="font-display font-semibold italic text-[1.12em]" data-if="marking"><slot name="marking"></slot></span>
-        <div class="staff mt-[0.3em]" aria-hidden="true">
-          <span class="absolute top-1/2 left-[0.25em] -translate-y-[54%] font-music text-[length:calc(var(--staff-gap)*4.6)] leading-none text-ink opacity-75">𝄞</span>
-        </div>
-      </div>
-    </template>
 
     <!-- ::signature[text] -->
     <template data-template="signature">
@@ -308,17 +271,17 @@
 
     <!-- :sc[text] -->
     <template data-template="sc">
-      <span class="font-bold text-xl tracking-[0.08em]"><slot name="text"></slot></span>
+      <span class="font-medium text-xl tracking-wider"><slot name="text"></slot></span>
     </template>
 
     <!-- :pageref{to}, or :pageref[label]{to}. label ends in ", " when given. -->
     <template data-template="pageref">
-      <a href="#{{to}}"><slot name="label"></slot>p. {{page}}</a>
+      <a href="#{{to}}"><slot name="label"></slot>p. <span data-page-of="{{to}}"></span></a>
     </template>
 
     <!-- Shown in place of the book when book.md can't be loaded or has a mistake. -->
     <template data-template="book-error">
-      <p class="max-w-[36rem] mx-auto my-12 px-5 py-4 bg-paper text-[1.05rem]">{{message}}</p>
+      <p class="max-w-xl mx-auto my-12 px-5 py-4 bg-paper text-lg">{{message}}</p>
     </template>
   </body>
 </html>

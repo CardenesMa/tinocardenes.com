@@ -1,8 +1,11 @@
 // Builds the book's pages from the paginated Markdown. The markup lives in
 // <template data-template="…"> elements in index.html; each function here picks
 // a template and fills it with data. See fill() for how templates are filled.
+//
+// Page numbers aren't known yet: layout.ts decides them once it has measured
+// the text, and fills in every [data-page-number] and [data-page-of="id"].
 
-import { slugger, type Book, type Page, type PageTitle } from './book.js';
+import { isSet, slugger, type Book, type Page, type PageTitle } from './book.js';
 import { plainText, type Block, type Directive, type Inline } from './markdown.js';
 
 type InlineDirective = Extract<Inline, { type: 'directive' }>;
@@ -13,45 +16,70 @@ type Data = Record<string, Value>;
 
 interface Context {
   book: Book;
-  plate?: string;
   slug: (text: string) => string;
   /** Running "No. n" counter for :::work entries. */
   works: number;
 }
 
-export function renderBook(book: Book, root: HTMLElement, options: { plate?: string } = {}) {
-  const ctx: Context = { book, plate: options.plate, slug: slugger(['cover', 'back', 'toc', ...book.pageOf.keys()]), works: 0 };
-  root.append(...book.pages.map((page) => renderPage(page, ctx)));
-
-  // Links that leave the site open in a new tab.
-  for (const link of root.querySelectorAll<HTMLAnchorElement>('a[href^="http:"], a[href^="https:"]')) {
-    link.target = '_blank';
-    link.rel = 'noopener noreferrer';
-  }
+/** The pages as book.md has them, before any text flows onto further pages. */
+export function renderPages(book: Book, options: { plate?: string } = {}): HTMLElement[] {
+  const ctx: Context = { book, slug: slugger(['cover', 'back', 'toc', ...book.ids]), works: 0 };
+  return book.pages.map((page) => {
+    const el = renderPage(page, ctx, options.plate);
+    // Links that leave the site open in a new tab.
+    for (const link of el.querySelectorAll<HTMLAnchorElement>('a[href^="http:"], a[href^="https:"]')) {
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+    }
+    return el;
+  });
 }
 
 /** One page. The page-flip library pairs pages into spreads and positions them. */
-function renderPage(page: Page, ctx: Context) {
+function renderPage(page: Page, ctx: Context, plate?: string) {
   const isCover = page.kind === 'cover';
   const isBack = page.kind === 'back';
-  const isContents = page.blocks.some((b) => b.type === 'directive' && b.name === 'contents');
-  const numbered = page.kind === 'text' || page.kind === 'full';
-
-  return fill('page', {
-    kind: page.kind,
-    id: isCover || isBack ? page.kind : `p${page.number}`,
+  return pageShell(page.kind, {
+    id: isCover || isBack ? page.kind : '',
     title: isCover ? 'Cover' : isBack ? 'Back cover' : page.title && plainText(page.title.content),
-    // Covers are boards: the library turns them stiffly rather than curling them.
-    density: isCover || isBack ? 'hard' : 'soft',
-    isContents,
-    contentsClass: isContents ? 'page--contents' : '',
-    numbered,
-    number: page.number,
-    bodyClass: page.kind === 'text' ? 'prose' : '',
-    body: isCover ? cover(page, ctx) : [page.title && scoreHeading(page.title, ctx), blocks(page.blocks, ctx)],
-    plate: numbered && ctx.plate,
-    isCover,
+    left: page.left,
+    isContents: page.blocks.some((b) => b.type === 'directive' && b.name === 'contents'),
+    plate,
+    body: isCover ? cover(page, ctx) : isBack ? back(page, ctx) : [page.title && scoreHeading(page.title, ctx), blocks(page.blocks, ctx)],
   });
+}
+
+/** An empty text page for what didn't fit on `page`. */
+export function continuationPage(page: HTMLElement) {
+  return pageShell('text', { plate: page.querySelector('.page-plate')?.textContent ?? undefined });
+}
+
+/** A page of blank manuscript paper, to bring the next page onto the left. */
+export function blankPage() {
+  return pageShell('blank', {});
+}
+
+function pageShell(
+  kind: Page['kind'],
+  { id = '', title, left = false, isContents = false, plate, body = [] }: { id?: string; title?: string; left?: boolean; isContents?: boolean; plate?: string; body?: Value },
+) {
+  const numbered = kind === 'text' || kind === 'full';
+  const fragment = fill('page', {
+    kind,
+    contentsClass: isContents ? 'page--contents' : '',
+    id,
+    title,
+    // Covers are boards: the library turns them stiffly rather than curling them.
+    density: kind === 'cover' || kind === 'back' ? 'hard' : 'soft',
+    left,
+    isContents,
+    numbered,
+    bodyClass: kind === 'text' ? 'prose' : '',
+    body,
+    plate: numbered && plate,
+    isCover: kind === 'cover',
+  });
+  return fragment.firstElementChild as HTMLElement;
 }
 
 function cover(page: Page, ctx: Context) {
@@ -59,17 +87,21 @@ function cover(page: Page, ctx: Context) {
   return fill('cover', { name, label, publisher, number, text: blocks(page.blocks, ctx) });
 }
 
+/** :::back. Whatever follows a --- goes at the foot of the page. */
+function back(page: Page, ctx: Context) {
+  const rule = page.blocks.findIndex((b) => b.type === 'rule');
+  const [main, foot] = rule < 0 ? [page.blocks, []] : [page.blocks.slice(0, rule), page.blocks.slice(rule + 1)];
+  return fill('back', { main: blocks(main, ctx), foot: blocks(foot, ctx) });
+}
+
 function scoreHeading(title: PageTitle, ctx: Context) {
-  const { subtitle, marking, composer } = title.attrs;
+  const { subtitle } = title.attrs;
   return fill('score-heading', {
     h1: title.depth === 1,
     h2: title.depth === 2,
     id: title.id,
     title: inlines(title.content, ctx),
     subtitle,
-    hasMeta: !!(marking || composer),
-    marking,
-    composer,
   });
 }
 
@@ -113,27 +145,33 @@ function inlines(nodes: Inline[], ctx: Context): Value[] {
 // ── Directives (each is checked against DIRECTIVES in book.ts first) ─────────
 
 const BLOCKS: Record<string, (node: Directive, ctx: Context) => Node> = {
-  score: (node) => plate('score', node.attrs.src ?? '/scores/placeholder.png', node.attrs),
-  plate: (node) => plate(node.attrs.kind ?? 'figure', node.attrs.src, node.attrs),
+  score: (node) => plate('score', true, { ...node.attrs, src: node.attrs.src ?? '/scores/placeholder.png' }),
+  plate: (node) => plate(node.attrs.kind ?? 'figure', isSet(node.attrs.fill), node.attrs),
 
+  // The site map: every title outside a ::part, each part once (linking to its
+  // first title), and the back cover.
   contents: (_node, ctx) => {
-    // Consecutive entries in the same part share one group heading.
-    const groups: { name?: string; entries: Book['toc'] }[] = [];
-    for (const entry of ctx.book.toc) {
-      const last = groups.at(-1);
-      if (last && entry.group && last.name === entry.group) last.entries.push(entry);
-      else groups.push({ name: entry.group, entries: [entry] });
+    const parts = new Set<string>();
+    const entries: Value[] = [];
+    for (const { id, title, detail, group } of ctx.book.toc) {
+      if (!group) entries.push(fill('contents-entry', { id, title, detail }));
+      else if (!parts.has(group)) {
+        parts.add(group);
+        entries.push(fill('contents-entry', { id, title: group, detail: undefined }));
+      }
     }
-    return fill('contents', {
-      groups: groups.map((group) =>
-        fill('contents-group', {
-          name: group.name,
-          indented: !!group.name,
-          entries: group.entries.map((e) => fill('contents-entry', { id: e.id, title: e.title, detail: e.detail, page: e.page })),
-        }),
-      ),
-    });
+    return fill('contents', { entries, hasBack: ctx.book.pages.some((p) => p.kind === 'back') });
   },
+
+  // A thematic index: each ::incipit is a title over the first line of its music,
+  // linking to its page. Title and composer come from that page unless given.
+  incipits: (node, ctx) =>
+    fill('incipits', {
+      entries: (node.children as Directive[]).map(({ label, attrs: { to, src, composer } }, i) => {
+        const page = ctx.book.toc.find((e) => e.id === to);
+        return fill('incipit', { id: to, number: i + 1, title: plainText(label) || page?.title, detail: composer ?? page?.detail, src, noSrc: !src });
+      }),
+    }),
 
   youtube: (node) => {
     const [width, height] = (node.attrs.aspect ?? '16/9').split(/[/:]/).map(Number);
@@ -146,20 +184,14 @@ const BLOCKS: Record<string, (node: Directive, ctx: Context) => Node> = {
     });
   },
 
-  figure: (node) =>
-    fill('figure', {
-      src: node.attrs.src,
-      alt: node.attrs.alt ?? '',
-      width: node.attrs.width ?? '100%',
-      caption: node.attrs.caption,
-    }),
-
+  // A page to itself; its picture fills the space the words leave.
   work: (node, ctx) => {
-    const { title, role, year, href, label } = node.attrs;
+    const { title, role, year, href, label, src } = node.attrs;
     return fill('work', {
       number: ++ctx.works,
       title,
       role: [role, year].filter(Boolean).join(', '),
+      image: src && plate(node.attrs.kind ?? 'figure', true, node.attrs),
       body: blocks(node.children, ctx),
       href,
       label: label ?? 'Visit',
@@ -167,7 +199,6 @@ const BLOCKS: Record<string, (node: Directive, ctx: Context) => Node> = {
   },
 
   links: (node, ctx) => fill('links', { body: blocks(node.children, ctx) }),
-  staff: (node, ctx) => fill('staff', { marking: inlines(node.label, ctx) }),
   signature: (node, ctx) => fill('signature', { text: inlines(node.label, ctx) }),
   continued: (node, ctx) => fill('continued', { text: inlines(node.label, ctx) }),
 };
@@ -175,16 +206,23 @@ const BLOCKS: Record<string, (node: Directive, ctx: Context) => Node> = {
 const INLINES: Record<string, (node: InlineDirective, ctx: Context) => Node> = {
   download: (node, ctx) => fill('download', { href: node.attrs.href, label: inlines(node.label, ctx) }),
   sc: (node, ctx) => fill('sc', { text: inlines(node.label, ctx) }),
-  pageref: (node, ctx) =>
-    fill('pageref', {
-      to: node.attrs.to,
-      label: node.label.length ? [inlines(node.label, ctx), ', '] : [],
-      page: ctx.book.pageOf.get(node.attrs.to) ?? '?',
-    }),
+  pageref: (node, ctx) => fill('pageref', { to: node.attrs.to, label: node.label.length ? [inlines(node.label, ctx), ', '] : [] }),
 };
 
-function plate(kind: string, src: string, attrs: Record<string, string>) {
-  return fill('plate', { kind, src, alt: attrs.alt ?? '', caption: attrs.caption });
+/** How wide each kind of picture is set, unless the plate gives a width. */
+const PLATE_WIDTHS: Record<string, string> = { score: '100%', portrait: '78%', figure: '55%' };
+
+function plate(kind: string, fills: boolean, attrs: Record<string, string>) {
+  return fill('plate', {
+    kind,
+    fill: fills,
+    width: attrs.width ?? PLATE_WIDTHS[kind],
+    src: attrs.src,
+    alt: attrs.alt ?? '',
+    caption: attrs.caption,
+    // A plate in the text must have its height before layout.ts measures the page.
+    loading: fills ? 'lazy' : 'eager',
+  });
 }
 
 // ── Templates ───────────────────────────────────────────────────────────────

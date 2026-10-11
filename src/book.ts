@@ -1,17 +1,22 @@
-// Lays book.md out as a bound score:
+// Splits book.md into pages, the way a bound score is set:
 //
 //   • page 1 is the cover, alone on the right;
-//   • every `#` heading starts a new left-hand page, so it opens a spread
-//     (a blank manuscript page fills the gap when needed);
+//   • every `#` heading starts a new left-hand page, so it opens a spread;
 //   • a `##` heading at the top of a page also titles that page;
 //   • ::pagebreak continues on the next page;
-//   • full-page directives (::score, ::plate) take a page to themselves;
+//   • ::score takes a page to itself;
+//   • ::plate{fill} and :::work fill the rest of a page: each starts a new one
+//     unless the page so far is only a title, and what follows goes on the next;
 //   • the back cover lands alone on a left-hand page.
+//
+// These are the pages as written. Text too long for its page flows onto more
+// pages, and blank manuscript pages fill the gaps before left-hand pages; both
+// happen in layout.ts, which can measure the text. Page numbers come from there too.
 //
 // It also checks every directive against the table below, so mistakes are
 // reported with their line number. No DOM here: the deploy check runs it too.
 
-import { BookError, parse, plainText, type Attrs, type Block, type Inline } from './markdown.js';
+import { BookError, parse, plainText, type Attrs, type Block, type Directive, type Inline } from './markdown.js';
 
 interface DirectiveSpec {
   kind: 'inline' | 'leaf' | 'container';
@@ -21,6 +26,9 @@ interface DirectiveSpec {
   /** Attributes holding site paths (e.g. /images/x.jpg) that must exist. */
   files?: string[];
   check?: (attrs: Attrs) => string | undefined;
+  /** The container this directive must be in, or the only directive a container holds. */
+  inside?: string;
+  holds?: string;
 }
 
 /** Every directive book.md may use. Rendering lives in render.ts under the same names. */
@@ -30,14 +38,10 @@ export const DIRECTIVES: Record<string, DirectiveSpec> = {
   pagebreak: { kind: 'leaf', role: 'structural' },
   part: { kind: 'leaf', role: 'structural' },
   score: { kind: 'leaf', role: 'page', files: ['src'] },
-  plate: {
-    kind: 'leaf',
-    role: 'page',
-    required: ['src'],
-    files: ['src'],
-    check: (a) => (a.kind && a.kind !== 'portrait' && a.kind !== 'figure' ? 'kind must be "portrait" or "figure"' : undefined),
-  },
+  plate: { kind: 'leaf', required: ['src'], files: ['src'], check: (a) => checkKind(a.kind) },
   contents: { kind: 'leaf' },
+  incipits: { kind: 'container', holds: 'incipit' },
+  incipit: { kind: 'leaf', inside: 'incipits', required: ['to'], files: ['src'] },
   youtube: {
     kind: 'leaf',
     required: ['id'],
@@ -48,10 +52,8 @@ export const DIRECTIVES: Record<string, DirectiveSpec> = {
           ? 'aspect must look like 16/9'
           : undefined,
   },
-  figure: { kind: 'leaf', required: ['src'], files: ['src'] },
-  work: { kind: 'container', required: ['title'] },
+  work: { kind: 'container', required: ['title'], files: ['src'], check: (a) => checkKind(a.kind) },
   links: { kind: 'container' },
-  staff: { kind: 'leaf' },
   signature: { kind: 'leaf' },
   continued: { kind: 'leaf' },
   download: { kind: 'inline', required: ['href'], files: ['href'] },
@@ -68,7 +70,8 @@ export interface PageTitle {
 
 export interface Page {
   kind: 'cover' | 'back' | 'text' | 'full' | 'blank';
-  number: number;
+  /** Must be a left-hand page (it opens a spread). */
+  left: boolean;
   blocks: Block[];
   title?: PageTitle;
   /** Attributes of the :::cover or :::back directive. */
@@ -78,18 +81,18 @@ export interface Page {
 export interface TocEntry {
   id: string;
   title: string;
-  page: number;
   detail?: string;
+  /** The ::part it's in. */
   group?: string;
 }
 
 export interface Book {
   pages: Page[];
   toc: TocEntry[];
-  /** Page number of each page title's id, for :pageref. */
-  pageOf: Map<string, number>;
-  /** Site paths referenced by directives, checked at deploy. */
-  files: { path: string; line: number }[];
+  /** Every page title's id, for :pageref. */
+  ids: Set<string>;
+  /** Site paths referenced by book.md, checked at deploy. */
+  files: { path: string; line: number; directive: string }[];
 }
 
 /** Ids the viewer uses itself. */
@@ -102,20 +105,15 @@ export function parseBook(source: string): Book {
 
   const pages: Page[] = [];
   const toc: TocEntry[] = [];
-  const pageOf = new Map<string, number>();
+  const ids = new Set<string>();
   const slug = slugger(RESERVED);
   let open: Page | null = null; // the page collecting body content
   let part: string | undefined;
 
-  const addPage = (kind: Page['kind']) => {
-    const number = pages.length + 1;
-    const page: Page = { kind, number, blocks: [] };
+  const addPage = (kind: Page['kind'], left = false) => {
+    const page: Page = { kind, left, blocks: [] };
     pages.push(page);
     return page;
-  };
-  // The next page must be a left-hand page: fill the facing right page if needed.
-  const toLeftPage = () => {
-    if (pages.length % 2 === 0) addPage('blank');
   };
 
   for (const block of blocks) {
@@ -127,8 +125,7 @@ export function parseBook(source: string): Book {
           Object.assign(addPage('cover'), { blocks: block.children, attrs: block.attrs });
           break;
         case 'back':
-          toLeftPage();
-          Object.assign(addPage('back'), { blocks: block.children, attrs: block.attrs });
+          Object.assign(addPage('back', true), { blocks: block.children, attrs: block.attrs });
           break;
         case 'part':
           part = plainText(block.label) || undefined;
@@ -142,29 +139,37 @@ export function parseBook(source: string): Book {
     }
 
     if (block.type === 'heading' && (block.depth === 1 || (block.depth === 2 && !open))) {
-      if (block.depth === 1) toLeftPage();
-      open = addPage('text');
+      open = addPage('text', block.depth === 1);
       const text = plainText(block.children).trim();
+      const { composer } = block.attrs;
       const id = block.attrs.id ?? slug(text);
-      if (pageOf.has(id)) throw new BookError(`two pages share the id "${id}"; add {id=…} to one`, block.line);
+      if (ids.has(id)) throw new BookError(`two pages share the id "${id}"; add {id=…} to one`, block.line);
       open.title = { id, depth: block.depth, content: block.children, attrs: block.attrs };
-      pageOf.set(id, open.number);
-      if (block.attrs.toc !== 'false') toc.push({ id, title: text, page: open.number, detail: block.attrs.composer, group: part });
+      ids.add(id);
+      if (block.attrs.toc !== 'false') toc.push({ id, title: text, detail: composer, group: part });
       continue;
     }
 
+    const fills = block.type === 'directive' && (block.name === 'work' || (block.name === 'plate' && isSet(block.attrs.fill)));
+    if (fills && open?.blocks.length) open = null;
     open ??= addPage('text');
     open.blocks.push(block);
+    if (fills) open = null;
   }
 
-  // Finish on a complete spread unless the book ends with its back cover.
-  if (pages.length % 2 === 0 && pages.at(-1)?.kind !== 'back') addPage('blank');
+  // Each ::incipit links to a page title, and takes its title from there unless it has its own.
+  const incipits = (nodes: Block[]): Directive[] =>
+    nodes.flatMap((b) => (b.type !== 'directive' ? [] : b.name === 'incipit' ? [b] : incipits(b.children)));
+  for (const { attrs, label, line } of incipits(blocks)) {
+    if (!ids.has(attrs.to)) throw new BookError(`::incipit: no page title has the id "${attrs.to}"`, line);
+    if (!label.length && !toc.some((e) => e.id === attrs.to)) throw new BookError(`::incipit: "${attrs.to}" isn't in the contents, so give it a title: ::incipit[Title]{to=${attrs.to}}`, line);
+  }
 
-  return { pages, toc, pageOf, files };
+  return { pages, toc, ids, files };
 }
 
 /** Checks every directive's name, syntax, placement and attributes. */
-function validate(blocks: Block[], topLevel: boolean, files: Book['files']) {
+function validate(blocks: Block[], topLevel: boolean, files: Book['files'], parent?: string) {
   const syntax = { inline: ':', leaf: '::', container: ':::' };
   const check = (name: string, kind: DirectiveSpec['kind'], attrs: Attrs, line: number) => {
     const spec = DIRECTIVES[name];
@@ -172,10 +177,11 @@ function validate(blocks: Block[], topLevel: boolean, files: Book['files']) {
     if (!spec) throw new BookError(`unknown directive ${written}. Available: ${Object.keys(DIRECTIVES).join(', ')}`, line);
     if (spec.kind !== kind) throw new BookError(`${written} should be written ${syntax[spec.kind]}${name}`, line);
     if (spec.role && !topLevel) throw new BookError(`${written} only works at the top level, not inside another block`, line);
+    if (spec.inside && parent !== spec.inside) throw new BookError(`${written} only works inside :::${spec.inside}`, line);
     for (const attr of spec.required ?? []) if (!attrs[attr]) throw new BookError(`${written} needs ${attr}="…"`, line);
     const problem = spec.check?.(attrs);
     if (problem) throw new BookError(`${written}: ${problem}`, line);
-    for (const attr of spec.files ?? []) if (attrs[attr]?.startsWith('/')) files.push({ path: attrs[attr], line });
+    for (const attr of spec.files ?? []) if (attrs[attr]?.startsWith('/')) files.push({ path: attrs[attr], line, directive: name });
   };
   const inlines = (nodes: Inline[], line: number) => {
     for (const n of nodes) {
@@ -186,11 +192,15 @@ function validate(blocks: Block[], topLevel: boolean, files: Book['files']) {
     }
   };
 
+  const holds = parent && DIRECTIVES[parent].holds;
   for (const block of blocks) {
+    if (holds && (block.type !== 'directive' || block.name !== holds)) {
+      throw new BookError(`:::${parent} holds only ::${holds} lines`, block.line);
+    }
     if (block.type === 'directive') {
       check(block.name, block.kind, block.attrs, block.line);
       inlines(block.label, block.line);
-      validate(block.children, false, files);
+      validate(block.children, false, files, block.name);
     } else if (block.type === 'heading' || block.type === 'paragraph') {
       inlines(block.children, block.line);
     } else if (block.type === 'list') {
@@ -198,6 +208,14 @@ function validate(blocks: Block[], topLevel: boolean, files: Book['files']) {
     }
   }
 }
+
+/** The kinds of picture a ::plate or :::work can show. */
+function checkKind(kind: string | undefined) {
+  return kind && kind !== 'portrait' && kind !== 'figure' ? 'kind must be "portrait" or "figure"' : undefined;
+}
+
+/** A flag attribute: `{fill}` or `{fill=true}`, but not `{fill=false}`. */
+export const isSet = (value: string | undefined) => value !== undefined && value !== 'false';
 
 /** URL-safe ids from text, numbered when repeated: "Wave", "Wave" → wave, wave-1. */
 export function slugger(taken: string[] = []) {
