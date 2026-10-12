@@ -169,7 +169,15 @@ const BLOCKS: Record<string, (node: Directive, ctx: Context) => Node> = {
     fill('incipits', {
       entries: (node.children as Directive[]).map(({ label, attrs: { to, src, composer } }, i) => {
         const page = ctx.book.toc.find((e) => e.id === to);
-        return fill('incipit', { id: to, number: i + 1, title: plainText(label) || page?.title, detail: composer ?? page?.detail, src, noSrc: !src });
+        return fill('incipit',
+          {
+            id: to,
+            number: i + 1,
+            title:
+              plainText(label) || page?.title,
+            detail: composer ?? page?.detail,
+            src, noSrc: !src
+          });
       }),
     }),
 

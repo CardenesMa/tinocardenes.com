@@ -8,6 +8,7 @@
   },
   "scripts": {
     "dev": "node scripts/dev.mjs",
+    "scores" : "python scripts/clear-scores.py --inc",
     "build": "tsc && tailwindcss -i src/styles.css -o site/styles.css --minify && node scripts/check-book.mjs"
   },
   "devDependencies": {

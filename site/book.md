@@ -37,13 +37,17 @@ Turn the pages with the arrows, click, or your keyboard.
 # Recordings {id=index}
 
 :::incipits
-::incipit{to=sinfonietta-for-piano-4-hands src="/scores/incipits/sinfonietta.png"}
-::incipit{to=harlem-nocturne src="/scores/incipits/harlem.png"}
-::incipit{to=wave src="/scores/incipits/wave.png"}
-::incipit{to=recorda-me src="/scores/incipits/recordame.png"}
-::incipit{to=fugue-no-8-in-d-sharp-minor src="/scores/incipits/fugue8.png"}
-::incipit{to=there-will-never-be-another-you src="/scores/incipits/another_you.png"}
-::incipit{to=allegro src="/scores/incipits/allegro.png"}
+::incipit{to=sinfonietta-for-piano-4-hands src="/scores/incipits/sinfonietta.inc.png"}
+::incipit{to=harlem-nocturne src="/scores/incipits/harlem.inc.png"}
+::incipit{to=wave src="/scores/incipits/wave.inc.png"}
+::incipit{to=recorda-me src="/scores/incipits/recordame.inc.png"}
+::incipit{to=fugue-no-8-in-d-sharp-minor src="/scores/incipits/fugue8.inc.png"}
+::incipit{to=there-will-never-be-another-you src="/scores/incipits/another_you.inc.png"}
+::incipit{to=allegro src="/scores/incipits/allegro.inc.png"}
+:::
+
+:::links
+[See more on YouTube](https://www.youtube.com/@tinocardenes)
 :::
 
 ::pagebreak

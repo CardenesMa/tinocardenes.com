@@ -30,20 +30,19 @@
   --color-henle: #829fb7;
   --color-cover-ink: #16191d;
 
-  /* Behind the book: a wash from pale sky blue (top left) to warm cream (bottom right). */
-  --color-desk: #e2edfa;
-  --color-desk-end: #fbeee4;
+  /* Behind the book, until --texture-wood loads: its palest tone. */
+  --color-desk: #fdf6fa;
 
-  /* The toolbar: white, slate ink, the Henle blue made dark enough to read
-     (≈ 5:1 on white), and a warm coral when something is hovered. */
+  /* The toolbar: white, slate ink, and the Henle blue made dark enough to read
+     (≈ 5:1 on white). */
   --color-bar: #ffffff;
   --color-bar-ink: #1f2a37;
   --color-bar-accent: #2f6db0;
-  --color-bar-hover: #c4462b;
   --color-bar-line: rgb(31 42 55 / 0.1);
 
   /* textures used to make it look more realistic */
   --texture-paper: url("/images/paper.png");
+  --texture-wood: url("/images/wood.jpg");
   /* font-serif, font-display, font-caps, font-music */
   --font-serif: 'Merriweather', 'EB Garamond', Garamond, 'Times New Roman', serif;
   --font-display: 'Cormorant Garamond', 'EB Garamond', Garamond, serif;
@@ -61,13 +60,9 @@
   :root {
     --color-paper: #efe9db;
     --color-paper-edge: #ddd4c1;
-    /* Midnight blue fading to plum, so the paper glows against it. */
-    --color-desk: #172131;
-    --color-desk-end: #2a2033;
     --color-bar: #111926;
     --color-bar-ink: #e6ebf2;
     --color-bar-accent: #8fb8e8;
-    --color-bar-hover: #ff9a7a;
     --color-bar-line: rgb(255 255 255 / 0.08);
     color-scheme: dark;
   }
@@ -138,9 +133,7 @@
     /* antialiased: true; */
     /* webkit-font-smoothing: antialiased; */
     -moz-osx-font-smoothing: grayscale;
-    background-color: var(--color-desk);
-    background-image: linear-gradient(135deg, var(--color-desk), var(--color-desk-end));
-    background-attachment: fixed;
+    background: var(--color-desk) var(--texture-wood) center / cover fixed;
   }
 }
 
@@ -149,12 +142,12 @@
 @layer components {
 
   /* A text link in the toolbar: an underline fades in on hover (or keyboard
-     focus) and out again, and a colour change (hover:text-…) fades with it. */
+     focus) and out again. */
   .nav-link {
     text-decoration: underline;
     text-decoration-color: transparent;
     text-underline-offset: 4px;
-    transition: color 0.2s, text-decoration-color 0.2s;
+    transition: text-decoration-color 0.2s;
 
     &:hover,
     &:focus-visible {
@@ -188,12 +181,6 @@
     cursor: pointer;
     font-size: 150%;
     color: var(--color-bar-accent);
-    transition: color 0.2s;
-
-    &:hover:not(:disabled),
-    &:focus-visible {
-      color: var(--color-bar-hover);
-    }
 
     &:disabled {
       opacity: 0.3;
