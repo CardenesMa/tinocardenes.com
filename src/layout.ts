@@ -11,6 +11,9 @@
 //
 // Pages are a fixed size whose text doesn't scale with them, so how much fits
 // depends on the window. reader.ts runs this again when the page size changes.
+//
+// One page at a time (a phone), none of that: each page holds all its text and
+// scrolls (see .page-body), and with no spreads there are no blank pages to add.
 
 import { blankPage, continuationPage } from './render.js';
 
@@ -25,6 +28,11 @@ export interface PageSize {
 
 /** Lays out `written` at `size`, measuring each page in `host` (which must be in the document). */
 export function paginate(written: HTMLElement[], size: PageSize, host: HTMLElement): HTMLElement[] {
+  if (size.portrait) {
+    number(written);
+    return written;
+  }
+
   const ruler = document.createElement('div');
   ruler.style.cssText = 'position:absolute;top:0;left:0;width:0;height:0;overflow:hidden;visibility:hidden';
   host.append(ruler);
@@ -34,7 +42,7 @@ export function paginate(written: HTMLElement[], size: PageSize, host: HTMLEleme
   for (let page; (page = queue.shift()); ) {
     // Left-hand pages are the even ones; the cover is page 1, on the right.
     if (page.dataset.left === 'true' && pages.length % 2 === 0) pages.push(blankPage());
-    const side = size.portrait || pages.length % 2 === 0 ? '--right' : '--left';
+    const side = pages.length % 2 === 0 ? '--right' : '--left';
     if (page.classList.contains('page--text')) {
       page.classList.add(side);
       page.style.cssText = `position:relative;width:${size.width}px;height:${size.height}px`;

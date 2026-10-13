@@ -39,7 +39,7 @@ Depdendencies :
 
 ```sh
 pnpm install
-pnpm dev      # launch dev server (just a )
+pnpm dev      # launch dev server; it also prints a LAN address to open on a phone on the same Wi-Fi
 pnpm build    # compiles TS and CSS (tailwind insertion) 
 ```
 

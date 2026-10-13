@@ -5,23 +5,25 @@
 import { PageFlip } from 'page-flip';
 import type { PageSize } from './layout.js';
 
-// The page's proportions, and the sizes between which it scales with the window.
+// The page's proportions in a spread, and the sizes between which it scales with the window.
 const PAGE = { width: 760, height: 1000, minWidth: 330, maxWidth: 1000 };
 
-/** The size StPageFlip will give each page in `book` (see its Render.calculateBoundsRect). */
-function pageSize(book: HTMLElement): PageSize {
-  const width = Math.max(book.offsetWidth, PAGE.minWidth);
+/** The size StPageFlip will give each page in `frame` (see its Render.calculateBoundsRect). */
+function pageSize(frame: HTMLElement): PageSize {
+  const width = Math.max(frame.clientWidth, PAGE.minWidth);
   // One page at a time when the book is narrower than two minWidth pages. The book is
   // at most 640px wide below the max-spread: breakpoint, so it's always one page there.
+  // That page fills the frame, whose height .book-frame sets to the room in the window.
   const portrait = width < PAGE.minWidth * 2;
-  const pageWidth = Math.min(portrait ? width : width / 2, PAGE.maxWidth);
+  if (portrait) return { width, height: frame.clientHeight, portrait };
+  const pageWidth = Math.min(width / 2, PAGE.maxWidth);
   return { width: pageWidth, height: (pageWidth * PAGE.height) / PAGE.width, portrait };
 }
 
 /** Opens the book. `build` lays the pages out for a page size; it runs again whenever that changes. */
 export function initReader(book: HTMLElement, build: (size: PageSize) => HTMLElement[]) {
   const frame = book.parentElement!;
-  let size = pageSize(book);
+  let size = pageSize(frame);
   let pages = build(size);
   const pagerPages = document.querySelector<HTMLElement>('[data-pager-pages]');
   const pagerTotal = document.querySelector<HTMLElement>('[data-pager-total]');
@@ -33,6 +35,9 @@ export function initReader(book: HTMLElement, build: (size: PageSize) => HTMLEle
 
   const flipbook = new PageFlip(book, {
     ...PAGE,
+    // StPageFlip keeps the pages in this ratio; fit() changes it with the window.
+    width: size.width,
+    height: size.height,
     size: 'stretch',
     minHeight: 395,
     maxHeight: 1316,
@@ -46,6 +51,15 @@ export function initReader(book: HTMLElement, build: (size: PageSize) => HTMLEle
     showPageCorners: false,
   });
   flipbook.loadFromHTML(pages);
+
+  /** Sets the pages' proportions to `size`'s. StPageFlip only reads them when it starts. */
+  const fit = (size: PageSize) => {
+    Object.assign(flipbook.getSettings(), { width: size.width, height: size.height });
+    // The book's height, as StPageFlip sets it (UI.setOrientationStyle).
+    const wrapper = book.querySelector<HTMLElement>('.stf__wrapper')!;
+    wrapper.style.paddingBottom = `${(size.height / (size.width * (size.portrait ? 1 : 2))) * 100}%`;
+    flipbook.update();
+  };
 
   /** The pages on view: a lone cover, a spread, or one page in portrait. */
   const visible = () => {
@@ -70,10 +84,14 @@ export function initReader(book: HTMLElement, build: (size: PageSize) => HTMLEle
   addEventListener('resize', () => {
     clearTimeout(resizing);
     resizing = setTimeout(() => {
-      const next = pageSize(book);
-      if (next.width === size.width && next.portrait === size.portrait) return;
-      const place = placeOf(visible()[0]);
+      const next = pageSize(frame);
+      if (next.width === size.width && next.height === size.height && next.portrait === size.portrait) return;
+      // A page that scrolls holds all its text whatever its size: no need to lay it out again.
+      const relayout = !(size.portrait && next.portrait);
       size = next;
+      fit(size);
+      if (!relayout) return;
+      const place = placeOf(visible()[0]);
       pages = build(size);
       recordHistory = false;
       flipbook.updateFromHtml(pages);
@@ -165,6 +183,39 @@ export function initReader(book: HTMLElement, build: (size: PageSize) => HTMLEle
     event.preventDefault();
     actions[event.key]();
   });
+
+  // One page at a time, a page's text scrolls up and down (.page-body), and a
+  // sideways swipe turns the page. StPageFlip doesn't see touches there: it would
+  // turn the page at the end of any touch longer than a quarter second, scrolls
+  // included, and on a tap (through the mouse events the browser makes from it).
+  let swipe: { x: number; y: number; axis?: 'x' | 'y' } | null = null;
+  let touched = 0;
+  book.addEventListener('touchstart', (event) => {
+    if (!size.portrait) return;
+    event.stopPropagation();
+    touched = event.timeStamp;
+    const touch = event.touches[0];
+    swipe = event.touches.length === 1 ? { x: touch.clientX, y: touch.clientY } : null;
+  }, { capture: true, passive: true });
+  book.addEventListener('touchmove', (event) => {
+    if (!swipe) return;
+    const touch = event.touches[0];
+    const dx = touch.clientX - swipe.x;
+    const dy = touch.clientY - swipe.y;
+    // The first 10px decide: a scroll, or a swipe (which mustn't scroll the page too).
+    if (!swipe.axis && Math.hypot(dx, dy) > 10) swipe.axis = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y';
+    if (swipe.axis === 'x' && event.cancelable) event.preventDefault();
+  }, { passive: false });
+  book.addEventListener('touchend', (event) => {
+    const dx = swipe?.axis === 'x' ? event.changedTouches[0].clientX - swipe.x : 0;
+    swipe = null;
+    if (dx < -40) flipbook.flipNext();
+    else if (dx > 40) flipbook.flipPrev();
+  });
+  book.addEventListener('touchcancel', () => (swipe = null));
+  book.addEventListener('mousedown', (event) => {
+    if (size.portrait && event.timeStamp - touched < 1000) event.stopPropagation();
+  }, { capture: true });
 
   // Back/forward buttons and hand-edited hashes (both fire popstate): turn to
   // the page without adding history. The browser also scrolls to the id; undo that.

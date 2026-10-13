@@ -44,6 +44,10 @@ declare module 'page-flip' {
     getCurrentPageIndex(): number;
     getPageCount(): number;
     getOrientation(): 'portrait' | 'landscape';
+    /** The settings in use, by reference: changing width and height changes the ratio the pages keep. */
+    getSettings(): FlipSettings;
+    /** Measures the book again (as on a window resize) and redraws the pages on view. */
+    update(): void;
     on(event: 'init' | 'flip', callback: (e: FlipEvent<unknown>) => void): this;
     on(event: 'changeOrientation', callback: (e: FlipEvent<'portrait' | 'landscape'>) => void): this;
     /** States: 'read' (at rest), 'user_fold', 'fold_corner', 'flipping'. */

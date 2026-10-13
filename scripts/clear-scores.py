@@ -1,10 +1,11 @@
 # Makes the scores backgrounds transparent, so the music sits on the page's
 # paper rather than on a photo of other paper.
 #
-#   python3 scripts/clear-scores.py [--lo 18] [--hi 110] [--inc] file…
+#   python3 scripts/clear-scores.py [--lo 18] [--hi 110] [--color] [--inc] file…
 #
-# Each file is relative to site/scores/ (e.g. wave_full.png, incipits/wave.jpg)
-# and gets a transparent copy beside it with .inc.png in place of its extension
+# Each file is looked for in site/scores/ (e.g. wave_full.png, incipits/wave.jpg),
+# then from where you ran the script (e.g. ../site/images/promo.jpeg), and gets
+# a transparent copy beside it with .inc.png in place of its extension
 # (incipits/wave.inc.png): point book.md at that. The original is left alone, so
 # you can run it again with other --lo/--hi.
 #
@@ -16,6 +17,9 @@
 # as grey. Darker than the paper by --lo or less: clear. By --hi or more: solid
 # ink. Light pencil lands in between, faint.
 #
+# --color keeps each pixel's own colour instead (for photos, or coloured ink);
+# only the alpha is worked out as above.
+#
 # Needs Pillow: `brew install pillow` (or `pip install pillow` in a venv).
 
 import argparse
@@ -23,7 +27,8 @@ from pathlib import Path
 
 from PIL import Image, ImageChops, ImageFilter
 
-SCORES = Path('site/scores')
+# From the repo, so the script runs from any directory.
+SCORES = Path(__file__).resolve().parent.parent / 'site' / 'scores'
 INCIPITS = SCORES / 'incipits'
 IMAGES = ('.png', '.jpg', '.jpeg')
 CLEARED = '.inc.png'
@@ -43,7 +48,13 @@ def cleared(src: Path) -> Path:
     return src.with_name(src.stem + CLEARED)
 
 
-def clear(src: Path, lo: int, hi: int) -> Path:
+def find(file: Path) -> Path:
+    """file in site/scores/ if it's there, otherwise as given."""
+    in_scores = SCORES / file
+    return in_scores if in_scores.is_file() else file
+
+
+def clear(src: Path, lo: int, hi: int, color: bool = False) -> Path:
     image = Image.open(src)
     # Anything already transparent counts as white paper.
     if image.mode in ('RGBA', 'LA', 'P'):
@@ -55,7 +66,7 @@ def clear(src: Path, lo: int, hi: int) -> Path:
     darkness = ImageChops.subtract(paper_level(gray), gray)
     alpha = darkness.point(lambda d: 0 if d <= lo else 255 if d >= hi else round((d - lo) * 255 / (hi - lo)))
 
-    out = Image.new('RGBA', gray.size, INK + (0,))
+    out = image.convert('RGBA') if color else Image.new('RGBA', gray.size, INK + (0,))
     out.putalpha(alpha)
     dest = cleared(src)
     out.save(dest, optimize=True)
@@ -64,9 +75,10 @@ def clear(src: Path, lo: int, hi: int) -> Path:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description='Make the backgrounds of images in site/scores/ transparent.')
-    parser.add_argument('files', nargs='*', type=Path, help=f'images, relative to {SCORES}/')
+    parser.add_argument('files', nargs='*', type=Path, help='images, in site/scores/ or relative to here')
     parser.add_argument('--lo', type=int, default=18, help='this much darker than the paper or less is clear')
     parser.add_argument('--hi', type=int, default=110, help='this much darker or more is solid ink')
+    parser.add_argument('--color', action='store_true', help="keep the image's colours instead of using the ink colour")
     parser.add_argument('--inc', action='store_true', help=f'also do every image in {INCIPITS}/ without an {CLEARED}')
     args = parser.parse_args()
 
@@ -84,12 +96,12 @@ def main() -> None:
         parser.error('name some files, or pass --inc')
 
     for file in files:
-        src = SCORES / file
+        src = find(file)
         if not src.is_file():
-            parser.error(f'{src} not found')
+            parser.error(f'{file} not found in {SCORES}/ or here')
         if src.name.endswith(CLEARED):
             parser.error(f'{src} is already a cleared copy; name the original instead')
-        print(f'{src} → {clear(src, args.lo, args.hi)}')
+        print(f'{src} → {clear(src, args.lo, args.hi, args.color)}')
 
 
 if __name__ == '__main__':

@@ -1,6 +1,6 @@
 <!-- The whole site. Page rules and directives are documented in README.md. -->
 
-:::cover{name="Tino Cardenes" label="" publisher="Upcoming Concert! Kapustin Concerto No. 2, October 31st @ 2pm, Heinz Hall" number="2026"}
+:::cover{name="Tino Cardenes" label="" publisher="click to open" number="Updated Oct 2026"}
 **Works for Piano & Computer**\
 An Interactive Website
 
@@ -13,7 +13,7 @@ Pittsburgh, Pennsylvania
 ::pagebreak
 # {toc=false subtitle="Frontispiece"}
 
-::plate{src=/images/portrait.jpg kind=portrait fill alt="Portrait of Tino Cardenes" caption="Tino Cardenes"}
+::plate{src=/images/portrait.png kind=portrait fill alt="Portrait of Tino Cardenes" caption=""}
 
 ## Contents  {toc=false subtitle="Inhalt · Table des matières"}
 
@@ -22,7 +22,7 @@ Pittsburgh, Pennsylvania
 ::pagebreak
 
 
-# Preface
+# Preface {subtitle="Vorwort · Préface"}
 
 I'm a musician and computer scientist based in Pittsburgh, Pennsylvania. This volume collects my music, my software, and the projects that combine the two. I'm pursuing a Bachelor of Science in Computer Science and Music Technology at Carnegie Mellon University, and I'm always glad to collaborate with artists and developers on new work.
 
@@ -34,7 +34,12 @@ Turn the pages with your keyboard arrows or click!
 
 
 
-# Recordings {id=index}
+## {toc=False} 
+
+::plate{src=/images/promo.jpeg kind=portrait fill alt="Concert" caption="Concert October 31st"}
+
+
+# Recordings {subtitle="Aufnahmen · Enregistrements" id=index}
 
 :::incipits
 ::incipit{to=sinfonietta-for-piano-4-hands src="/scores/incipits/sinfonietta.inc.png"}
@@ -42,7 +47,7 @@ Turn the pages with your keyboard arrows or click!
 ::incipit{to=wave src="/scores/incipits/wave.inc.png"}
 ::incipit{to=recorda-me src="/scores/incipits/recordame.inc.png"}
 ::incipit{to=fugue-no-8-in-d-sharp-minor src="/scores/incipits/fugue8.inc.png"}
-::incipit{to=there-will-never-be-another-you src="/scores/incipits/another_you.inc.png"}
+<!-- ::incipit{to=there-will-never-be-another-you src="/scores/incipits/another_you.inc.png"} -->
 ::incipit{to=allegro src="/scores/incipits/allegro.inc.png"}
 :::
 

@@ -45,15 +45,22 @@
   --image-bg: url("/images/bg.jpg");
   /* font-serif, font-display, font-caps, font-music */
   --font-serif: 'Merriweather', 'EB Garamond', Garamond, 'Times New Roman', serif;
-  --font-display: 'Cormorant Garamond', 'EB Garamond', Garamond, serif;
-  --font-caps: 'Cormorant SC', 'Cormorant Garamond', serif;
+  --font-display: 'Merriweather', 'Cormorant Garamond', 'EB Garamond', Garamond, serif;
+  --font-caps: 'Merriweather', 'Cormorant SC', 'Cormorant Garamond', serif;
   --font-music: 'Noto Music', 'Bravura Text', 'Apple Symbols', serif;
 
-  /* The toolbar's height: h-bar */
+  /* The toolbar's height: h-bar (two rows on a phone, below) */
   --spacing-bar: 3rem;
 
   /* Wide enough for a two-page spread. Below it (max-spread:) the book shows one page at a time. */
   --breakpoint-spread: 860px;
+}
+
+/* Below the spread breakpoint the toolbar takes two rows: links and socials, then the page controls. */
+@media (width < 860px) {
+  :root {
+    --spacing-bar: 4.75rem;
+  }
 }
 
 @media (prefers-color-scheme: dark) {
@@ -86,6 +93,7 @@
     font-kerning: normal;
     font-variant-ligatures: common-ligatures;
   }
+
 
   a {
     color: inherit;
@@ -133,7 +141,23 @@
     /* antialiased: true; */
     /* webkit-font-smoothing: antialiased; */
     -moz-osx-font-smoothing: grayscale;
-    background: var(--image-bg) bottom / cover fixed;
+    background: var(--color-desk);
+
+    /* The desk, fixed behind everything. On its own layer rather than as the body's
+       background, which iOS Safari scrolls and rescales with the page (it ignores
+       background-attachment: fixed), so it jumped whenever a turning page changed
+       the page's height. 100lvh, the height with the browser's toolbars hidden, so
+       it doesn't resize when they come and go either. */
+    &::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      inset-inline: 0;
+      height: 100lvh;
+      z-index: -1;
+      background: var(--image-bg) center / cover;
+      opacity: 50%;
+    }
   }
 }
 
@@ -204,8 +228,12 @@
     width: min(100vw - 5rem, max(660px, var(--room) * 1.52), 1560px);
     transition: translate 0.8s cubic-bezier(0.45, 0.05, 0.25, 1);
 
+    /* One page at a time, the page fills the window's height (its text scrolls if
+       need be; see .page-body). <main>'s padding is 1.5rem top and bottom together here. */
     @variant max-spread {
-      width: min(100%, 640px, max(330px, var(--room) * 0.76));
+      --room: calc(100svh - var(--spacing-bar) - 1.5rem);
+      width: min(100%, 640px);
+      height: var(--room);
     }
 
     &[data-closed='front'] {
@@ -358,6 +386,10 @@
     font-size: max(20px, 2.6cqi);
     font-variant-numeric: oldstyle-nums;
 
+    @variant max-spread {
+      font-size: max(16px, 2.6cqi);
+    }
+
     .--left & {
       left: 6cqi;
     }
@@ -386,7 +418,8 @@
   }
 
   /* What's on the page, in the band between the page number and the plate
-     number. Nothing scrolls: layout.ts moves what doesn't fit onto the next page. */
+     number. In a spread nothing scrolls: layout.ts moves what doesn't fit onto
+     the next page. One page at a time (a phone), the page holds it all and scrolls. */
   .page-body {
     position: absolute;
     inset: 8cqi 0 7.5cqi;
@@ -402,7 +435,8 @@
     line-height: calc(var(--leading) * var(--squeeze, 1));
 
     @variant max-spread {
-      font-size: 1.125rem;
+      font-size: 0.9375rem;
+      --leading: 1.75;
     }
 
     &>* {
@@ -415,6 +449,15 @@
 
     .--right & {
       padding-left: 9cqi;
+    }
+
+    /* StPageFlip marks its wrapper --portrait. Up and down scroll the text (and
+       pinch zooms); sideways is for turning the page (reader.ts). */
+    .--portrait & {
+      padding-inline: 6cqi;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      touch-action: pan-y pinch-zoom;
     }
 
     .page--cover & {

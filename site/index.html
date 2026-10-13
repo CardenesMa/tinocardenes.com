@@ -52,29 +52,31 @@
     </script>
   </head>
   <body class="desk">
-    <!-- navbar : 3 sections, nav links, page controls, social links -->
+    <!-- navbar : 3 sections, nav links, page controls, social links.
+         On a phone (max-spread:) two rows: nav links and social links, then the page controls.
+         The height of either is --spacing-bar (src/styles.css). -->
     <header class="sticky top-0 z-20 grid grid-cols-[1fr_auto_1fr] 
     items-center gap-4 h-bar px-6 bg-bar/95 backdrop-blur text-bar-ink border-b 
-    border-bar-line max-spread:gap-2 max-spread:px-3">
-      <nav class="flex items-baseline gap-5 font-caps tracking-wide" aria-label="Site">
+    border-bar-line max-spread:grid-cols-[1fr_auto] max-spread:grid-rows-[1fr_2.25rem] max-spread:gap-x-2 max-spread:gap-y-0 max-spread:px-3">
+      <nav class="flex items-baseline gap-5 font-caps tracking-wide max-spread:gap-3" aria-label="Site">
         <!-- .nav-link: an underline that fades in on hover (src/styles.css). -->
-        <a class="nav-link text-bar-accent text-lg" href="#cover">Tino Cardenes</a>
+        <a class="nav-link text-bar-accent text-lg max-spread:text-base whitespace-nowrap" href="#cover">Tino Cardenes</a>
         <span class="max-spread:hidden" aria-hidden="true">|</span>
-        <a class="nav-link text-lg" href="#toc">Contents</a>
+        <a class="nav-link text-lg max-spread:text-base" href="#toc">Contents</a>
         <a class="nav-link text-lg max-spread:hidden" href="#back">Contact</a>
       </nav>
 
       <!-- page controls  -->
-      <div class="flex items-center gap-1 tabular-nums">
-        <button type="button" class="tool text-sm" data-turn="first" aria-label="Front page"><span class="icon [--icon:url(/icons/angles-left.svg)]" aria-hidden="true"></span></button>
-        <button type="button" class="tool text-xl" data-turn="prev" aria-label="Previous pages"><span class="icon [--icon:url(/icons/chevron-left.svg)]" aria-hidden="true"></span></button>
+      <div class="flex items-center gap-1 tabular-nums max-spread:col-span-2 max-spread:row-start-2 max-spread:justify-self-center">
+        <button type="button" class="tool text-sm max-spread:w-10" data-turn="first" aria-label="Front page"><span class="icon [--icon:url(/icons/angles-left.svg)]" aria-hidden="true"></span></button>
+        <button type="button" class="tool text-xl max-spread:w-10" data-turn="prev" aria-label="Previous pages"><span class="icon [--icon:url(/icons/chevron-left.svg)]" aria-hidden="true"></span></button>
         <span class="min-w-[5.5em] text-center"><span data-pager-pages>1</span> / <span data-pager-total></span></span>
-        <button type="button" class="tool text-xl" data-turn="next" aria-label="Next pages"><span class="icon [--icon:url(/icons/chevron-right.svg)]" aria-hidden="true"></span></button>
-        <button type="button" class="tool text-sm" data-turn="last" aria-label="Back Page"><span class="icon [--icon:url(/icons/angles-right.svg)]" aria-hidden="true"></span></button>
+        <button type="button" class="tool text-xl max-spread:w-10" data-turn="next" aria-label="Next pages"><span class="icon [--icon:url(/icons/chevron-right.svg)]" aria-hidden="true"></span></button>
+        <button type="button" class="tool text-sm max-spread:w-10" data-turn="last" aria-label="Back Page"><span class="icon [--icon:url(/icons/angles-right.svg)]" aria-hidden="true"></span></button>
       </div>
 
       <!-- social links -->
-      <nav class="flex gap-4 justify-self-end text-bar-ink/65" aria-label="Socials">
+      <nav class="flex gap-4 justify-self-end text-bar-ink/65 max-spread:gap-1 max-spread:col-start-2 max-spread:row-start-1" aria-label="Socials">
         <a class="tool" href="https://www.youtube.com/@tinocardenes" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><span class="icon [--icon:url(/icons/youtube.svg)]" aria-hidden="true"></span></a>
         <a class="tool" href="https://www.instagram.com/tinocardenes/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><span class="icon [--icon:url(/icons/instagram.svg)]" aria-hidden="true"></span></a>
         <a class="tool" href="https://github.com/CardenesMa" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><span class="icon [--icon:url(/icons/github.svg)]" aria-hidden="true"></span></a>
@@ -82,8 +84,9 @@
       </nav>
     </header>
 
-    <!--  vertical padding adds up to 2.75rem at every size; .book-frame (src/styles.css) counts on it to fit the window. -->
-    <main class="relative pt-7 px-18 pb-4 overflow-x-clip max-spread:p-3 max-spread:pb-8">
+    <!--  vertical padding adds up to 2.75rem (1.5rem on a phone); .book-frame (src/styles.css) counts on it to fit the window.
+          On a phone nothing overflows <main>, not even a page while it turns, so the window never scrolls. -->
+    <main class="relative pt-7 px-18 pb-4 overflow-x-clip max-spread:p-3 max-spread:overflow-clip">
       <div class="book-frame">
         <!-- pages are built from book.md. data-plate is printed at the foot of every page. -->
         <div class="book" data-book data-source="/book.md" data-plate="©Tino Cardenes 2026"></div>
@@ -130,7 +133,7 @@
     <template data-template="cover">
       <div class="absolute inset-0">
         <!-- name at the top -->
-        <p class="absolute top-[15%] left-[10%] m-0 text-[3em] leading-none whitespace-nowrap" data-if="name">{{name}}</p>
+        <p class="absolute top-[15%] left-[10%] m-0 text-[length:min(3em,10cqi)] leading-none whitespace-nowrap" data-if="name">{{name}}</p>
         <div class="absolute top-[30.5%] bottom-[6%] left-[10%] right-[8%] 
                     grid grid-cols-[28cqi_1fr] grid-rows-[auto_1fr_auto]">
           <p class="m-0 pt-[6cqi] font-semibold text-[3.9cqi]">{{label}}</p>
@@ -139,11 +142,11 @@
           </div>
           <div class="col-2 row-3">
             <!-- I use this line not as much for publisher but also other messages  -->
-            <p class="m-0 text-[4cqi]" data-if="publisher">{{publisher}}</p>
-            <p class="m-0 mt-[5cqi] pt-[7cqi] border-t border-cover-ink text-[2cqi]">{{number}}</p>
+            <p class="m-0 text-[4cqi] text-right" data-if="publisher">{{publisher}}</p>
+            <p class="m-0 mt-[2cqi] pt-[2cqi] border-t border-cover-ink text-[2cqi]">{{number}}</p>
           </div>
         </div>
-        <p class="absolute bottom-[3%] right-[3%] text-black m-0 text-[6cqi] animate-pulse"><span class="icon [--icon:url(/icons/hand-pointer.svg)]" aria-hidden="true"></span></p>
+        <!-- <p class="absolute bottom-[3%] right-[3%] text-black m-0 text-[6cqi] animate-pulse"><span class="icon [--icon:url(/icons/hand-pointer.svg)]" aria-hidden="true"></span></p> -->
       </div>
     </template>
 
@@ -200,14 +203,14 @@
     </template>
 
     <template data-template="incipit">
-      <li class="[&+&]:mt-[2em]">
-        <a class="group grid grid-cols-[1.5em_1fr_1.5em] items-center gap-x-[0.75em] no-underline" href="#{{id}}">
-          <span class="row-span-2 font-caps text-ink-soft/80 text-sm ">#{{number}}</span>
-          <span class="mb-[0.15em] leading-tight text-left group-hover:text-accent">{{title}}<span class="ml-[0.5em] italic text-[0.9em] text-ink-soft" data-if="detail">{{detail}}</span></span>
-          <span class="row-span-2 text-right oldstyle-nums tabular-nums" data-page-of="{{id}}">p.</span>
-          <img class="col-2 block w-full aspect-[10/1] object-cover object-left mix-blend-multiply" src="{{src}}" alt="" data-if="src" />
+      <li class="[&+&]:mt-[1.5em]">
+        <a class="group grid grid-cols-[0.5em_1fr_auto] items-center gap-x-[0.5em] no-underline" href="#{{id}}">
+          <span class="col-1 row-2 font-caps text-ink-soft/80 text-sm">#{{number}}</span>
+          <span class="col-start-2 col-span-2 row-1 mb-[0.15em] leading-tight text-left group-hover:text-accent">{{title}}<span class="ml-[0.5em] italic text-[0.9em] text-ink-soft" data-if="detail">{{detail}}</span></span>
+          <span class="col-3 row-2 whitespace-nowrap text-right text-ink-soft/90 oldstyle-nums tabular-nums">p. <span data-page-of="{{id}}"></span></span>
+          <img class="col-2 row-2 block w-full aspect-10/1 object-cover object-left mix-blend-multiply" src="{{src}}" alt="" data-if="src" />
           <!-- Until there's an image: an empty staff. -->
-          <span class="col-2 flex items-center aspect-[10/1]" data-if="noSrc">(Placeholder. Tell Tino to fire up Sibelius!)</span>
+          <span class="col-2 row-2 flex items-center aspect-[10/1]" data-if="noSrc">(Placeholder. Tell Tino to fire up Sibelius!)</span>
         </a>
       </li>
     </template>
