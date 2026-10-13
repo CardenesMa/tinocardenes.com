@@ -28,7 +28,7 @@ I'm a musician and computer scientist based in Pittsburgh, Pennsylvania. This vo
 
 Each recording in this edition is printed with its lead sheet on the facing page, so you can read along while you listen. 
 
-Turn the pages with the arrows, click, or your keyboard.
+Turn the pages with your keyboard arrows or click!
 
 ::signature[Tino Cardenes · Pittsburgh, 2026]
 
@@ -159,7 +159,7 @@ Joe Henderson's tune, played with the Tartan Quartet.
 ::pagebreak 
 
 ::score{src="scores/fugue8_full.png"}
-## Fugue No.&nbsp;8 in D-sharp minor {subtitle="The Well-Tempered Clavier, Book I · BWV 853" }
+## Fugue No.&nbsp;8 in D-sharp Minor {subtitle="The Well-Tempered Clavier, Book I · BWV 853" }
 
 ::youtube{id=VnlUzmmqrGg}
 

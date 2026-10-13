@@ -3,7 +3,9 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- maybe I should make this a variable so when I cahnge it across the website it propogates. -->
     <title>Tino Cardenes · Pianist, Composer, Computer Scientist</title>
+    <!-- metadata info for scraper and sharing -->
     <meta name="description" content="Classical and jazz pianist, composer, and computer scientist based in Pittsburgh. Recordings, lead sheets, software, and projects that combine music and computation." />
     <link rel="canonical" href="https://tinocardenes.com" />
     <meta property="og:type" content="website" />
@@ -14,18 +16,20 @@
     <meta name="twitter:card" content="summary" />
     <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#111926" media="(prefers-color-scheme: dark)" />
-    <!-- Icons from site/favicon/. /favicon.ico stays at the root, where browsers and crawlers look by default. -->
+    <!-- i downloaded some favicons from a favicon maker website. Serve them based on user preference  -->
     <link rel="icon" href="/favicon.ico" sizes="48x48" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
     <link rel="manifest" href="/favicon/site.webmanifest" />
 
+    <!-- load in merriweather from google fonts so I don't have to download it myself  -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,600&family=Cormorant+SC:wght@500&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Music&display=swap" /> -->
+
+
+    <!-- HERE is where our actual stylesheet and js is loaded  -->
     <link rel="stylesheet" href="/styles.css" />
-    <!-- Page turning is done by StPageFlip (MIT), pinned to one version. -->
     <script type="importmap">
       { "imports": { "page-flip": "https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/js/page-flip.module.js" } }
     </script>
@@ -48,9 +52,10 @@
     </script>
   </head>
   <body class="desk">
-    <!-- Three columns: the site and its links on the left, the pager in the middle, elsewhere on the right.
-         On narrow screens only Menu, the pager and the icons stay. -->
-    <header class="sticky top-0 z-20 grid grid-cols-[1fr_auto_1fr] items-center gap-4 h-bar px-6 bg-bar/95 backdrop-blur text-bar-ink border-b border-bar-line max-spread:gap-2 max-spread:px-3">
+    <!-- navbar : 3 sections, nav links, page controls, social links -->
+    <header class="sticky top-0 z-20 grid grid-cols-[1fr_auto_1fr] 
+    items-center gap-4 h-bar px-6 bg-bar/95 backdrop-blur text-bar-ink border-b 
+    border-bar-line max-spread:gap-2 max-spread:px-3">
       <nav class="flex items-baseline gap-5 font-caps tracking-wide" aria-label="Site">
         <!-- .nav-link: an underline that fades in on hover (src/styles.css). -->
         <a class="nav-link text-bar-accent text-lg" href="#cover">Tino Cardenes</a>
@@ -59,6 +64,7 @@
         <a class="nav-link text-lg max-spread:hidden" href="#back">Contact</a>
       </nav>
 
+      <!-- page controls  -->
       <div class="flex items-center gap-1 tabular-nums">
         <button type="button" class="tool text-sm" data-turn="first" aria-label="Front page"><span class="icon [--icon:url(/icons/angles-left.svg)]" aria-hidden="true"></span></button>
         <button type="button" class="tool text-xl" data-turn="prev" aria-label="Previous pages"><span class="icon [--icon:url(/icons/chevron-left.svg)]" aria-hidden="true"></span></button>
@@ -67,7 +73,8 @@
         <button type="button" class="tool text-sm" data-turn="last" aria-label="Back Page"><span class="icon [--icon:url(/icons/angles-right.svg)]" aria-hidden="true"></span></button>
       </div>
 
-      <nav class="flex gap-4 justify-self-end text-bar-ink/65" aria-label="Elsewhere">
+      <!-- social links -->
+      <nav class="flex gap-4 justify-self-end text-bar-ink/65" aria-label="Socials">
         <a class="tool" href="https://www.youtube.com/@tinocardenes" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><span class="icon [--icon:url(/icons/youtube.svg)]" aria-hidden="true"></span></a>
         <a class="tool" href="https://www.instagram.com/tinocardenes/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><span class="icon [--icon:url(/icons/instagram.svg)]" aria-hidden="true"></span></a>
         <a class="tool" href="https://github.com/CardenesMa" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><span class="icon [--icon:url(/icons/github.svg)]" aria-hidden="true"></span></a>
@@ -75,10 +82,10 @@
       </nav>
     </header>
 
-    <!-- The vertical padding adds up to 2.75rem at every size; .book-frame (src/styles.css) counts on it to fit the window. -->
+    <!--  vertical padding adds up to 2.75rem at every size; .book-frame (src/styles.css) counts on it to fit the window. -->
     <main class="relative pt-7 px-18 pb-4 overflow-x-clip max-spread:p-3 max-spread:pb-8">
       <div class="book-frame">
-        <!-- The pages are built from book.md. data-plate is printed at the foot of every page. -->
+        <!-- pages are built from book.md. data-plate is printed at the foot of every page. -->
         <div class="book" data-book data-source="/book.md" data-plate="©Tino Cardenes 2026"></div>
       </div>
       <p class="sr-only" aria-live="polite" data-announcer></p>
@@ -98,48 +105,40 @@
         <slot name="key">     is replaced by content from book.md (paragraphs, links, …);
         data-if="key"         keeps the element only when key has a value;
         data-style="…"        becomes style="…" (so the editor doesn't flag {{key}} as broken CSS).
-      Line breaks and indentation between tags are ignored, so lay them out freely.
-
-      Styling is Tailwind classes for one-off layout, and named classes from
-      src/styles.css for what recurs or depends on the page (.page, .staff,
-      .text-link, …). Colours: paper, ink, ink-soft, rule, accent, henle, cover-ink,
-      desk. Fonts: font-serif, font-display, font-caps, font-music.
-      Lengths in cqi are fractions of the page's width (1cqi = 1%).
-      Attributes like data-body and data-page-of are hooks for the scripts; keep them.
     -->
 
-    <!-- ── Pages ─────────────────────────────────────────────────────────── -->
+    <!-- ============================= Pages ======================== -->
 
-    <!-- Every page. kind is cover, back, text, full or blank. The page number and
-         the numbers in [data-page-of] are filled in by layout.ts. -->
+    <!-- (defualt) page kind is cover, back, text, full or blank -->
     <template data-template="page">
       <div class="page page--{{kind}} {{contentsClass}}" id="{{id}}" data-title="{{title}}" data-density="{{density}}" data-left="{{left}}">
         <span class="page-number" data-page-number data-if="numbered"></span>
         <div class="page-body {{bodyClass}}" data-body><slot name="body"></slot></div>
+        <!-- plate is mostly unused but some md directives are in place so I'm too scared to change it -->
         <span class="page-plate" aria-hidden="true" data-if="plate">{{plate}}</span>
         <a class="absolute inset-0 z-3" href="#p2" data-turn="next" data-if="isCover"><span class="sr-only">Open</span></a>
       </div>
     </template>
 
-    <!-- :::back: the main part centred on the page, and what follows its --- at the foot, under a rule. -->
+    <!-- :::back:  -->
     <template data-template="back">
-      <div class="flex-1 flex flex-col justify-center gap-[0.2em]"><slot name="main"></slot></div>
+      <div class="flex-1 flex flex-col justify-center gap-[0.5em]"><slot name="main"></slot></div>
       <footer class="back-foot" data-if="foot"><slot name="foot"></slot></footer>
     </template>
 
-    <!-- :::cover -->
+    <!-- :::cover made to resemble a __certain__ music publisher (perhaps by coincidence!!)-->
     <template data-template="cover">
       <div class="absolute inset-0">
-        <!-- The composer's name, large, set flush left across the top. -->
+        <!-- name at the top -->
         <p class="absolute top-[15%] left-[10%] m-0 text-[3em] leading-none whitespace-nowrap" data-if="name">{{name}}</p>
-        <!-- Below it, two columns: a label on the left, the title block on the right,
-             with hairline rules spanning the right column. -->
-        <div class="absolute top-[30.5%] bottom-[6%] left-[10%] right-[8%] grid grid-cols-[28cqi_1fr] grid-rows-[auto_1fr_auto]">
+        <div class="absolute top-[30.5%] bottom-[6%] left-[10%] right-[8%] 
+                    grid grid-cols-[28cqi_1fr] grid-rows-[auto_1fr_auto]">
           <p class="m-0 pt-[6cqi] font-semibold text-[3.9cqi]">{{label}}</p>
           <div class="cover-text pt-[6cqi] border-t border-cover-ink text-[2.3cqi] leading-[1.3]">
             <slot name="text"></slot>
           </div>
           <div class="col-2 row-3">
+            <!-- I use this line not as much for publisher but also other messages  -->
             <p class="m-0 text-[4cqi]" data-if="publisher">{{publisher}}</p>
             <p class="m-0 mt-[5cqi] pt-[7cqi] border-t border-cover-ink text-[2cqi]">{{number}}</p>
           </div>
@@ -158,9 +157,9 @@
       </header>
     </template>
 
-    <!-- ── Block directives ──────────────────────────────────────────────── -->
+    <!-- =========================== Block directives ================================ -->
 
-    <!-- ::score and ::plate. kind is score, portrait or figure; fill is true when it fills the rest of the page. -->
+    <!-- ::score and ::plate. kind is score, portrait or figure; (fill == true) <=> fills the rest of the page. -->
     <template data-template="plate">
       <figure class="plate plate--{{kind}}" data-fill="{{fill}}" data-style="--plate-width: {{width}}">
         <img src="{{src}}" alt="{{alt}}" loading="{{loading}}" decoding="async" />
@@ -204,7 +203,7 @@
       <li class="[&+&]:mt-[2em]">
         <a class="group grid grid-cols-[1.5em_1fr_1.5em] items-center gap-x-[0.75em] no-underline" href="#{{id}}">
           <span class="row-span-2 font-caps text-ink-soft/80 text-sm ">#{{number}}</span>
-          <span class="mb-[0.15em] leading-tight text-center group-hover:text-accent">{{title}}<span class="ml-[0.5em] italic text-[0.9em] text-ink-soft" data-if="detail">{{detail}}</span></span>
+          <span class="mb-[0.15em] leading-tight text-left group-hover:text-accent">{{title}}<span class="ml-[0.5em] italic text-[0.9em] text-ink-soft" data-if="detail">{{detail}}</span></span>
           <span class="row-span-2 text-right oldstyle-nums tabular-nums" data-page-of="{{id}}">p.</span>
           <img class="col-2 block w-full aspect-[10/1] object-cover object-left mix-blend-multiply" src="{{src}}" alt="" data-if="src" />
           <!-- Until there's an image: an empty staff. -->

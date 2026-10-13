@@ -1,5 +1,5 @@
 // pnpm dev: recompiles the TypeScript and the Tailwind CSS on save and serves
-// site/ at http://localhost:4321. Reload the browser to see changes.
+// site/ at http://localhost:8000. Does incremental building but you have to reload the page to see changes
 
 import { spawn } from 'node:child_process';
 import { createReadStream, existsSync, statSync } from 'node:fs';
@@ -7,7 +7,7 @@ import { createServer } from 'node:http';
 import path from 'node:path';
 
 const root = path.resolve('site');
-const port = Number(process.env.PORT ?? 4321);
+const port = Number(process.env.PORT ?? 8000);
 const types = {
   '.html': 'text/html; charset=utf-8',
   '.md': 'text/markdown; charset=utf-8',
@@ -27,6 +27,7 @@ const types = {
 spawn('tsc', ['--watch', '--preserveWatchOutput'], { stdio: 'inherit' });
 spawn('tailwindcss', ['-i', 'src/styles.css', '-o', 'site/styles.css', '--watch'], { stdio: 'inherit' });
 
+// Super crude server that just sends literally the files requested 
 createServer((req, res) => {
   let file = path.join(root, decodeURIComponent(new URL(req.url, 'http://x').pathname));
   if (!file.startsWith(root)) return res.writeHead(403).end();

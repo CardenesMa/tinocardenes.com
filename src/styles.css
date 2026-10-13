@@ -27,13 +27,13 @@
   --color-rule: rgb(28 27 25 / 0.42);
   --color-accent: #2b4a73;
 
-  --color-henle: #829fb7;
+  --color-edition: #829fb7;
   --color-cover-ink: #16191d;
 
-  /* Behind the book, until --texture-wood loads: its palest tone. */
+  /* Behind the book, until --image-bg loads: its palest tone. */
   --color-desk: #fdf6fa;
 
-  /* The toolbar: white, slate ink, and the Henle blue made dark enough to read
+  /* The toolbar: white, slate ink, and the edition blue made dark enough to read
      (≈ 5:1 on white). */
   --color-bar: #ffffff;
   --color-bar-ink: #1f2a37;
@@ -42,7 +42,7 @@
 
   /* textures used to make it look more realistic */
   --texture-paper: url("/images/paper.png");
-  --texture-wood: url("/images/wood.jpg");
+  --image-bg: url("/images/bg.jpg");
   /* font-serif, font-display, font-caps, font-music */
   --font-serif: 'Merriweather', 'EB Garamond', Garamond, 'Times New Roman', serif;
   --font-display: 'Cormorant Garamond', 'EB Garamond', Garamond, serif;
@@ -133,7 +133,7 @@
     /* antialiased: true; */
     /* webkit-font-smoothing: antialiased; */
     -moz-osx-font-smoothing: grayscale;
-    background: var(--color-desk) var(--texture-wood) center / cover fixed;
+    background: var(--image-bg) bottom / cover fixed;
   }
 }
 
@@ -341,7 +341,7 @@
 
   .page--cover,
   .page--back {
-    background-color: var(--color-henle);
+    background-color: var(--color-edition);
     color: var(--color-cover-ink);
 
     &::after {

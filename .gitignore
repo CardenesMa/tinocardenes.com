@@ -19,3 +19,6 @@ pnpm-debug.log*
 
 # compiled CSS (from src/styles.css)
 site/styles.css
+
+# originals is only meant for 'undo' so if you commit something you probably don't want the original!
+originals/

@@ -1,21 +1,21 @@
 # tinocardenes.com
-Alas this version of the website is a massive overhaul and greatly benefited from the recent advances of Anthropic. 
+This version of the website is a massive overhaul and greatly benefited from the recent advances of Anthropic. 
 The PDF rendering scheme is inspired by Brian McFee's DSP book, and from my work with CMU's 15-322/622 class. 
 
-The site is one Markdown file, [`site/book.md`](site/book.md), shown as a bound
-music score: an Urtext-style cover, a table of contents, and two-page spreads
-you turn like a book.
+Although Mr. Claude has helped with the initial development, rest assured that every line of code AI wrote has been edited,
+reviewed, iterated, and scrutinized. All media, hefty hefty chunks of code, creative design, website content, and aesthetic curation were created by Tino Cardenes himself. 
+
+Website content is conveniently formatted as one Markdown file, [`site/book.md`](site/book.md).
 
 ```
-site/              everything Vercel serves
-  index.html       the page shell: <head> metadata, toolbar, book container,
-                   and the <template>s each part of a page is built from
-  styles.css       compiled from src/styles.css (not committed)
-  book.md          all the content
+site/              all public content served to client
+  index.html       the page shell. Contains some hard-coded content to make .md slicker
+  book.md          all the website content
   images/ scores/  pictures and lead sheets (plus PDFs, …)
   favicon/         browser and home-screen icons, and site.webmanifest
                    (favicon.ico itself sits at the root of site/)
   js/              compiled from src/ (not committed)
+
 src/               TypeScript, compiled into site/js/
   markdown.ts      a small Markdown + directive parser
   book.ts          the directive table, and splitting book.md into pages
@@ -23,41 +23,29 @@ src/               TypeScript, compiled into site/js/
   layout.ts        flows text that doesn't fit onto more pages, adds blank
                    pages, and numbers them
   reader.ts        connects StPageFlip to links, keys, the URL and the toolbar
-  page-flip.d.ts   types for the parts of StPageFlip we use
+  page-flip.d.ts   types for the parts of StPageFlip we use, since they're a JS library only rn
   main.ts          loads book.md and puts it together
   styles.css       Tailwind setup (colours, fonts), named classes for the
                    pages and anything that recurs, and book.md's own Markdown
+
 scripts/
   dev.mjs          local server
   check-book.mjs   build-time check of book.md
+  clear-scores.py  does a pseudo-intelligent background removal on score images so they blend with the website
 ```
 
-The only dependencies are TypeScript and Tailwind CSS (its CLI, v4). Page turning (the animation, dragging a
-corner, swiping, one page at a time on phones) is done by
-[StPageFlip](https://github.com/Nodlik/StPageFlip), loaded from jsDelivr through
-the import map in `index.html`. Pages are a fixed size and never scroll: text
-that doesn't fit continues on the next page, split between lines. How much fits
-depends on the window, so the pages are laid out again when it's resized.
+Depdendencies :
+- [StPageFlip](https://github.com/Nodlik/StPageFlip), loaded from jsDelivr through the import map in `index.html`. Used to handle page turning interaction (and they're fantastic thank you so much ❤️❤️❤️)
 
 ```sh
 pnpm install
-pnpm dev      # http://localhost:4321; recompiles TS and CSS on save, refresh to see changes
-pnpm build    # compiles TS and CSS, then checks book.md
+pnpm dev      # launch dev server (just a )
+pnpm build    # compiles TS and CSS (tailwind insertion) 
 ```
 
-Vercel runs `pnpm build` and serves `site/`. The build fails, naming the line,
-if `book.md` uses an unknown directive, misses a required attribute, or points
-to a file that isn't in `site/`.
+Your provider (I use tailwind) should run `pnpm build` and serve `site/`. The build step may complete BUT CHECK THE OUTPUT since you may have a directive that is malformed or another issue.
 
-Styling is split two ways. One-off layout and type (a margin, a font, a size)
-is Tailwind classes on the templates in `index.html`. Anything that recurs, or
-that changes with the kind of page, is a named class in `src/styles.css`:
-`.page` and its kinds (`.page--cover`, `.page--blank`, …), `.tool` (toolbar
-buttons), `.staff` and `.clef`, `.text-link`, `.plate`, `.video`, … That file
-also sets the site's colours (`bg-paper`, `text-ink-soft`, …) and fonts
-(`font-display`, `font-caps`, …), and styles the Markdown from `book.md` (plain
-`<p>`, `<ul>`, `<em>`). There's no Tailwind Preflight, so elements keep the
-browser's default styles.
+Note that the `/site/styles.css` is generated in the build step, so any changes overwrite it. One-off styling is done in tailwind in the HTML directly, and recurring items are in `src/styles.css`
 
 Page titles, descriptions, and social-preview tags live in `index.html`. So
 does `data-plate`, the plate number printed at the foot of every page.
