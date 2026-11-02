@@ -39,7 +39,7 @@ Turn the pages with your keyboard arrows or click!
 ::plate{src=/images/promo.jpeg kind=portrait fill alt="Concert" caption="Concert October 31st"}
 
 
-# Recordings {subtitle="Aufnahmen · Enregistrements" id=index}
+# Index {subtitle="Aufnahmen · Enregistrements" id=index}
 
 :::incipits
 ::incipit{to=sinfonietta-for-piano-4-hands src="/scores/incipits/sinfonietta.inc.png"}
@@ -113,7 +113,7 @@ A web app for building and sharing your own virtual museum. Upload favorite pain
 Free music instruction in Pittsburgh's Shadyside neighborhood for students who otherwise wouldn't have access to it. Founded in 2020 by Tino Cardenes, Alex Sayette, and Rohan Sykora, Music for Good has prepared students for auditions and helped them discover the joy of music.
 :::
 
-# SonicScore {subtitle="Notation software for sound practitioners" composer="T. Cardenes, developer"}
+# SonicScore {subtitle="Notation software for sound practitioners"}
 
 SonicScore is the official editor for creating and customizing sound bath notation. Create, share, and print fully customizable SonicScore projects with ease, and upgrade your sound bath courses with the only notation software designed specifically for sound practitioners.
 
