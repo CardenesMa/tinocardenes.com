@@ -47,7 +47,7 @@ Turn the pages with your keyboard arrows or click!
 ::incipit{to=wave src="/scores/incipits/wave.inc.png"}
 ::incipit{to=recorda-me src="/scores/incipits/recordame.inc.png"}
 ::incipit{to=fugue-no-8-in-d-sharp-minor src="/scores/incipits/fugue8.inc.png"}
-<!-- ::incipit{to=there-will-never-be-another-you src="/scores/incipits/another_you.inc.png"} -->
+::incipit{to=there-will-never-be-another-you src="/scores/incipits/another_you.inc.png"}
 ::incipit{to=allegro src="/scores/incipits/allegro.inc.png"}
 :::
 
@@ -177,7 +177,7 @@ From the first book of *The Well-Tempered Clavier*, recorded for *The Vlahakis S
 
 Harry Warren and Mack Gordon's standard, recorded live.
 
-::score
+::score{src="scores/another_you.png"}
 
 # Allegro {composer="Peterson" }
 
