@@ -130,12 +130,15 @@ Enjoy complete control over colors, fonts, styles, and symbols while adjusting t
 # CAMLab Immersive Room {subtitle="For Harvard's CAMLab Summer Studio 2026"}
 
 ::youtube{id=eqMwIz2O2rU}
-
+**This video is best watched on the YouTube website.** VR equipment makes for a more immersive experience, but not required. 
+::pagebreak 
 
 ## {toc=false}
 Created for the immersive gallery at Harvard CAMLab's 'Summer Studio' 2026. Almost all visuals were created by implementing/forking different algorithms in Javascript (boids, differential growth, particle sim, etc). The bits were cobbled together using a trackpad and Premiere Pro! The original gallery space had 3 projected walls and a large mirror on the 4th. This 360 version was created with ffmpeg to simulate the room. 
 
 While the Summer Studio was focused on AI use for the bulk of the process in creating art, I was trying to demonstrate to the students how even only using very little AI, you can make an involved piece of art like this in just a few hours. 
+
+
 
 
 ::part[Videos]
