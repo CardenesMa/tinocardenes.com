@@ -34,11 +34,6 @@ Turn the pages with your keyboard arrows or click!
 
 
 
-## {toc=false} 
-
-::plate{src=/images/promo.jpeg kind=portrait fill alt="Concert" caption="Concert October 31st"}
-
-
 # Index {subtitle="Aufnahmen · Enregistrements" id=index}
 
 :::incipits
